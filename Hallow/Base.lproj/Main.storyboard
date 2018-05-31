@@ -740,7 +740,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Entry on [DATE]" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bnv-nh-XKb">
-                                            <rect key="frame" x="15" y="10" width="138" height="24"/>
+                                            <rect key="frame" x="15" y="10" width="320" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -754,6 +754,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="bnv-nh-XKb" firstAttribute="leading" secondItem="dMN-QR-3oo" secondAttribute="leading" constant="15" id="2rh-TP-U2v"/>
+                                        <constraint firstItem="bnv-nh-XKb" firstAttribute="trailing" secondItem="asx-jP-tgJ" secondAttribute="trailing" id="aOC-Mv-qAK"/>
                                         <constraint firstItem="asx-jP-tgJ" firstAttribute="leading" secondItem="bnv-nh-XKb" secondAttribute="leading" id="mFI-xz-3RC"/>
                                         <constraint firstItem="asx-jP-tgJ" firstAttribute="top" secondItem="bnv-nh-XKb" secondAttribute="bottom" constant="10" id="pBq-3i-dp9"/>
                                         <constraint firstItem="bnv-nh-XKb" firstAttribute="top" secondItem="dMN-QR-3oo" secondAttribute="top" constant="10" id="qHG-QT-gf1"/>

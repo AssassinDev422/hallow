@@ -93,25 +93,10 @@ class AudioPlayerViewController: UIViewController {
         }
     }
     
-    // MARK: - WIP
-    
     @IBAction func progressControl(_ sender: Any) {
         print("progressControl function was run")
         sliderUpdatedTime()
     }
-    
-    private func sliderUpdatedTime() {
-        if audioPlayer != nil {
-            let percentComplete = progressControlOutlet.value
-            audioPlayer?.currentTime = TimeInterval(percentComplete * Float(audioPlayer!.duration))
-        } else {
-            setupAudioPlayer(file: prayer)
-            print("Audio player is nil")
-            return
-        }
-    }
-    
-    //
     
     @IBAction func reflectButton(_ sender: Any) {
         guard let audioPlayer = audioPlayer else {
@@ -199,7 +184,7 @@ class AudioPlayerViewController: UIViewController {
         }
     }
     
-    // MARK: - WIP
+    // MARK: - Functions - Progress Control
     
     private func updateProgressControl(songCompleted: @escaping (Bool) -> Void) {
         if audioPlayer != nil {
@@ -234,6 +219,19 @@ class AudioPlayerViewController: UIViewController {
         }
     }
     
+    private func sliderUpdatedTime() {
+        if audioPlayer != nil {
+            let percentComplete = progressControlOutlet.value
+            audioPlayer?.currentTime = TimeInterval(percentComplete * Float(audioPlayer!.duration))
+        } else {
+            setupAudioPlayer(file: prayer)
+            print("Audio player is nil")
+            return
+        }
+    }
+    
+    // MARK: - Functions - Stats
+    
     private func updateMyStats() {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) { results in
             print("Results: \(results)")
@@ -255,6 +253,8 @@ class AudioPlayerViewController: UIViewController {
             }
         }
     }
+    
+    // MARK: Functions - Hud and outlets
     
     let hud: JGProgressHUD = {
         let hud = JGProgressHUD(style: .dark)
