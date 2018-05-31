@@ -13,8 +13,6 @@ import JGProgressHUD
 import FirebaseFirestore
 import Firebase
 
-// TODO: Need to add authentication listener
-
 class AudioPlayerViewController: UIViewController {
 
     @IBOutlet weak var playPauseButton: UIButton!
