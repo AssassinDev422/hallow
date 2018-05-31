@@ -6,9 +6,6 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
-// Test for git upload
-// Test for git UI upload #2
-
 import UIKit
 import AVFoundation
 import FirebaseStorage
