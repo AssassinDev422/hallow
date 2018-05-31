@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>196891593771-b4fjbc89ng4r1crak7o7qjspuo3pms4e.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.196891593771-b4fjbc89ng4r1crak7o7qjspuo3pms4e</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBGiXnt7Z538kCJOgd4kRy1tANam5d99V8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>196891593771</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.hallow.Hallow</string>
+	<key>PROJECT_ID</key>
+	<string>hallow-d1da0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hallow-d1da0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:196891593771:ios:2c91d9ba79c6182b</string>
+	<key>DATABASE_URL</key>
+	<string>https://hallow-d1da0.firebaseio.com</string>
+</dict>
+</plist>
