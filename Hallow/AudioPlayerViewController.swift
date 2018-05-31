@@ -21,8 +21,8 @@ class AudioPlayerViewController: UIViewController {
     @IBOutlet weak var rewindOutlet: UIButton!
     @IBOutlet weak var fastForwardOutlet: UIButton!
     @IBOutlet weak var reflectOutlet: UIButton!
-    @IBOutlet weak var progressBar: UIProgressView!
-    @IBOutlet weak var completedLabel: UILabel!
+    @IBOutlet weak var progressControlOutlet: UISlider!
+    
     
     var prayer: PrayerItem?
     var audioPlayer: AVAudioPlayer?
@@ -30,7 +30,7 @@ class AudioPlayerViewController: UIViewController {
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
     
-    var timer: Timer?
+    var controlTimer: Timer?
     
     var alreadySaved = 0
     
@@ -40,8 +40,8 @@ class AudioPlayerViewController: UIViewController {
     // MARK: - Life cycle
    
     override func viewDidLoad() {
-        self.progressBar.progress = 0.0
         hideOutlets(shouldHide: true)
+        progressControlOutlet.setThumbImage(#imageLiteral(resourceName: "thumb"), for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,8 +53,8 @@ class AudioPlayerViewController: UIViewController {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user!.uid
         }
-        self.alreadySaved = 0
-        self.addedTimeTracker = 0.0
+        alreadySaved = 0
+        addedTimeTracker = 0.0
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -64,11 +64,12 @@ class AudioPlayerViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        timer?.invalidate()
-        self.audioPlayer?.currentTime = 0
-        self.audioPlayer?.stop()
-        self.progressBar.progress = 0.0
-        self.updateMyStats()
+        controlTimer?.invalidate()
+        audioPlayer?.currentTime = 0
+        audioPlayer?.currentTime = 0
+        audioPlayer?.stop()
+        progressControlOutlet.setValue(Float(0.0), animated: false)
+        updateMyStats()
     }
     
     // MARK: - Actions
@@ -91,6 +92,26 @@ class AudioPlayerViewController: UIViewController {
             self.alreadySaved = 1
         }
     }
+    
+    // MARK: - WIP
+    
+    @IBAction func progressControl(_ sender: Any) {
+        print("progressControl function was run")
+        sliderUpdatedTime()
+    }
+    
+    private func sliderUpdatedTime() {
+        if audioPlayer != nil {
+            let percentComplete = progressControlOutlet.value
+            audioPlayer?.currentTime = TimeInterval(percentComplete * Float(audioPlayer!.duration))
+        } else {
+            setupAudioPlayer(file: prayer)
+            print("Audio player is nil")
+            return
+        }
+    }
+    
+    //
     
     @IBAction func reflectButton(_ sender: Any) {
         guard let audioPlayer = audioPlayer else {
@@ -172,17 +193,19 @@ class AudioPlayerViewController: UIViewController {
             print("Audio player was set up")
             self.navigationItem.title = self.prayer!.title
             self.set(isLoading: false)
-            updateProgressBar(songCompleted: completionHandler)
+            updateProgressControl(songCompleted: completionHandler)
         } catch let error {
             print(error.localizedDescription)
         }
     }
     
-    private func updateProgressBar(songCompleted: @escaping (Bool) -> Void) {
+    // MARK: - WIP
+    
+    private func updateProgressControl(songCompleted: @escaping (Bool) -> Void) {
         if audioPlayer != nil {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
+            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
                 let percentComplete = self!.audioPlayer!.currentTime / self!.audioPlayer!.duration
-                self?.progressBar.progress = Float(percentComplete)
+                self?.progressControlOutlet.setValue(Float(percentComplete), animated: true)
                 if self?.audioPlayer?.isPlaying == true {
                     self?.addedTimeTracker += 0.01
                 }
@@ -203,7 +226,7 @@ class AudioPlayerViewController: UIViewController {
     lazy var completionHandler: (Bool) -> Void = {
         if $0 {
             print("Ran completion handler")
-            self.timer?.invalidate()
+            self.controlTimer?.invalidate()
             self.audioPlayer!.pause()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.performSegue(withIdentifier: "reflectSegue", sender: self)
@@ -253,7 +276,7 @@ class AudioPlayerViewController: UIViewController {
     
     private func hideOutlets(shouldHide: Bool) {
         self.playPauseButton.isHidden = shouldHide
-        self.progressBar.isHidden = shouldHide
+        self.progressControlOutlet.isHidden = shouldHide
         self.reflectOutlet.isHidden = shouldHide
         self.rewindOutlet.isHidden = shouldHide
         self.fastForwardOutlet.isHidden = shouldHide

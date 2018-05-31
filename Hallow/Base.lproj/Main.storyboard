@@ -539,9 +539,6 @@
                                     <action selector="pressPlayPause:" destination="6Sh-5U-3MK" eventType="touchUpInside" id="UsJ-T2-JsU"/>
                                 </connections>
                             </button>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ZTv-k6-ljd">
-                                <rect key="frame" x="16" y="84" width="343" height="2"/>
-                            </progressView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPu-Zg-waY">
                                 <rect key="frame" x="149.5" y="536" width="76" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
@@ -571,21 +568,27 @@
                                     <action selector="fastForward:" destination="6Sh-5U-3MK" eventType="touchUpInside" id="1NK-QC-Fns"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Xky-H4-Z68">
+                                <rect key="frame" x="18" y="74" width="339" height="31"/>
+                                <connections>
+                                    <action selector="progressControl:" destination="6Sh-5U-3MK" eventType="valueChanged" id="IIN-mA-HVz"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="uHF-Lb-2IF" firstAttribute="bottom" secondItem="hPu-Zg-waY" secondAttribute="bottom" constant="40" id="CEi-Tf-vx7"/>
                             <constraint firstItem="GhZ-kD-fJG" firstAttribute="height" secondItem="Zki-XY-f7p" secondAttribute="height" id="L4l-T5-0Kq"/>
                             <constraint firstItem="Zki-XY-f7p" firstAttribute="centerY" secondItem="cRJ-Nv-69b" secondAttribute="centerY" id="LVg-ku-eDR"/>
+                            <constraint firstItem="Xky-H4-Z68" firstAttribute="width" secondItem="cRJ-Nv-69b" secondAttribute="width" constant="-40" id="NNf-dX-bbo"/>
+                            <constraint firstItem="Xky-H4-Z68" firstAttribute="centerX" secondItem="uHF-Lb-2IF" secondAttribute="centerX" id="OB8-zO-DMr"/>
                             <constraint firstItem="GhZ-kD-fJG" firstAttribute="width" secondItem="Zki-XY-f7p" secondAttribute="width" id="PJC-ID-fR8"/>
-                            <constraint firstItem="ZTv-k6-ljd" firstAttribute="top" secondItem="uHF-Lb-2IF" secondAttribute="top" constant="20" id="PcY-L1-tcV"/>
-                            <constraint firstItem="ZTv-k6-ljd" firstAttribute="centerX" secondItem="uHF-Lb-2IF" secondAttribute="centerX" id="SqT-LS-2bc"/>
                             <constraint firstItem="avM-mx-sbt" firstAttribute="centerX" secondItem="cRJ-Nv-69b" secondAttribute="centerX" id="Ujn-QS-Xq4"/>
                             <constraint firstItem="avM-mx-sbt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zki-XY-f7p" secondAttribute="trailing" constant="20" id="XTE-bY-Suv"/>
                             <constraint firstItem="GhZ-kD-fJG" firstAttribute="centerX" secondItem="uHF-Lb-2IF" secondAttribute="centerX" constant="90" id="Y9G-jZ-b4W"/>
                             <constraint firstItem="Zki-XY-f7p" firstAttribute="centerX" secondItem="uHF-Lb-2IF" secondAttribute="centerX" constant="-90" id="gPJ-z5-8uu"/>
+                            <constraint firstItem="Xky-H4-Z68" firstAttribute="top" secondItem="uHF-Lb-2IF" secondAttribute="top" constant="10" id="gtY-tU-R3Y"/>
                             <constraint firstItem="hPu-Zg-waY" firstAttribute="centerX" secondItem="cRJ-Nv-69b" secondAttribute="centerX" id="klB-zq-6Ne"/>
-                            <constraint firstItem="ZTv-k6-ljd" firstAttribute="leading" secondItem="cRJ-Nv-69b" secondAttribute="leadingMargin" id="nD1-jD-8sQ"/>
                             <constraint firstItem="GhZ-kD-fJG" firstAttribute="centerY" secondItem="cRJ-Nv-69b" secondAttribute="centerY" id="wYU-pX-yfD"/>
                             <constraint firstItem="avM-mx-sbt" firstAttribute="centerY" secondItem="cRJ-Nv-69b" secondAttribute="centerY" id="zI1-vB-uay"/>
                         </constraints>
@@ -594,7 +597,7 @@
                     <connections>
                         <outlet property="fastForwardOutlet" destination="GhZ-kD-fJG" id="AvD-tZ-8gf"/>
                         <outlet property="playPauseButton" destination="avM-mx-sbt" id="ce5-OS-z7w"/>
-                        <outlet property="progressBar" destination="ZTv-k6-ljd" id="bGY-uQ-y5E"/>
+                        <outlet property="progressControlOutlet" destination="Xky-H4-Z68" id="oQP-d7-qTS"/>
                         <outlet property="reflectOutlet" destination="hPu-Zg-waY" id="8OA-tS-B0x"/>
                         <outlet property="rewindOutlet" destination="Zki-XY-f7p" id="lFe-hC-1JB"/>
                     </connections>
