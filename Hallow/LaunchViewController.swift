@@ -13,6 +13,7 @@ class LaunchViewController: UIViewController {
     
     @IBOutlet weak var signUpOutlet: UIButton!
     @IBOutlet weak var signInOutlet: UIButton!
+    @IBOutlet weak var prayerChallengeLabel: UILabel!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
@@ -22,7 +23,6 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideOutlets(shouldHide: true)
-        setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,12 +48,7 @@ class LaunchViewController: UIViewController {
     private func hideOutlets(shouldHide: Bool) {
         self.signInOutlet.isHidden = shouldHide
         self.signUpOutlet.isHidden = shouldHide
+        self.prayerChallengeLabel.isHidden = shouldHide
     }
-    
-    // MARK: - Design
-    
-    private func setUpUI() {
-        //signUpOutlet.font = UIFont(name: "AcuminPro-Regular", size: 21)!
-    }
-    
+
 }

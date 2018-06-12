@@ -22,7 +22,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         
         emailField.delegate = self
         emailField.tag = 1
@@ -89,7 +88,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         if isLoading {
             self.hud.show(in: view, animated: false)
         } else {
-            self.hud.dismiss(animated: true)
+            self.hud.dismiss(animated: false)
         }
     }
     

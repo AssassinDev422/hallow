@@ -18,7 +18,6 @@ class PasswordResetViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         
         emailField.delegate = self
         
@@ -87,7 +86,7 @@ class PasswordResetViewController: UIViewController, UITextFieldDelegate {
         if isLoading {
             self.hud.show(in: view, animated: false)
         } else {
-            self.hud.dismiss(animated: true)
+            self.hud.dismiss(animated: false)
         }
     }
     

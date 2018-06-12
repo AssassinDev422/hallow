@@ -100,7 +100,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         if isLoading {
             self.hud.show(in: view, animated: false)
         } else {
-            self.hud.dismiss(animated: true)
+            self.hud.dismiss(animated: false)
         }
     }
     

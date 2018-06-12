@@ -158,7 +158,7 @@ class AudioPlayerViewController: UIViewController {
             audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
             
             print("Audio player was set up")
-            self.navigationItem.title = self.prayer!.title
+            //FIXME: Update title on screen - self.navigationItem.title = self.prayer!.title
             self.set(isLoading: false)
             updateProgressControl(songCompleted: completionHandler)
         } catch let error {

@@ -103,7 +103,6 @@
                         <viewLayoutGuide key="safeArea" id="D4T-8h-i4S"/>
                     </view>
                     <connections>
-                        <outlet property="prayerChallengeLabel" destination="8Vj-WS-JpM" id="75H-7g-fre"/>
                         <outlet property="signInOutlet" destination="NNx-fa-cEx" id="uCe-E0-EFx"/>
                         <outlet property="signUpOutlet" destination="syZ-Z8-fsl" id="dgX-vK-hJe"/>
                         <segue destination="BXq-9Y-utP" kind="presentation" identifier="alreadySignedInSegue" id="EJK-VX-YDh"/>
@@ -1062,7 +1061,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YdU-ra-4JJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3505" y="300"/>
+            <point key="canvasLocation" x="3614" y="239"/>
         </scene>
         <!--Journal Entry View Controller-->
         <scene sceneID="wdH-6J-6tb">
@@ -1136,7 +1135,7 @@
                     <connections>
                         <segue destination="Hfx-0g-Lwu" kind="relationship" relationship="viewControllers" id="Vwl-bs-0TQ"/>
                         <segue destination="Zdp-gr-Era" kind="relationship" relationship="viewControllers" id="QZI-yk-dAA"/>
-                        <segue destination="d03-Ua-0AP" kind="relationship" relationship="viewControllers" id="Blq-lK-SlO"/>
+                        <segue destination="qev-o3-vSz" kind="relationship" relationship="viewControllers" id="OKd-AS-7Od"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q6l-Sh-uv5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1144,26 +1143,9 @@
             <point key="canvasLocation" x="1626" y="-528"/>
         </scene>
         <!--My Profile-->
-        <scene sceneID="WB4-V6-P9E">
-            <objects>
-                <navigationController id="d03-Ua-0AP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="My Profile" id="xVO-ej-Uya"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="HuL-a2-O5D">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="JuQ-bH-QA0" kind="relationship" relationship="rootViewController" id="UVB-Kx-GN4"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nJG-cm-vmT" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="916" y="300"/>
-        </scene>
-        <!--My Profile-->
         <scene sceneID="Vxi-GP-nQ2">
             <objects>
-                <viewController storyboardIdentifier="UIViewController-JuQ-bH-QA0" automaticallyAdjustsScrollViewInsets="NO" id="JuQ-bH-QA0" customClass="MyProfileViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="JuQ-bH-QA0" customClass="MyProfileViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="thC-7X-0Mm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1245,16 +1227,13 @@
                     </navigationItem>
                     <connections>
                         <outlet property="prayerSessionCount" destination="vPr-Ic-W1y" id="i7R-MZ-475"/>
-                        <outlet property="prayersCompletedLabel" destination="d8L-oZ-K5n" id="YcU-G7-BGv"/>
                         <outlet property="timeInPrayer" destination="3aC-w6-uzh" id="1mO-IX-o8B"/>
-                        <outlet property="timeInPrayerLabel" destination="2Id-aQ-o6C" id="Oid-ln-VgD"/>
-                        <outlet property="titleOutlet" destination="2gl-88-KKg" id="XFe-s0-j5H"/>
                         <segue destination="3J2-Fd-p1L" kind="presentation" identifier="signOutSegue" id="VfS-1x-Ilb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iap-Sm-Uif" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1806" y="300"/>
+            <point key="canvasLocation" x="1914.4000000000001" y="238.83058470764618"/>
         </scene>
         <!--Settings-->
         <scene sceneID="zi5-jh-wMB">
@@ -1361,7 +1340,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ztx-gO-3z6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2679" y="300"/>
+            <point key="canvasLocation" x="2788" y="239"/>
         </scene>
         <!--Settings Guide Selector View Controller-->
         <scene sceneID="9ox-UN-DYv">
@@ -1431,7 +1410,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="78z-Ma-DuJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3505" y="1080"/>
+            <point key="canvasLocation" x="3614" y="1019"/>
         </scene>
         <!--First Day Reminder View Controller-->
         <scene sceneID="NHE-q3-Zp8">
@@ -1551,6 +1530,25 @@
             </objects>
             <point key="canvasLocation" x="5153" y="1713"/>
         </scene>
+        <!--My Profile-->
+        <scene sceneID="Tyu-lN-ZSg">
+            <objects>
+                <navigationController id="qev-o3-vSz" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="My Profile" id="4B3-in-ATt"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="yqP-do-Efm">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="JuQ-bH-QA0" kind="relationship" relationship="rootViewController" id="MGp-5K-JDs"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="w7p-sT-SgZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="975.20000000000005" y="238.83058470764618"/>
+        </scene>
         <!--Settings Reminder View Controller-->
         <scene sceneID="Noq-zp-ryr">
             <objects>
@@ -1613,7 +1611,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mXE-dU-bM1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3505" y="1773"/>
+            <point key="canvasLocation" x="3614" y="1713"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="teh-0o-JdN">
@@ -1641,7 +1639,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YKz-K0-Lc7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3505" y="2448"/>
+            <point key="canvasLocation" x="3614" y="2387"/>
         </scene>
     </scenes>
     <resources>
@@ -1671,8 +1669,8 @@
         <segue reference="Btd-74-LYH"/>
         <segue reference="Vwl-bs-0TQ"/>
         <segue reference="N4L-OX-4hY"/>
-        <segue reference="AO7-XM-VI3"/>
-        <segue reference="VfS-1x-Ilb"/>
+        <segue reference="bvD-Vn-ZPt"/>
+        <segue reference="z1z-dC-aIz"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

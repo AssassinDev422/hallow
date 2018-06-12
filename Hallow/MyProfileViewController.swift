@@ -16,6 +16,9 @@ class MyProfileViewController: UIViewController {
     
     @IBOutlet weak var timeInPrayer: UILabel!
     @IBOutlet weak var prayerSessionCount: UILabel!
+    @IBOutlet weak var titleOutlet: UILabel!
+    @IBOutlet weak var prayersCompletedLabel: UILabel!
+    @IBOutlet weak var timeInPrayerLabel: UILabel!
     
     var completedPrayers: [PrayerTracking] = []
     var stats: StatsItem?
@@ -104,8 +107,18 @@ class MyProfileViewController: UIViewController {
     private func set(isLoading: Bool) {
         if isLoading {
             self.hud.show(in: view, animated: false)
+            self.timeInPrayer.isHidden = true
+            self.timeInPrayerLabel.isHidden = true
+            self.titleOutlet.isHidden = true
+            self.prayersCompletedLabel.isHidden = true
+            self.prayerSessionCount.isHidden = true
         } else {
-            self.hud.dismiss(animated: true)
+            self.hud.dismiss(animated: false)
+            self.timeInPrayer.isHidden = false
+            self.timeInPrayerLabel.isHidden = false
+            self.titleOutlet.isHidden = false
+            self.prayersCompletedLabel.isHidden = false
+            self.prayerSessionCount.isHidden = false
         }
     }
 

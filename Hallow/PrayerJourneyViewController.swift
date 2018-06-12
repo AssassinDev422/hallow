@@ -121,7 +121,7 @@ class PrayerJourneyViewController: UICollectionViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? UITabBarController, let nav = destination.viewControllers?.first as? UINavigationController, let prayNow = nav.topViewController as? PrayNowViewController, let prayer = sender as? PrayerItem {
+        if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let prayer = sender as? PrayerItem {
                 prayNow.prayer = prayer
         }
     }
