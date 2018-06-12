@@ -32,6 +32,8 @@ class JournalEntryViewController: UIViewController {
         textField!.layer.borderWidth = 1
         textField!.layer.borderColor = UIColor.black.cgColor
         
+        setUpDoneButton()
+        
     }
     
     // Firebase listener
@@ -50,7 +52,15 @@ class JournalEntryViewController: UIViewController {
     
     // MARK: - Actions
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     @IBAction func updateButton(_ sender: Any) {
+        update()
+    }
+    
+    private func update() {
         print("journalEntry?.entry: \(journalEntry?.entry ?? "Error")")
         let entry = textField!.text
         let docID = journalEntry?.docID
@@ -58,4 +68,22 @@ class JournalEntryViewController: UIViewController {
         FirebaseUtilities.deleteFile(ofType: "journal", byUser: self.userID!, withID: docID!)
         self.navigationController?.popViewController(animated: true)
     }
+    
+    // MARK: - Design
+    
+    // Add done button to keyboard
+    
+    private func setUpDoneButton() {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        textField.inputAccessoryView = toolBar
+    }
+    
+    @objc private func doneClicked() {
+        view.endEditing(true)
+    }
+    
 }

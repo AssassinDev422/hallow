@@ -12,7 +12,7 @@ import FirebaseFirestore
 class PrayerItem {
     var title = "Day 1"
     var description = "Sitting in silence"
-    var audioURLPath = "audio/day_1.mp3"
+    var audioURLPath = "audio/Meditation - 10 mins - F - 1.m4a"  //FIXME: Update
     var length = "10 mins"
     
     init(firestoreDocument document: DocumentSnapshot) {

@@ -22,6 +22,7 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideOutlets(shouldHide: true)
+        setUpUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,4 +49,11 @@ class LaunchViewController: UIViewController {
         self.signInOutlet.isHidden = shouldHide
         self.signUpOutlet.isHidden = shouldHide
     }
+    
+    // MARK: - Design
+    
+    private func setUpUI() {
+        //signUpOutlet.font = UIFont(name: "AcuminPro-Regular", size: 21)!
+    }
+    
 }

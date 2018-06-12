@@ -11,9 +11,9 @@ import Firebase
 import JGProgressHUD
 
 //TODO: What happens if you try to create the same user with an existing email
-//TODO: Check what the enter button on the key pad is
+//TODO: Center text with icons
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
@@ -21,13 +21,47 @@ class SignUpViewController: UIViewController {
     
     // MARK: - Life cycle
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        nameField.delegate = self
+        nameField.tag = 0
+        emailField.delegate = self
+        emailField.tag = 1
+        passwordField.delegate = self
+        passwordField.tag = 2
+        
+        setUpDoneButton()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         Constants.isFirstDay = true
     }
     
     // MARK: - Actions
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+            nextField.becomeFirstResponder()
+        } else {
+            signUp()
+            textField.resignFirstResponder()
+        }
+        return false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     @IBAction func signUpButton(_ sender: Any) {
+        signUp()
+    }
+    
+    func signUp() {
         set(isLoading: true)
         if let name = nameField.text, let email = emailField.text, let password = passwordField.text {
             Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
@@ -57,9 +91,8 @@ class SignUpViewController: UIViewController {
     // Sets up loading hud
     
     let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .dark)
+        let hud = JGProgressHUD(style: .light)
         hud.interactionType = .blockAllTouches
-        hud.textLabel.text = "Signing up..."
         return hud
     }()
     
@@ -69,6 +102,36 @@ class SignUpViewController: UIViewController {
         } else {
             self.hud.dismiss(animated: true)
         }
+    }
+    
+    // MARK: - Design
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.white.cgColor
+        textField.layer.cornerRadius = 5.0
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.clear.cgColor
+    }
+    
+    // Add done button to keyboard
+    
+    private func setUpDoneButton() {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        nameField.inputAccessoryView = toolBar
+        emailField.inputAccessoryView = toolBar
+        passwordField.inputAccessoryView = toolBar
+    }
+    
+    @objc private func doneClicked() {
+        view.endEditing(true)
     }
     
 }

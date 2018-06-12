@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import JGProgressHUD
 
 //TODO: Add privacy, terms and conditions
 
@@ -27,6 +28,7 @@ class MyProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        set(isLoading: true)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             print("User: \(String(describing: user))")
             if let user = user?.uid {
@@ -61,6 +63,11 @@ class MyProfileViewController: UIViewController {
             self.completedPrayers = results.map(PrayerTracking.init)
             print("Completed prayers: \(self.completedPrayers.count)")
             self.prayerSessionCount.text = String(self.completedPrayers.count)
+            if self.numberLoading == 1 {
+                self.set(isLoading: false)
+            } else {
+                self.numberLoading = 1
+            }
         }
     }
     
@@ -70,6 +77,11 @@ class MyProfileViewController: UIViewController {
             let minutes = (self.stats?.timeInPrayer)! / 60.0
             let minutesString = String(format: "%.0f", minutes)
             self.timeInPrayer.text = minutesString
+            if self.numberLoading == 1 {
+                self.set(isLoading: false)
+            } else {
+                self.numberLoading = 1
+            }
         }
     }
     
@@ -77,6 +89,24 @@ class MyProfileViewController: UIViewController {
         let alert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alert, animated: true)
+    }
+    
+    // Sets up loading hud
+    
+    var numberLoading = 2
+    
+    let hud: JGProgressHUD = {
+        let hud = JGProgressHUD(style: .light)
+        hud.interactionType = .blockAllTouches
+        return hud
+    }()
+    
+    private func set(isLoading: Bool) {
+        if isLoading {
+            self.hud.show(in: view, animated: false)
+        } else {
+            self.hud.dismiss(animated: true)
+        }
     }
 
 }

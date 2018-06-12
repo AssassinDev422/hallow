@@ -6,7 +6,7 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
-// This is the ui branch
+// This is the ui branch v2
 
 import UIKit
 import AVFoundation
@@ -18,8 +18,6 @@ import Firebase
 class AudioPlayerViewController: UIViewController {
 
     @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet weak var rewindOutlet: UIButton!
-    @IBOutlet weak var fastForwardOutlet: UIButton!
     @IBOutlet weak var reflectOutlet: UIButton!
     @IBOutlet weak var progressControlOutlet: UISlider!
     
@@ -107,22 +105,6 @@ class AudioPlayerViewController: UIViewController {
             audioPlayer.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
         }
-    }
-    
-    @IBAction func fastForward(_ sender: Any) {
-        guard let audioPlayer = audioPlayer else {
-            setupAudioPlayer(file: prayer)
-            return
-        }
-        audioPlayer.currentTime += 30.0
-    }
-    
-    @IBAction func rewind(_ sender: Any) {
-        guard let audioPlayer = audioPlayer else {
-            setupAudioPlayer(file: prayer)
-            return
-        }
-        audioPlayer.currentTime -= 30.0
     }
     
     // MARK: - Functions
@@ -278,7 +260,5 @@ class AudioPlayerViewController: UIViewController {
         self.playPauseButton.isHidden = shouldHide
         self.progressControlOutlet.isHidden = shouldHide
         self.reflectOutlet.isHidden = shouldHide
-        self.rewindOutlet.isHidden = shouldHide
-        self.fastForwardOutlet.isHidden = shouldHide
     }
 }

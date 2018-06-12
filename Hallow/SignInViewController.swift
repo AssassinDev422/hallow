@@ -10,9 +10,10 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-//TODO: Constrain Views
+// FIXME: Navigator VC exits when I go to log out v. log in
+// TODO: Update Navigator VC color
 
-class SignInViewController: UIViewController {
+class SignInViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -22,23 +23,49 @@ class SignInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+        
+        emailField.delegate = self
+        emailField.tag = 1
+        passwordField.delegate = self
+        passwordField.tag = 2
+        
+        setUpDoneButton()
+
     }
     
     // MARK: - Actions
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+            nextField.becomeFirstResponder()
+        } else {
+            signIn()
+            textField.resignFirstResponder()
+        }
+        return false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     @IBAction func signInButton(_ sender: Any) {
+        signIn()
+    }
+    
+    private func signIn() {
         set(isLoading: true)
         if let email = self.emailField.text, let password = self.passwordField.text {
-                Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-                    if let error = error {
-                        self.errorAlert(message: "\(error.localizedDescription)")
-                        self.set(isLoading: false)
-                        return
-                    } else {
-                        self.set(isLoading: false)
-                        self.performSegue(withIdentifier: "signInSegue", sender: self)
-                    }
+            Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+                if let error = error {
+                    self.errorAlert(message: "\(error.localizedDescription)")
+                    self.set(isLoading: false)
+                    return
+                } else {
+                    self.set(isLoading: false)
+                    self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
+            }
         }
     }
     
@@ -53,9 +80,8 @@ class SignInViewController: UIViewController {
     // Sets up is loading hud
     
     let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .dark)
+        let hud = JGProgressHUD(style: .light)
         hud.interactionType = .blockAllTouches
-        hud.textLabel.text = "Signing in..."
         return hud
     }()
     
@@ -66,4 +92,34 @@ class SignInViewController: UIViewController {
             self.hud.dismiss(animated: true)
         }
     }
+    
+    // MARK: - Design
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.white.cgColor
+        textField.layer.cornerRadius = 5.0
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.clear.cgColor
+    }
+    
+    // Add done button to keyboard
+    
+    private func setUpDoneButton() {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        emailField.inputAccessoryView = toolBar
+        passwordField.inputAccessoryView = toolBar
+    }
+    
+    @objc private func doneClicked() {
+        view.endEditing(true)
+    }
+    
 }
