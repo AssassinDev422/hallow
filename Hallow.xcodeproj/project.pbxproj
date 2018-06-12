@@ -17,6 +17,8 @@
 		5087C9DF2973C039B0BB91C1 /* Pods_Hallow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */; };
 		B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */; };
 		B407175820B72A920091B524 /* PrayerTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B407175720B72A910091B524 /* PrayerTracking.swift */; };
+		B41F4E0620D05F9000C0D118 /* MyProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */; };
+		B41F4E0820D05FBB00C0D118 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */; };
 		B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */; };
 		B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */; };
 		B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */; };
@@ -76,6 +78,8 @@
 		944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hallow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryViewController.swift; sourceTree = "<group>"; };
 		B407175720B72A910091B524 /* PrayerTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTracking.swift; sourceTree = "<group>"; };
+		B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyProfile.storyboard; sourceTree = "<group>"; };
+		B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
 		B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayNowViewController.swift; sourceTree = "<group>"; };
 		B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
@@ -184,8 +188,10 @@
 				033704F5209E96990032703B /* Utilities.swift */,
 				033704F7209E980A0032703B /* FirebaseUtilities.swift */,
 				B479569120BDC7FD00745E92 /* UIViewExtension.swift */,
-				030C40D2209E718B006D9690 /* Main.storyboard */,
 				030C40D7209E718C006D9690 /* LaunchScreen.storyboard */,
+				B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */,
+				030C40D2209E718B006D9690 /* Main.storyboard */,
+				B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */,
 				030C40D5209E718C006D9690 /* Assets.xcassets */,
 				030C40DA209E718C006D9690 /* Info.plist */,
 				030C40E2209E7875006D9690 /* GoogleService-Info.plist */,
@@ -305,6 +311,7 @@
 				B4F32A4D20CC709000EB93FF /* Montserrat-BoldItalic.ttf in Resources */,
 				B4F32A5920CC70CB00EB93FF /* Montserrat-Black.ttf in Resources */,
 				B4F32A3620CC706A00EB93FF /* Montserrat in Resources */,
+				B41F4E0620D05F9000C0D118 /* MyProfile.storyboard in Resources */,
 				B4F32A5320CC70A300EB93FF /* Montserrat-MediumItalic.ttf in Resources */,
 				B4F32A5420CC70A500EB93FF /* Montserrat-BlackItalic.ttf in Resources */,
 				030C40D9209E718C006D9690 /* LaunchScreen.storyboard in Resources */,
@@ -319,6 +326,7 @@
 				B4F32A5B20CC70D000EB93FF /* Montserrat-Italic.ttf in Resources */,
 				B4F32A5020CC709800EB93FF /* Montserrat-ExtraLight.ttf in Resources */,
 				B4F32A4C20CC708D00EB93FF /* Montserrat-Medium.ttf in Resources */,
+				B41F4E0820D05FBB00C0D118 /* LogIn.storyboard in Resources */,
 				030C40D6209E718C006D9690 /* Assets.xcassets in Resources */,
 				030C40E3209E7875006D9690 /* GoogleService-Info.plist in Resources */,
 				B4F32A5120CC709A00EB93FF /* Montserrat-Thin.ttf in Resources */,
