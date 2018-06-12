@@ -19,6 +19,7 @@
 		B407175820B72A920091B524 /* PrayerTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B407175720B72A910091B524 /* PrayerTracking.swift */; };
 		B41F4E0620D05F9000C0D118 /* MyProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */; };
 		B41F4E0820D05FBB00C0D118 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */; };
+		B41F4E0D20D061DB00C0D118 /* PrayerJourney.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0C20D061DB00C0D118 /* PrayerJourney.storyboard */; };
 		B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */; };
 		B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */; };
 		B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */; };
@@ -80,6 +81,7 @@
 		B407175720B72A910091B524 /* PrayerTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTracking.swift; sourceTree = "<group>"; };
 		B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyProfile.storyboard; sourceTree = "<group>"; };
 		B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
+		B41F4E0C20D061DB00C0D118 /* PrayerJourney.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PrayerJourney.storyboard; sourceTree = "<group>"; };
 		B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayNowViewController.swift; sourceTree = "<group>"; };
 		B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
@@ -161,24 +163,73 @@
 			isa = PBXGroup;
 			children = (
 				030C40CE209E718B006D9690 /* AppDelegate.swift */,
-				B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */,
+				B41F4E0920D060CE00C0D118 /* LogIn */,
+				B41F4E0B20D0619400C0D118 /* PrayNow */,
+				B41F4E0E20D0620000C0D118 /* PrayerJourney */,
+				B41F4E0A20D0616F00C0D118 /* MyProfile */,
+				B41F4E0F20D0621F00C0D118 /* Utilities */,
+				030C40D7209E718C006D9690 /* LaunchScreen.storyboard */,
+				B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */,
+				030C40D2209E718B006D9690 /* Main.storyboard */,
+				B41F4E0C20D061DB00C0D118 /* PrayerJourney.storyboard */,
+				B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */,
+				030C40D5209E718C006D9690 /* Assets.xcassets */,
+				030C40DA209E718C006D9690 /* Info.plist */,
+				030C40E2209E7875006D9690 /* GoogleService-Info.plist */,
+				B4F32A3720CC707600EB93FF /* Fonts */,
+			);
+			path = Hallow;
+			sourceTree = "<group>";
+		};
+		B41F4E0920D060CE00C0D118 /* LogIn */ = {
+			isa = PBXGroup;
+			children = (
 				B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */,
 				B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */,
 				B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */,
 				B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */,
-				B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */,
-				B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */,
-				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
-				B4D3A10020A89D08009D69A5 /* PrayerJourneyViewController.swift */,
-				B4D3A10620A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift */,
+			);
+			path = LogIn;
+			sourceTree = "<group>";
+		};
+		B41F4E0A20D0616F00C0D118 /* MyProfile */ = {
+			isa = PBXGroup;
+			children = (
 				B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */,
 				B4EEEA7820B4AD3A00B091F7 /* JournalTableViewCell.swift */,
 				B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */,
 				B4EB8E9320B38174000330EB /* MyProfileViewController.swift */,
 				B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */,
+				B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */,
+			);
+			path = MyProfile;
+			sourceTree = "<group>";
+		};
+		B41F4E0B20D0619400C0D118 /* PrayNow */ = {
+			isa = PBXGroup;
+			children = (
+				B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */,
+				B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */,
+				B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */,
+				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
 				B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */,
 				B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */,
-				B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */,
+			);
+			path = PrayNow;
+			sourceTree = "<group>";
+		};
+		B41F4E0E20D0620000C0D118 /* PrayerJourney */ = {
+			isa = PBXGroup;
+			children = (
+				B4D3A10020A89D08009D69A5 /* PrayerJourneyViewController.swift */,
+				B4D3A10620A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift */,
+			);
+			path = PrayerJourney;
+			sourceTree = "<group>";
+		};
+		B41F4E0F20D0621F00C0D118 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
 				B473D68220AC8A1C00D57E78 /* PrayerItem.swift */,
 				B407175720B72A910091B524 /* PrayerTracking.swift */,
 				B473D68020AC89C200D57E78 /* JournalEntry.swift */,
@@ -188,16 +239,8 @@
 				033704F5209E96990032703B /* Utilities.swift */,
 				033704F7209E980A0032703B /* FirebaseUtilities.swift */,
 				B479569120BDC7FD00745E92 /* UIViewExtension.swift */,
-				030C40D7209E718C006D9690 /* LaunchScreen.storyboard */,
-				B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */,
-				030C40D2209E718B006D9690 /* Main.storyboard */,
-				B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */,
-				030C40D5209E718C006D9690 /* Assets.xcassets */,
-				030C40DA209E718C006D9690 /* Info.plist */,
-				030C40E2209E7875006D9690 /* GoogleService-Info.plist */,
-				B4F32A3720CC707600EB93FF /* Fonts */,
 			);
-			path = Hallow;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		B4F32A3720CC707600EB93FF /* Fonts */ = {
@@ -321,6 +364,7 @@
 				B4F32A5D20CC70D500EB93FF /* Montserrat-ExtraBoldItalic.ttf in Resources */,
 				B4F32A5A20CC70CE00EB93FF /* Montserrat-Regular.ttf in Resources */,
 				B4F32A4F20CC709500EB93FF /* Montserrat-ThinItalic.ttf in Resources */,
+				B41F4E0D20D061DB00C0D118 /* PrayerJourney.storyboard in Resources */,
 				B4F32A5820CC70C900EB93FF /* OFL.txt in Resources */,
 				B4F32A4B20CC708A00EB93FF /* Montserrat-LightItalic.ttf in Resources */,
 				B4F32A5B20CC70D000EB93FF /* Montserrat-Italic.ttf in Resources */,

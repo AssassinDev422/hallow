@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Zdp-gr-Era">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--My Prayer Journey-->
+        <scene sceneID="skj-jP-0TH">
+            <objects>
+                <collectionViewController id="Zdp-gr-Era" customClass="PrayerJourneyViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="PS6-pm-qay">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="60" minimumInteritemSpacing="18.75" id="yJ1-ER-x6E">
+                            <size key="itemSize" width="100" height="100"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="18.75" minY="80" maxX="18.75" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="FrK-Hz-oL7" customClass="PrayerJourneyCollectionViewCell" customModule="Hallow" customModuleProvider="target">
+                                <rect key="frame" x="19" y="80" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Entering into a convo" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ilv-B3-2ae">
+                                            <rect key="frame" x="10.5" y="52" width="80" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSV-ah-WwA">
+                                            <rect key="frame" x="26" y="18" width="48" height="24"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="cSV-ah-WwA" firstAttribute="centerX" secondItem="FrK-Hz-oL7" secondAttribute="centerX" id="0xW-Qi-ciH"/>
+                                    <constraint firstItem="cSV-ah-WwA" firstAttribute="top" secondItem="FrK-Hz-oL7" secondAttribute="topMargin" constant="10" id="6YP-1b-Ecc"/>
+                                    <constraint firstItem="ilv-B3-2ae" firstAttribute="top" secondItem="cSV-ah-WwA" secondAttribute="bottom" constant="10" id="EkN-iC-COH"/>
+                                    <constraint firstAttribute="trailing" secondItem="ilv-B3-2ae" secondAttribute="trailing" constant="9.5" id="FhN-G5-QZA"/>
+                                    <constraint firstItem="ilv-B3-2ae" firstAttribute="centerX" secondItem="FrK-Hz-oL7" secondAttribute="centerX" id="Yzn-gS-DRD"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="prayerCellDescription" destination="ilv-B3-2ae" id="7ou-zL-hRN"/>
+                                    <outlet property="prayerCellTitle" destination="cSV-ah-WwA" id="zfn-UR-7PO"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="Zdp-gr-Era" id="v35-ys-vLg"/>
+                            <outlet property="delegate" destination="Zdp-gr-Era" id="by2-gB-eXT"/>
+                        </connections>
+                    </collectionView>
+                    <tabBarItem key="tabBarItem" title="My Prayer Journey" id="hH6-zM-a1C"/>
+                    <connections>
+                        <segue destination="VLH-uv-Otu" kind="presentation" identifier="returnToPrayNowSegue" id="shk-iZ-awk"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bmm-4S-y9z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4897" y="-528"/>
+        </scene>
+        <!--UITabBarController-BXq-9Y-utP-->
+        <scene sceneID="spx-E2-liU">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="UITabBarController-BXq-9Y-utP" storyboardName="Main" referencedIdentifier="UITabBarController-BXq-9Y-utP" id="VLH-uv-Otu" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vyk-On-HCB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4387" y="-74"/>
+        </scene>
+    </scenes>
+    <color key="tintColor" name="white"/>
+</document>
