@@ -11,13 +11,16 @@ import JGProgressHUD
 import Firebase
 
 // TODO: Remove multiple downloaded files after playing
+// TODO: Add line spacing between description2 lines
 
 class PrayNowViewController: UIViewController {
     
     @IBOutlet weak var prayNowLabel: UIButton!
     @IBOutlet weak var prayerSessionTitle: UILabel!
     @IBOutlet weak var prayerSessionDescription: UILabel!
+    @IBOutlet weak var prayerSessionDescription2: UILabel!
     @IBOutlet weak var lengthSelectorOutlet: UISegmentedControl!
+    @IBOutlet weak var selectorBar: UIView!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
@@ -26,18 +29,25 @@ class PrayNowViewController: UIViewController {
     var completedPrayers: [PrayerTracking] = []
     var completedPrayersTitles: [String] = []
     var nextPrayerTitle: String = "Day 1"
+    var lengthWasChanged: Bool = false
+    var prayerLength: String = "10 mins"
+    
+    var prayer10mins: PrayerItem?
+    var prayer5mins: PrayerItem?
+    var prayer15mins: PrayerItem?
     
     // MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        set(isLoading: true)
+        setUpSelector()
     }
     
     // Firebase listener
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.set(isLoading: true)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user!.uid  //TODO: Potential bug - with new phone - unexpectedly found nil
             if let prayer = self.prayer {
@@ -55,14 +65,37 @@ class PrayNowViewController: UIViewController {
         Auth.auth().removeStateDidChangeListener(handle!)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setSelectorBarPosition()
+    }
     
     // MARK: - Actions
     
     @IBAction func lengthChanged(_ sender: Any) {
         self.hud.show(in: view, animated: false)
-        let prayerLength = self.lengthSelectorOutlet.titleForSegment(at: self.lengthSelectorOutlet.selectedSegmentIndex)!
-        self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: prayerLength)
+        self.prayerLength = self.lengthSelectorOutlet.titleForSegment(at: self.lengthSelectorOutlet.selectedSegmentIndex)!
+        if self.prayerLength == "5 mins" {
+            self.prayer = self.prayer5mins
+        } else if self.prayerLength == "15 mins" {
+            self.prayer = self.prayer15mins
+        } else {
+            self.prayer = self.prayer10mins
+        }
         print("Prayer length changed: \(prayerLength)")
+
+        UIView.animate(withDuration: 0.3) {
+            self.setSelectorBarPosition()
+        }
+    }
+
+    @IBAction func prayNowReleased(_ sender: Any) {
+        prayNowLabel.backgroundColor = UIColor(named: "purplishBlue")
+    }
+    
+    
+    @IBAction func prayNowPressed(_ sender: Any) {
+        prayNowLabel.backgroundColor = UIColor(named: "darkIndigo")
     }
     
     // MARK: - Functions
@@ -84,8 +117,13 @@ class PrayNowViewController: UIViewController {
                 self.nextPrayerTitle.removeLast()
                 self.nextPrayerTitle.append(newDayNumber)  
                 print(self.nextPrayerTitle)
-                self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
-                print("Loading prayer session: \(self.nextPrayerTitle)")
+                if dayNumber == 10 {
+                    print("dayNumber was equal to 10 and we are performing segue")
+                    self.performSegue(withIdentifier: "completedSegue", sender: self)
+                } else {
+                    self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                    print("Loading prayer session: \(self.nextPrayerTitle)")
+                }
             } else {
                 print("Kept next prayer set as Day 1 since there are no completed prayers")
                 self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
@@ -96,13 +134,40 @@ class PrayNowViewController: UIViewController {
     private func loadPrayerSession(withTitle title: String, withLength length: String) {
         self.set(isLoading: true)
         FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: length) { result in
-            self.prayer = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
-            print("Prayer title \(self.prayer!.title)")
-            print("Prayer length \(self.prayer!.length)")
+            self.prayer10mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
+            self.prayer = self.prayer10mins
             self.prayerSessionTitle.text = self.prayer!.title
+            self.prayerSessionTitle.text?.append(" of 9")
             self.prayerSessionDescription.text = self.prayer!.description
+            
+            let description2 = NSMutableAttributedString(string: self.prayer!.description2)
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 10
+            description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
+            self.prayerSessionDescription2.attributedText = description2
+
+            FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: "5 mins") { result in
+                self.prayer5mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
+            }
+            FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: "15 mins") { result in
+                self.prayer15mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
+            }
+            
             self.set(isLoading: false)
-            self.hud.dismiss(animated: true)
+            self.hud.dismiss(animated: false)
+        }
+    }
+    
+    private func setSelectorBarPosition() {
+        let width = self.lengthSelectorOutlet.frame.width / 3
+        let origin = self.lengthSelectorOutlet.frame.origin.x
+        let index = self.lengthSelectorOutlet.selectedSegmentIndex
+        if index == 0 {
+            self.selectorBar.frame.origin.x = origin
+        } else if index == 1 {
+            self.selectorBar.frame.origin.x = origin + width
+        } else {
+            self.selectorBar.frame.origin.x = origin + 2 * width
         }
     }
     
@@ -119,10 +184,12 @@ class PrayNowViewController: UIViewController {
         self.prayerSessionDescription.isHidden = isLoading
         self.prayNowLabel.isHidden = isLoading
         self.lengthSelectorOutlet.isHidden = isLoading
+        self.selectorBar.isHidden = isLoading
+        self.prayerSessionDescription2.isHidden = isLoading
         if isLoading {
             self.hud.show(in: view, animated: false)
         } else {
-            self.hud.dismiss(animated: true)
+            self.hud.dismiss(animated: false)
         }
     }
     
@@ -132,10 +199,30 @@ class PrayNowViewController: UIViewController {
         let destinationViewController = segue.destination
         if let AudioPlayerViewController = destinationViewController as? AudioPlayerViewController,
             let _ = segue.identifier {
+                self.prayer?.length = self.prayerLength
                 let prayer = self.prayer
                 print("Prayer length selected: \(prayer!.length)")
                 AudioPlayerViewController.prayer = prayer
                 print("Prayer title in prepare for segue: \(prayer!.title)")  //TODO: Potential bug - Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-        }
+            }
     }
+    
+    // MARK: - Design
+    
+    private func setUpSelector() {
+        
+        lengthSelectorOutlet.setTitleTextAttributes([
+            NSAttributedStringKey.font : UIFont(name: "Montserrat-Black", size: 18) as Any,
+            NSAttributedStringKey.foregroundColor: UIColor(named: "darkIndigo") as Any
+            ], for: .normal)
+        
+        lengthSelectorOutlet.setTitleTextAttributes([
+            NSAttributedStringKey.font : UIFont(name: "Montserrat-Black", size: 18) as Any,
+            NSAttributedStringKey.foregroundColor: UIColor(named: "fadedPink") as Any
+            ], for: .selected)
+        
+    }
+    
+    
+    
 }

@@ -13,4 +13,6 @@ class Constants {
     static var isFirstDay: Bool = false
     static var reminderTime: Date = Date(timeIntervalSince1970: 0)
     static var hasStartedListening: Bool = false
+    
+    static var iPhoneX: Bool = false
 }

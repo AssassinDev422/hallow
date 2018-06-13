@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--My Prayer Journey-->
+        <!--Sessions-->
         <scene sceneID="skj-jP-0TH">
             <objects>
                 <collectionViewController id="Zdp-gr-Era" customClass="PrayerJourneyViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
@@ -63,14 +63,14 @@
                             <outlet property="delegate" destination="Zdp-gr-Era" id="by2-gB-eXT"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" title="My Prayer Journey" id="hH6-zM-a1C"/>
+                    <tabBarItem key="tabBarItem" title="Sessions" image="prayerIcon" id="hH6-zM-a1C"/>
                     <connections>
                         <segue destination="VLH-uv-Otu" kind="presentation" identifier="returnToPrayNowSegue" id="shk-iZ-awk"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bmm-4S-y9z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4897" y="-528"/>
+            <point key="canvasLocation" x="4638" y="-529"/>
         </scene>
         <!--UITabBarController-BXq-9Y-utP-->
         <scene sceneID="spx-E2-liU">
@@ -81,5 +81,8 @@
             <point key="canvasLocation" x="4387" y="-74"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="prayerIcon" width="20" height="28"/>
+    </resources>
     <color key="tintColor" name="white"/>
 </document>

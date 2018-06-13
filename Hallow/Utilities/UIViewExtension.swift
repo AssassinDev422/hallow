@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-// MARK: Background color
+// MARK: - Background gradient
 
 @IBDesignable class GradientView: UIView {
     @IBInspectable var topColor: UIColor = UIColor.white
@@ -24,7 +24,7 @@ import UIKit
     }
 }
 
-// MARK: Designable text field
+// MARK: - Designable text field
 
 @IBDesignable
 class DesignableUITextField: UITextField {
@@ -71,7 +71,7 @@ class DesignableUITextField: UITextField {
 }
 
 
-//MARK: Shadow
+// MARK: - Shadow
 
 // TODO: - Make it update real time in IB
 // Have to change class of each view / button / label to see it work
@@ -87,6 +87,26 @@ class DesignableButton: UIButton {
 @IBDesignable
 class DesignableLabel: UILabel {
 }
+
+// MARK: - Create rectangle as image from single color
+
+extension UIImage {
+    class func createImageOfSingleColor(color: UIColor, height: Double) -> UIImage {
+        let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: height)
+
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        
+        context!.setFillColor(color.cgColor)
+        context!.fill(rect)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
+}
+
 
 // MARK: - Make it appear in IB
 // For now only has shadow elements

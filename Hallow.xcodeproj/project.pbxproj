@@ -25,6 +25,8 @@
 		B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */; };
 		B42B0CEE20A542E600FDAFB6 /* ReflectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */; };
 		B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */; };
+		B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */; };
+		B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */; };
 		B45C11DD20BC737800CEEAA9 /* StatsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DC20BC737800CEEAA9 /* StatsItem.swift */; };
 		B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */; };
 		B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */; };
@@ -63,6 +65,9 @@
 		B4F32A5B20CC70D000EB93FF /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4820CC707600EB93FF /* Montserrat-Italic.ttf */; };
 		B4F32A5C20CC70D200EB93FF /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4920CC707600EB93FF /* Montserrat-SemiBoldItalic.ttf */; };
 		B4F32A5D20CC70D500EB93FF /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4A20CC707600EB93FF /* Montserrat-ExtraBoldItalic.ttf */; };
+		B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FB770F20D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift */; };
+		B4FB771220D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FB771120D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift */; };
+		B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FB771320D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +92,8 @@
 		B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
 		B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectViewController.swift; sourceTree = "<group>"; };
 		B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideSelectorViewController.swift; sourceTree = "<group>"; };
+		B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedViewController.swift; sourceTree = "<group>"; };
+		B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B45C11DC20BC737800CEEAA9 /* StatsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsItem.swift; sourceTree = "<group>"; };
 		B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderViewController.swift; sourceTree = "<group>"; };
 		B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderSettingViewController.swift; sourceTree = "<group>"; };
@@ -125,6 +132,9 @@
 		B4F32A4820CC707600EB93FF /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Italic.ttf"; sourceTree = "<group>"; };
 		B4F32A4920CC707600EB93FF /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		B4F32A4A20CC707600EB93FF /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		B4FB770F20D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneyTableViewController.swift; sourceTree = "<group>"; };
+		B4FB771120D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneyTableViewCell.swift; sourceTree = "<group>"; };
+		B4FB771320D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneySuperViewController.swift; sourceTree = "<group>"; };
 		D2D114C1D2E8CFE738D11A56 /* Pods-Hallow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hallow.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Hallow/Pods-Hallow.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -208,12 +218,14 @@
 		B41F4E0B20D0619400C0D118 /* PrayNow */ = {
 			isa = PBXGroup;
 			children = (
+				B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */,
 				B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */,
 				B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */,
 				B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */,
 				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
 				B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */,
 				B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */,
+				B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */,
 			);
 			path = PrayNow;
 			sourceTree = "<group>";
@@ -221,8 +233,11 @@
 		B41F4E0E20D0620000C0D118 /* PrayerJourney */ = {
 			isa = PBXGroup;
 			children = (
-				B4D3A10020A89D08009D69A5 /* PrayerJourneyViewController.swift */,
 				B4D3A10620A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift */,
+				B4D3A10020A89D08009D69A5 /* PrayerJourneyViewController.swift */,
+				B4FB771320D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift */,
+				B4FB770F20D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift */,
+				B4FB771120D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift */,
 			);
 			path = PrayerJourney;
 			sourceTree = "<group>";
@@ -455,11 +470,14 @@
 				B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */,
 				B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */,
 				B4D3A10720A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift in Sources */,
+				B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */,
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,
+				B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */,
 				B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */,
 				033704F8209E980A0032703B /* FirebaseUtilities.swift in Sources */,
 				B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */,
 				B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */,
+				B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */,
 				B473D68120AC89C200D57E78 /* JournalEntry.swift in Sources */,
 				B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */,
 				B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */,
@@ -471,9 +489,11 @@
 				B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */,
 				B4EEEA7920B4AD3A00B091F7 /* JournalTableViewCell.swift in Sources */,
 				033704F6209E96990032703B /* Utilities.swift in Sources */,
+				B4FB771220D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift in Sources */,
 				B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */,
 				B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */,
 				B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */,
+				B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */,
 				B42B0CEE20A542E600FDAFB6 /* ReflectViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

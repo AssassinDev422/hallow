@@ -19,6 +19,9 @@ class FirstDayReminderSettingViewController: UIViewController {
     @IBAction func setUpReminderButton(_ sender: Any) {
         setUpReminder()
     }
+    @IBAction func nevermindButton(_ sender: Any) {
+        performSegue(withIdentifier: "finishFirstDaySegue", sender: self)
+    }
     
     // MARK: - Functions
     
@@ -47,6 +50,20 @@ class FirstDayReminderSettingViewController: UIViewController {
 
         Constants.reminderTime = reminderTime.date
         print("Set constants value to: \(Constants.reminderTime)")
+        performSegue(withIdentifier: "finishFirstDaySegue", sender: self)
+
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "finishFirstDaySegue" {
+            print("*************segue identifier finishing first day segue")
+            if let destination = segue.destination as? UITabBarController {
+                destination.selectedIndex = 1
+                print("prepare for segue happened")
+            }
+        }
     }
     
 }

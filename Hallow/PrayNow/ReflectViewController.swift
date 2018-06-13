@@ -21,8 +21,8 @@ class ReflectViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        textField!.layer.borderWidth = 1
-        textField!.layer.borderColor = UIColor.black.cgColor
+        textField!.layer.borderWidth = 0.5
+        textField!.layer.borderColor = UIColor.white.cgColor
         
         setUpDoneButton()
 
@@ -51,6 +51,14 @@ class ReflectViewController: UIViewController {
     @IBAction func saveButton(_ sender: Any) {
         save()
     }
+    @IBAction func exitButton(_ sender: Any) {
+        if Constants.isFirstDay == true {
+            performSegue(withIdentifier: "isFirstDaySegue", sender: self)
+            Constants.isFirstDay = false
+        } else {
+            performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+        }
+    }
     
     private func save() {
         let entry = textField!.text
@@ -58,10 +66,26 @@ class ReflectViewController: UIViewController {
         FirebaseUtilities.saveReflection(ofType: "journal", byUserID: self.userID!, withEntry: entry!)
     
         if Constants.isFirstDay == true {
-        performSegue(withIdentifier: "isFirstDaySegue", sender: self)
-        Constants.isFirstDay = false
+            performSegue(withIdentifier: "isFirstDaySegue", sender: self)
+            Constants.isFirstDay = false
         } else {
-        performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+            performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "isNotFirstDaySegue" {
+            print("*************segue identifier is alright - not first")
+            if let destination = segue.destination as? UITabBarController {
+                destination.selectedIndex = 1
+                print("prepare for segue happened")
+            }
+        } else if segue.identifier == "exitReflectSegue" {
+            print("*************segue identifier exiting reflect segue")
+            if let destination = segue.destination as? UITabBarController {
+                destination.selectedIndex = 1
+                print("prepare for segue happened")
+            }
         }
     }
     

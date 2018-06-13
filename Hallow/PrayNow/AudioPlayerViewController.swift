@@ -18,9 +18,11 @@ import Firebase
 class AudioPlayerViewController: UIViewController {
 
     @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet weak var reflectOutlet: UIButton!
     @IBOutlet weak var progressControlOutlet: UISlider!
-    
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var nowPrayingLabel: UILabel!
+    @IBOutlet weak var nowPrayingTitleLabel: UILabel!
+    @IBOutlet weak var exitButtonOutlet: UIButton!
     
     var prayer: PrayerItem?
     var audioPlayer: AVAudioPlayer?
@@ -39,7 +41,7 @@ class AudioPlayerViewController: UIViewController {
    
     override func viewDidLoad() {
         hideOutlets(shouldHide: true)
-        progressControlOutlet.setThumbImage(#imageLiteral(resourceName: "thumb"), for: .normal)
+        setUpProgressControlUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,6 +49,7 @@ class AudioPlayerViewController: UIViewController {
         if let prayer = prayer {
             downloadAndSetUpAudio(prayer: prayer)
             print("Prayer title in view did appear of audio player: \(self.prayer!.title)")
+            nowPrayingTitleLabel.text = self.prayer?.description
         }
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user!.uid
@@ -96,15 +99,12 @@ class AudioPlayerViewController: UIViewController {
         sliderUpdatedTime()
     }
     
-    @IBAction func reflectButton(_ sender: Any) {
-        guard let audioPlayer = audioPlayer else {
-            setupAudioPlayer(file: prayer)
-            return
-        }
-        if audioPlayer.isPlaying {
-            audioPlayer.pause()
-            playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-        }
+    @IBAction func exitButtonReleased(_ sender: Any) {
+        exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
+    }
+    
+    @IBAction func exitButtonPressed(_ sender: Any) {
+        exitButtonOutlet.setTitleColor(UIColor(named: "fadedPink"), for: .normal)
     }
     
     // MARK: - Functions
@@ -170,9 +170,17 @@ class AudioPlayerViewController: UIViewController {
     
     private func updateProgressControl(songCompleted: @escaping (Bool) -> Void) {
         if audioPlayer != nil {
-            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
+            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { [weak self] timer in
                 let percentComplete = self!.audioPlayer!.currentTime / self!.audioPlayer!.duration
                 self?.progressControlOutlet.setValue(Float(percentComplete), animated: true)
+                
+                let time = self!.audioPlayer!.currentTime
+                let minutes = Int(time) / 60 % 60
+                let seconds = Int(time) % 60
+                self?.timeLabel.text = String(format:"%01i:%02i", minutes, seconds)
+                
+                self?.timeLabel.frame.origin.x = 5 + CGFloat(percentComplete) * (self?.progressControlOutlet.frame.width)!
+                
                 if self?.audioPlayer?.isPlaying == true {
                     self?.addedTimeTracker += 0.01
                 }
@@ -236,7 +244,7 @@ class AudioPlayerViewController: UIViewController {
         }
     }
     
-    // MARK: Functions - Hud and outlets
+    // MARK: - Functions - Hud and outlets
     
     let hud: JGProgressHUD = {
         let hud = JGProgressHUD(style: .dark)
@@ -259,6 +267,27 @@ class AudioPlayerViewController: UIViewController {
     private func hideOutlets(shouldHide: Bool) {
         self.playPauseButton.isHidden = shouldHide
         self.progressControlOutlet.isHidden = shouldHide
-        self.reflectOutlet.isHidden = shouldHide
+        self.exitButtonOutlet.isHidden = shouldHide
+        self.timeLabel.isHidden = shouldHide
+        self.nowPrayingLabel.isHidden = shouldHide
+        self.nowPrayingTitleLabel.isHidden = shouldHide
+    }
+    
+    // MARK: - Design
+    
+    private func setUpProgressControlUI() {
+        let image = #imageLiteral(resourceName: "thumbIcon")
+        let newWidth = 2
+        let newHeight = 5
+        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
+        image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+        
+        let thumbImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        progressControlOutlet.setThumbImage(thumbImage, for: .normal)
+        
+        progressControlOutlet.transform = progressControlOutlet.transform.scaledBy(x: 1, y: 2)
+        progressControlOutlet.tintColor = UIColor(named: "fadedPink")
     }
 }
