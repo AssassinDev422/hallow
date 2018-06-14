@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 
+// TODO: Update play button image
+
 class PrayerJourneyTableViewController: UITableViewController {
     
     var prayers: [PrayerItem] = []
@@ -18,6 +20,9 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    
+    var tableViewLoaded: Bool = false
+    var row: Int = 0
     
     // MARK: - Life cycle
     
@@ -51,6 +56,8 @@ class PrayerJourneyTableViewController: UITableViewController {
             print("Prayer guide: \(Constants.guide)")
             print("Prayer sessions: \(self.prayers.count)")
             self.tableView!.reloadData()
+            
+            self.checkIfLoaded()
         }
     }
     
@@ -59,6 +66,44 @@ class PrayerJourneyTableViewController: UITableViewController {
             self.completedPrayers = results.map(PrayerTracking.init)
             print("Completed prayers: \(self.completedPrayers.count)")
             self.tableView!.reloadData()
+            
+            
+        }
+    }
+    
+    func checkIfLoaded() {
+        let parent = self.parent as! PrayerJourneySuperViewController
+        if self.tableViewLoaded == true {
+            if parent.everythingIsLoaded == true {
+                updateTableViewPosition()
+                print("Everything is loaded in tableview")
+                parent.set(isLoading: false)
+                parent.hud.dismiss(animated: false)
+                
+                parent.everythingIsLoaded = false
+            } else {
+                print("Everything is not loaded in tableview")
+                parent.everythingIsLoaded = true
+                parent.checkIfLoaded()
+            }
+            self.tableViewLoaded = false
+        } else {
+            self.tableViewLoaded = true
+            checkIfLoaded()
+            print("Everything is not loaded in tableview v2")
+        }
+    }
+    
+    private func updateTableViewPosition() {
+        let parent = self.parent as! PrayerJourneySuperViewController
+        
+        if parent.dayNumber == 10 {
+            let indexPath = IndexPath(row: 8, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        } else {
+            self.row = parent.dayNumber - 1
+            let indexPath = IndexPath(row: self.row, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
 
@@ -83,20 +128,27 @@ class PrayerJourneyTableViewController: UITableViewController {
         
         let completed = self.completedPrayers.contains {$0.title == prayer.title}
         if completed == true {
-            cell.layer.backgroundColor = UIColor.lightGray.cgColor
-            cell.layer.borderColor = UIColor.darkGray.cgColor
-            cell.prayerTitleLabel.textColor = UIColor.darkGray
-            cell.prayerDescriptionLabel.textColor = UIColor.darkGray
+            cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
+            cell.statusImage.contentMode = .scaleToFill
+            cell.prayerTitleLabel.textColor = UIColor(named: "fadedPink")
+            cell.prayerDescriptionLabel.textColor = UIColor(named: "fadedPink")
         } else {
-            cell.layer.backgroundColor = UIColor.clear.cgColor
-            cell.layer.borderColor = UIColor.black.cgColor
-            cell.prayerTitleLabel.textColor = UIColor.black
-            cell.prayerDescriptionLabel.textColor = UIColor.black
+            cell.statusImage.image = UIImage.circle(diameter: 15, color: UIColor(named: "purplishBlue")!)
+            cell.statusImage.contentMode = .center
+            cell.prayerTitleLabel.textColor = UIColor(named: "darkIndigo")
+            cell.prayerDescriptionLabel.textColor = UIColor(named: "darkIndigo")
         }
         
-        cell.layer.borderWidth = 1
+        cell.layer.borderWidth = 0
+        
+        cell.playCellButton.tag = indexPath.row
+        cell.playCellButton.addTarget(self, action: #selector(PrayerJourneyTableViewController.buttonTapped(_:)), for: UIControlEvents.touchUpInside)
         
         return cell
+    }
+    
+    @objc private func buttonTapped(_ sender: UIButton!){
+        self.performSegue(withIdentifier: "tableReturnToPrayNowSegue", sender: sender)
     }
     
     // MARK: - Table view delegate and appearance
@@ -116,11 +168,26 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let prayer = prayers[indexPath.item]
-//        performSegue(withIdentifier: "tableReturnToPrayNowSegue", sender: prayer)
+        let parent = self.parent as! PrayerJourneySuperViewController
+        parent.prayer = prayer
+        parent.prayerTitleLabel.text = prayer.title
+        parent.prayerTitleLabel.text?.append(" of 9")
+        parent.prayerDescriptionLabel.text = prayer.description
+        
+        let description2 = NSMutableAttributedString(string: prayer.description2)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 10
+        description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
+        parent.prayerDescription2Label.attributedText = description2
+        
+        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let prayer = sender as? PrayerItem {
+        if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let button:UIButton = sender as! UIButton? {
+            let indexPath = button.tag
+            let prayer = prayers[indexPath]
             prayNow.prayer = prayer
         }
     }

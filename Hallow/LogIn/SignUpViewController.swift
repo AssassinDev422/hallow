@@ -10,8 +10,9 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-//TODO: What happens if you try to create the same user with an existing email
-//TODO: Center text with icons
+// TODO: What happens if you try to create the same user with an existing email
+// TODO: Update person icon image
+
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
 

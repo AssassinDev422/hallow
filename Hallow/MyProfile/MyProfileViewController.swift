@@ -14,12 +14,15 @@ import JGProgressHUD
 
 class MyProfileViewController: UIViewController {
     
-    @IBOutlet weak var timeInPrayer: UILabel!
-    @IBOutlet weak var prayerSessionCount: UILabel!
-    @IBOutlet weak var titleOutlet: UILabel!
-    @IBOutlet weak var prayersCompletedLabel: UILabel!
-    @IBOutlet weak var timeInPrayerLabel: UILabel!
+    @IBOutlet weak var minsNumber: UILabel!
+    @IBOutlet weak var completedNumber: UILabel!
+    @IBOutlet weak var nameOutlet: UILabel!
+    @IBOutlet weak var completedLabel: UILabel!
+    @IBOutlet weak var minsLabel: UILabel!
+    @IBOutlet weak var startedLabel: UILabel!
+    @IBOutlet weak var startedNumber: UILabel!
     
+    @IBOutlet weak var logOutOutlet: UIButton!
     var completedPrayers: [PrayerTracking] = []
     var stats: StatsItem?
     
@@ -65,7 +68,7 @@ class MyProfileViewController: UIViewController {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
             self.completedPrayers = results.map(PrayerTracking.init)
             print("Completed prayers: \(self.completedPrayers.count)")
-            self.prayerSessionCount.text = String(self.completedPrayers.count)
+            self.completedNumber.text = String(self.completedPrayers.count)
             if self.numberLoading == 1 {
                 self.set(isLoading: false)
             } else {
@@ -79,7 +82,7 @@ class MyProfileViewController: UIViewController {
             self.stats = results.map(StatsItem.init)[0]  
             let minutes = (self.stats?.timeInPrayer)! / 60.0
             let minutesString = String(format: "%.0f", minutes)
-            self.timeInPrayer.text = minutesString
+            self.minsNumber.text = minutesString
             if self.numberLoading == 1 {
                 self.set(isLoading: false)
             } else {
@@ -107,18 +110,18 @@ class MyProfileViewController: UIViewController {
     private func set(isLoading: Bool) {
         if isLoading {
             self.hud.show(in: view, animated: false)
-            self.timeInPrayer.isHidden = true
-            self.timeInPrayerLabel.isHidden = true
-            self.titleOutlet.isHidden = true
-            self.prayersCompletedLabel.isHidden = true
-            self.prayerSessionCount.isHidden = true
+            self.minsNumber.isHidden = true
+            self.minsLabel.isHidden = true
+            self.nameOutlet.isHidden = true
+            self.completedLabel.isHidden = true
+            self.completedNumber.isHidden = true
         } else {
             self.hud.dismiss(animated: false)
-            self.timeInPrayer.isHidden = false
-            self.timeInPrayerLabel.isHidden = false
-            self.titleOutlet.isHidden = false
-            self.prayersCompletedLabel.isHidden = false
-            self.prayerSessionCount.isHidden = false
+            self.minsNumber.isHidden = false
+            self.minsLabel.isHidden = false
+            self.nameOutlet.isHidden = false
+            self.completedLabel.isHidden = false
+            self.completedNumber.isHidden = false
         }
     }
 

@@ -11,7 +11,10 @@ import JGProgressHUD
 import Firebase
 
 // TODO: Remove multiple downloaded files after playing
-// TODO: Add line spacing between description2 lines
+
+// FIXME: PrayerSuper desc
+
+// FIXME: appearance in iPhone 5s (test with clicking back and forth in iPhone 8)
 
 class PrayNowViewController: UIViewController {
     
@@ -49,7 +52,7 @@ class PrayNowViewController: UIViewController {
         super.viewWillAppear(animated)
         self.set(isLoading: true)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user!.uid  //TODO: Potential bug - with new phone - unexpectedly found nil
+            self.userID = user?.uid 
             if let prayer = self.prayer {
                 self.loadPrayerSession(withTitle: prayer.title, withLength: "10 mins")
                 print("Loading later prayer session")
@@ -73,7 +76,6 @@ class PrayNowViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func lengthChanged(_ sender: Any) {
-        self.hud.show(in: view, animated: false)
         self.prayerLength = self.lengthSelectorOutlet.titleForSegment(at: self.lengthSelectorOutlet.selectedSegmentIndex)!
         if self.prayerLength == "5 mins" {
             self.prayer = self.prayer5mins
@@ -101,38 +103,42 @@ class PrayNowViewController: UIViewController {
     // MARK: - Functions
     
     private func setNextPrayerAndLoad() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
-            self.completedPrayers = results.map(PrayerTracking.init)
-            print("Completed prayers: \(self.completedPrayers.count)")
-            if self.completedPrayers.count > 0 {
-                for completedPrayer in self.completedPrayers {
-                    self.completedPrayersTitles.append(completedPrayer.title)
-                }
-                self.completedPrayersTitles.sort()
-                print("Completed prayers in array: \(self.completedPrayersTitles)")
-                self.nextPrayerTitle = self.completedPrayersTitles[self.completedPrayersTitles.count-1]
-                var dayNumber: Int = Int(String(self.nextPrayerTitle.last!))!
-                dayNumber += 1
-                let newDayNumber: String = String(dayNumber)
-                self.nextPrayerTitle.removeLast()
-                self.nextPrayerTitle.append(newDayNumber)  
-                print(self.nextPrayerTitle)
-                if dayNumber == 10 {
-                    print("dayNumber was equal to 10 and we are performing segue")
-                    self.performSegue(withIdentifier: "completedSegue", sender: self)
+        if self.userID != nil {
+            FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+                self.completedPrayers = results.map(PrayerTracking.init)
+                print("Completed prayers: \(self.completedPrayers.count)")
+                if self.completedPrayers.count > 0 {
+                    for completedPrayer in self.completedPrayers {
+                        self.completedPrayersTitles.append(completedPrayer.title)
+                    }
+                    self.completedPrayersTitles.sort()
+                    print("Completed prayers in array: \(self.completedPrayersTitles)")
+                    self.nextPrayerTitle = self.completedPrayersTitles[self.completedPrayersTitles.count-1]
+                    var dayNumber: Int = Int(String(self.nextPrayerTitle.last!))!
+                    dayNumber += 1
+                    let newDayNumber: String = String(dayNumber)
+                    self.nextPrayerTitle.removeLast()
+                    self.nextPrayerTitle.append(newDayNumber)
+                    print(self.nextPrayerTitle)
+                    if dayNumber == 10 {
+                        print("dayNumber was equal to 10 and we are performing segue")
+                        self.performSegue(withIdentifier: "completedSegue", sender: self)
+                    } else {
+                        self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                        print("Loading prayer session: \(self.nextPrayerTitle)")
+                    }
                 } else {
+                    print("Kept next prayer set as Day 1 since there are no completed prayers")
                     self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
-                    print("Loading prayer session: \(self.nextPrayerTitle)")
                 }
-            } else {
-                print("Kept next prayer set as Day 1 since there are no completed prayers")
-                self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
             }
+        } else {
+            print("Do not have user ID ***************")
+            self.loadPrayerSession(withTitle: "Day 1", withLength: "10 mins")
         }
     }
     
     private func loadPrayerSession(withTitle title: String, withLength length: String) {
-        self.set(isLoading: true)
         FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: length) { result in
             self.prayer10mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
             self.prayer = self.prayer10mins

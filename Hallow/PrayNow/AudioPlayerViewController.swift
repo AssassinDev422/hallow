@@ -37,6 +37,8 @@ class AudioPlayerViewController: UIViewController {
     var addedTimeTracker = 0.00
     var stats: StatsItem?
     
+    var readyToPlay = false
+    
     // MARK: - Life cycle
    
     override func viewDidLoad() {
@@ -46,6 +48,7 @@ class AudioPlayerViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        readyToPlay = false
         if let prayer = prayer {
             downloadAndSetUpAudio(prayer: prayer)
             print("Prayer title in view did appear of audio player: \(self.prayer!.title)")
@@ -53,6 +56,11 @@ class AudioPlayerViewController: UIViewController {
         }
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user!.uid
+            if self.readyToPlay == false {
+                self.readyToPlay = true
+            } else {
+                self.playPause()
+            }
         }
         alreadySaved = 0
         addedTimeTracker = 0.0
@@ -76,6 +84,25 @@ class AudioPlayerViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func pressPlayPause(_ sender: Any) {
+        playPause()
+    }
+    
+    @IBAction func progressControl(_ sender: Any) {
+        print("progressControl function was run")
+        sliderUpdatedTime()
+    }
+    
+    @IBAction func exitButtonReleased(_ sender: Any) {
+        exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
+    }
+    
+    @IBAction func exitButtonPressed(_ sender: Any) {
+        exitButtonOutlet.setTitleColor(UIColor(named: "fadedPink"), for: .normal)
+    }
+    
+    // MARK: - Functions
+    
+    private func playPause() {
         Constants.hasStartedListening = true
         guard let audioPlayer = audioPlayer else {
             setupAudioPlayer(file: prayer)
@@ -93,21 +120,6 @@ class AudioPlayerViewController: UIViewController {
             self.alreadySaved = 1
         }
     }
-    
-    @IBAction func progressControl(_ sender: Any) {
-        print("progressControl function was run")
-        sliderUpdatedTime()
-    }
-    
-    @IBAction func exitButtonReleased(_ sender: Any) {
-        exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
-    }
-    
-    @IBAction func exitButtonPressed(_ sender: Any) {
-        exitButtonOutlet.setTitleColor(UIColor(named: "fadedPink"), for: .normal)
-    }
-    
-    // MARK: - Functions
     
     func downloadAndSetUpAudio(prayer: PrayerItem) {
         let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: prayer.audioURLPath)
@@ -160,6 +172,13 @@ class AudioPlayerViewController: UIViewController {
             print("Audio player was set up")
             //FIXME: Update title on screen - self.navigationItem.title = self.prayer!.title
             self.set(isLoading: false)
+            
+            if readyToPlay == false {
+                readyToPlay = true
+            } else {
+                self.playPause()
+            }
+            
             updateProgressControl(songCompleted: completionHandler)
         } catch let error {
             print(error.localizedDescription)
