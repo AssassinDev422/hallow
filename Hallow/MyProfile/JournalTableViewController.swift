@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseFirestore
 import Firebase
+import JGProgressHUD
 
 class JournalTableViewController: UITableViewController {
 
@@ -18,6 +19,12 @@ class JournalTableViewController: UITableViewController {
     var userID: String?
     
     // MARK: - Life cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = UIColor(named: "fadedPink")
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -37,10 +44,29 @@ class JournalTableViewController: UITableViewController {
     
     private func loadJournalEntries() {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "journal", byUser: self.userID!) { results in
+            self.set(isLoading: true)
             self.journalEntries = results.map(JournalEntry.init)
             self.journalEntries.sort{$0.dateStored > $1.dateStored}
             print("Journal count in private function: \(self.journalEntries.count)")
             self.tableView!.reloadData()
+            self.set(isLoading: false)
+        }
+    }
+    
+    // Sets up hud
+    
+    let hud: JGProgressHUD = {
+        let hud = JGProgressHUD(style: .extraLight)
+        hud.interactionType = .blockAllTouches
+        return hud
+    }()
+    
+    func set(isLoading: Bool) {
+        self.tableView.isHidden = isLoading
+        if isLoading {
+            self.hud.show(in: view, animated: false)
+        } else {
+            self.hud.dismiss(animated: false)
         }
     }
     

@@ -122,7 +122,8 @@ class PrayNowViewController: UIViewController {
                     print(self.nextPrayerTitle)
                     if dayNumber == 10 {
                         print("dayNumber was equal to 10 and we are performing segue")
-                        self.performSegue(withIdentifier: "completedSegue", sender: self)
+                        Constants.hasCompleted = true
+                        self.loadPrayerSession(withTitle: "Day 9", withLength: "10 mins")
                     } else {
                         self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
                         print("Loading prayer session: \(self.nextPrayerTitle)")

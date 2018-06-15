@@ -23,6 +23,9 @@
 		B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */; };
 		B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */; };
 		B42B0CEE20A542E600FDAFB6 /* ReflectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */; };
+		B432057220D2E0C8000EB246 /* ProfileNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057120D2E0C8000EB246 /* ProfileNavigationViewController.swift */; };
+		B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057320D2EEA7000EB246 /* FeedbackViewController.swift */; };
+		B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057520D2EEB3000EB246 /* SupportViewController.swift */; };
 		B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */; };
 		B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */; };
 		B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */; };
@@ -37,6 +40,10 @@
 		B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */; };
 		B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */; };
 		B4D3A0FB20A5F195009D69A5 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */; };
+		B4E486D420D327030054FFFB /* LeftToRightSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D320D327030054FFFB /* LeftToRightSegue.swift */; };
+		B4E486D620D3274D0054FFFB /* RightToLeftSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D520D3274D0054FFFB /* RightToLeftSegue.swift */; };
+		B4E486D820D327580054FFFB /* FromTopSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D720D327580054FFFB /* FromTopSegue.swift */; };
+		B4E486DA20D329C90054FFFB /* LeftToRightUnwindSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D920D329C90054FFFB /* LeftToRightUnwindSegue.swift */; };
 		B4EB8E9220B3450F000330EB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EB8E9120B3450F000330EB /* Constants.swift */; };
 		B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EB8E9320B38174000330EB /* MyProfileViewController.swift */; };
 		B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */; };
@@ -88,6 +95,9 @@
 		B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayNowViewController.swift; sourceTree = "<group>"; };
 		B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
 		B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectViewController.swift; sourceTree = "<group>"; };
+		B432057120D2E0C8000EB246 /* ProfileNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNavigationViewController.swift; sourceTree = "<group>"; };
+		B432057320D2EEA7000EB246 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		B432057520D2EEB3000EB246 /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideSelectorViewController.swift; sourceTree = "<group>"; };
 		B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedViewController.swift; sourceTree = "<group>"; };
 		B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +112,10 @@
 		B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		B4E486D320D327030054FFFB /* LeftToRightSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftToRightSegue.swift; sourceTree = "<group>"; };
+		B4E486D520D3274D0054FFFB /* RightToLeftSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightToLeftSegue.swift; sourceTree = "<group>"; };
+		B4E486D720D327580054FFFB /* FromTopSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromTopSegue.swift; sourceTree = "<group>"; };
+		B4E486D920D329C90054FFFB /* LeftToRightUnwindSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftToRightUnwindSegue.swift; sourceTree = "<group>"; };
 		B4EB8E9120B3450F000330EB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B4EB8E9320B38174000330EB /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTableViewController.swift; sourceTree = "<group>"; };
@@ -201,12 +215,15 @@
 		B41F4E0A20D0616F00C0D118 /* MyProfile */ = {
 			isa = PBXGroup;
 			children = (
+				B432057120D2E0C8000EB246 /* ProfileNavigationViewController.swift */,
 				B4EB8E9320B38174000330EB /* MyProfileViewController.swift */,
 				B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */,
 				B4EEEA7820B4AD3A00B091F7 /* JournalTableViewCell.swift */,
 				B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */,
 				B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */,
 				B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */,
+				B432057320D2EEA7000EB246 /* FeedbackViewController.swift */,
+				B432057520D2EEB3000EB246 /* SupportViewController.swift */,
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -239,6 +256,10 @@
 		B41F4E0F20D0621F00C0D118 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				B4E486D320D327030054FFFB /* LeftToRightSegue.swift */,
+				B4E486D920D329C90054FFFB /* LeftToRightUnwindSegue.swift */,
+				B4E486D520D3274D0054FFFB /* RightToLeftSegue.swift */,
+				B4E486D720D327580054FFFB /* FromTopSegue.swift */,
 				B473D68220AC8A1C00D57E78 /* PrayerItem.swift */,
 				B407175720B72A910091B524 /* PrayerTracking.swift */,
 				B473D68020AC89C200D57E78 /* JournalEntry.swift */,
@@ -456,9 +477,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B432057220D2E0C8000EB246 /* ProfileNavigationViewController.swift in Sources */,
 				B4EEEA7B20B4E90700B091F7 /* User.swift in Sources */,
+				B4E486D420D327030054FFFB /* LeftToRightSegue.swift in Sources */,
+				B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */,
 				B407175820B72A920091B524 /* PrayerTracking.swift in Sources */,
 				B4D3A0FB20A5F195009D69A5 /* SignInViewController.swift in Sources */,
+				B4E486D620D3274D0054FFFB /* RightToLeftSegue.swift in Sources */,
 				B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */,
 				B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */,
 				B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */,
@@ -467,7 +492,10 @@
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,
 				B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */,
 				B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */,
+				B4E486DA20D329C90054FFFB /* LeftToRightUnwindSegue.swift in Sources */,
 				033704F8209E980A0032703B /* FirebaseUtilities.swift in Sources */,
+				B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */,
+				B4E486D820D327580054FFFB /* FromTopSegue.swift in Sources */,
 				B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */,
 				B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */,
 				B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */,

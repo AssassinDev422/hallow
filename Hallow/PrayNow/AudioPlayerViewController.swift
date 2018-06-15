@@ -292,6 +292,12 @@ class AudioPlayerViewController: UIViewController {
         self.nowPrayingTitleLabel.isHidden = shouldHide
     }
     
+    // MARK: - Navigation
+    // Unwind
+    
+    @IBAction func returnFromSegueActions(sender: UIStoryboardSegue){
+    }
+    
     // MARK: - Design
     
     private func setUpProgressControlUI() {

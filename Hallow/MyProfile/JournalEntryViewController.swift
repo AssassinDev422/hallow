@@ -14,13 +14,12 @@ import Firebase
 class JournalEntryViewController: UIViewController {
     
     @IBOutlet weak var textField: UITextView!
+    @IBOutlet weak var dateField: UILabel!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
 
     var journalEntry: JournalEntry?
-    
-    let segmentTitles = ["Hardly", "Barely", "Fairly", "Very"]
     
     // MARK: - Life cycle
     
@@ -28,9 +27,18 @@ class JournalEntryViewController: UIViewController {
         super.viewDidLoad()
         
         textField.text = journalEntry?.entry
+        dateField.text = journalEntry?.date
         
-        textField!.layer.borderWidth = 1
-        textField!.layer.borderColor = UIColor.black.cgColor
+        textField!.layer.borderWidth = 0
+        textField!.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
+        
+        textField!.layer.masksToBounds = false
+        textField!.layer.shadowColor = UIColor.lightGray.cgColor
+        textField!.layer.shadowOpacity = 0.8
+        textField!.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
+        textField!.layer.shadowRadius = 2
+        
+        navigationItem.title = "Journal Entry"
         
         setUpDoneButton()
         
@@ -58,6 +66,7 @@ class JournalEntryViewController: UIViewController {
     
     @IBAction func updateButton(_ sender: Any) {
         update()
+        print("Button is pressed")
     }
     
     private func update() {

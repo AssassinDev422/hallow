@@ -14,6 +14,13 @@ class FirstDayReminderSettingViewController: UIViewController {
 
     @IBOutlet weak var reminderTime: UIDatePicker!
     
+    // MARK: - Life cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        reminderTime.setValue(UIColor.white, forKeyPath: "textColor")
+    }
+    
     // MARK: - Actions
     
     @IBAction func setUpReminderButton(_ sender: Any) {

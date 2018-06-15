@@ -29,4 +29,15 @@ class FirstDayReminderViewController: UIViewController {
         }
     }
     
+    // MARK: - NAVIGATION
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "noReminderSegue" {
+            if let destination = segue.destination as? UITabBarController {
+                destination.selectedIndex = 1
+                print("prepare for segue happened")
+            }
+        }
+    }
+    
 }

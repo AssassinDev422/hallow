@@ -16,6 +16,11 @@ class SettingsReminderViewController: UIViewController {
     
     // MARK: - Life cycle
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "My Reminders"
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         figureOutCurrentReminder()

@@ -43,6 +43,10 @@ class PasswordResetViewController: UIViewController, UITextFieldDelegate {
         sendReset()
     }
     
+    @IBAction func backToLogIn(_ sender: Any) {
+        performSegue(withIdentifier: "returnFromPasswordResetToLogIn", sender: self)
+    }
+    
     // MARK: - Functions
     
     private func sendReset() {

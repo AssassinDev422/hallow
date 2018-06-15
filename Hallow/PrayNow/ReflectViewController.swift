@@ -23,7 +23,7 @@ class ReflectViewController: UIViewController {
         super.viewDidLoad()
         textField!.layer.borderWidth = 0.5
         textField!.layer.borderColor = UIColor.white.cgColor
-        
+                
         setUpDoneButton()
 
     }
@@ -31,14 +31,16 @@ class ReflectViewController: UIViewController {
     // Firebase listener
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewDidAppear(animated)
+        print("REFLECT VIEW WILL APPEAR*************")
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user!.uid
+            self.userID = user?.uid  //FIXME: Thread error - found nil when clicking logout when user was unwrapped "!"
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        print("REFLECT VIEW DISAPPEARED*************")
         Auth.auth().removeStateDidChangeListener(handle!)
     }
 
@@ -55,8 +57,10 @@ class ReflectViewController: UIViewController {
         if Constants.isFirstDay == true {
             performSegue(withIdentifier: "isFirstDaySegue", sender: self)
             Constants.isFirstDay = false
-        } else {
+        } else if Constants.hasCompleted == false {
             performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+        } else if Constants.hasCompleted == true {
+            performSegue(withIdentifier: "completedSegue", sender: self)
         }
     }
     
@@ -68,10 +72,23 @@ class ReflectViewController: UIViewController {
         if Constants.isFirstDay == true {
             performSegue(withIdentifier: "isFirstDaySegue", sender: self)
             Constants.isFirstDay = false
-        } else {
+        } else if Constants.hasCompleted == false {
             performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+        } else if Constants.hasCompleted == true {
+            if Constants.hasSeenCompletionScreen == true {
+                performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+            } else {
+                performSegue(withIdentifier: "completedSegue", sender: self)
+                Constants.hasSeenCompletionScreen = true
+            }
         }
     }
+   
+    @IBAction func backButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "returnFromReflectToAudioSegue", sender: self)
+    }
+    
+    // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "isNotFirstDaySegue" {

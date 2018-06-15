@@ -101,7 +101,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <segue destination="Ubf-ho-mFU" kind="show" id="Q0c-lb-ngn"/>
+                                    <segue destination="Ubf-ho-mFU" kind="show" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="Q0c-lb-ngn"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eNW-Z1-bqp">
@@ -128,7 +128,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in to pick up where you left off" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKs-pN-MK8">
-                                <rect key="frame" x="90.5" y="147" width="195" height="49"/>
+                                <rect key="frame" x="90" y="147" width="195" height="49"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="z3F-Om-13s"/>
                                 </constraints>
@@ -190,22 +190,23 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNL-zN-yBb">
-                                        <rect key="frame" x="15" y="30" width="10" height="20"/>
+                                        <rect key="frame" x="20" y="50" width="10" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="BYj-jF-2uU"/>
                                             <constraint firstAttribute="width" secondItem="MNL-zN-yBb" secondAttribute="height" multiplier="1:2" id="DZd-Kr-1CL"/>
                                         </constraints>
+                                        <color key="tintColor" name="beige"/>
                                         <state key="normal" image="backIcon">
                                             <color key="titleColor" name="beige"/>
                                         </state>
                                         <connections>
-                                            <segue destination="Fbz-mJ-l80" kind="presentation" id="bvD-Vn-ZPt"/>
+                                            <action selector="backToLogIn:" destination="Ubf-ho-mFU" eventType="touchUpInside" id="tPT-5v-EVj"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="MNL-zN-yBb" firstAttribute="top" secondItem="t7k-NT-wJ3" secondAttribute="top" constant="30" id="GJH-2P-zi3"/>
-                                    <constraint firstItem="MNL-zN-yBb" firstAttribute="leading" secondItem="t7k-NT-wJ3" secondAttribute="leading" constant="15" id="Qmy-Xt-ccj"/>
+                                    <constraint firstItem="MNL-zN-yBb" firstAttribute="top" secondItem="t7k-NT-wJ3" secondAttribute="top" constant="50" id="GJH-2P-zi3"/>
+                                    <constraint firstItem="MNL-zN-yBb" firstAttribute="leading" secondItem="t7k-NT-wJ3" secondAttribute="leading" constant="20" id="Qmy-Xt-ccj"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MNL-zN-yBb" secondAttribute="trailing" constant="50" id="mFL-ig-1Q2"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -252,7 +253,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive an email to reset your password" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cV-tS-nCb">
-                                <rect key="frame" x="47.5" y="197" width="280" height="49"/>
+                                <rect key="frame" x="48" y="197" width="280" height="49"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="20"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -278,9 +279,11 @@
                     <connections>
                         <outlet property="emailField" destination="B4y-8n-xOX" id="yjH-wD-gfC"/>
                         <segue destination="HfP-at-hTS" kind="presentation" identifier="afterPasswordResetSegue" id="z1z-dC-aIz"/>
+                        <segue destination="xEM-fq-sCl" kind="unwind" identifier="returnFromPasswordResetToLogIn" customClass="LeftToRightUnwindSegue" customModule="Hallow" customModuleProvider="target" unwindAction="returnFromSegueActionsWithSender:" id="cqs-Nk-9sc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qwJ-Nu-bsn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="xEM-fq-sCl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1028" y="-1305"/>
         </scene>
@@ -304,7 +307,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a guide" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UPN-mM-tbH">
-                                <rect key="frame" x="41.5" y="125" width="293" height="43"/>
+                                <rect key="frame" x="41" y="125" width="293" height="43"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="35"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -483,7 +486,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account to save progress" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0QV-wk-cTR">
-                                <rect key="frame" x="71.5" y="122" width="233" height="49"/>
+                                <rect key="frame" x="71" y="122" width="233" height="49"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="qfb-tZ-qJ2"/>
                                 </constraints>
@@ -523,7 +526,7 @@
                                 </state>
                                 <connections>
                                     <action selector="signUpButton:" destination="8cw-gR-UXF" eventType="touchUpInside" id="vVN-as-e6c"/>
-                                    <segue destination="Ie1-Hc-9yg" kind="presentation" identifier="signUpSegue" id="guQ-Mt-WBW"/>
+                                    <segue destination="Ie1-Hc-9yg" kind="presentation" identifier="signUpSegue" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="guQ-Mt-WBW"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password must be 6 characters or longer" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNH-zq-HYr">
@@ -626,6 +629,9 @@
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="beige">
+            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="deepLilac">
             <color red="0.58399999140000003" green="0.48199999329999998" blue="0.72500002379999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -637,8 +643,8 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="zaW-6k-Tb0"/>
         <segue reference="gPK-rW-TWn"/>
+        <segue reference="Ova-Mg-bAe"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>
