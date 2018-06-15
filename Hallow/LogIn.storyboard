@@ -73,7 +73,7 @@
                                 </constraints>
                                 <color key="textColor" name="realWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" textContentType="name"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="emailIcon"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
@@ -227,7 +227,7 @@
                                 </constraints>
                                 <color key="textColor" name="realWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" textContentType="email"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="emailIcon"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
@@ -448,7 +448,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZZF-c4-nQP" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
-                                <rect key="frame" x="37.5" y="361" width="300" height="45"/>
+                                <rect key="frame" x="37.5" y="341" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019999998" green="0.63921568630000003" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" name="realWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
@@ -467,11 +467,11 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fLi-0X-ete" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
-                                <rect key="frame" x="37.5" y="296" width="300" height="45"/>
+                                <rect key="frame" x="37.5" y="276" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019999998" green="0.63921568630000003" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" name="realWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="emailIcon"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
@@ -486,7 +486,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account to save progress" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0QV-wk-cTR">
-                                <rect key="frame" x="71" y="122" width="233" height="49"/>
+                                <rect key="frame" x="71" y="102" width="233" height="49"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="qfb-tZ-qJ2"/>
                                 </constraints>
@@ -495,7 +495,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Phe-Ha-Jfb" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
-                                <rect key="frame" x="37.5" y="231" width="300" height="45"/>
+                                <rect key="frame" x="37.5" y="211" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019607845" green="0.63921568627450975" blue="0.81176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -530,7 +530,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password must be 6 characters or longer" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNH-zq-HYr">
-                                <rect key="frame" x="48.5" y="416" width="278" height="18"/>
+                                <rect key="frame" x="48.5" y="396" width="278" height="18"/>
                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
                                 <color key="textColor" name="beige"/>
                                 <nil key="highlightedColor"/>
@@ -579,7 +579,7 @@
                             <constraint firstItem="0QV-wk-cTR" firstAttribute="bottom" secondItem="Phe-Ha-Jfb" secondAttribute="top" constant="-60" id="c5h-2H-Fka"/>
                             <constraint firstItem="fLi-0X-ete" firstAttribute="height" secondItem="Phe-Ha-Jfb" secondAttribute="height" id="cep-jQ-rcR"/>
                             <constraint firstItem="Phe-Ha-Jfb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KgT-CD-hFO" secondAttribute="leading" constant="20" id="d9J-Dp-a6D"/>
-                            <constraint firstItem="ZZF-c4-nQP" firstAttribute="centerY" secondItem="KgT-CD-hFO" secondAttribute="centerY" constant="50" id="hWJ-G0-FM5"/>
+                            <constraint firstItem="ZZF-c4-nQP" firstAttribute="centerY" secondItem="KgT-CD-hFO" secondAttribute="centerY" constant="30" id="hWJ-G0-FM5"/>
                             <constraint firstItem="Sm3-En-10w" firstAttribute="top" secondItem="e86-wO-dHA" secondAttribute="bottom" constant="20" id="kVS-3h-cIz"/>
                             <constraint firstItem="fLi-0X-ete" firstAttribute="width" secondItem="Phe-Ha-Jfb" secondAttribute="width" id="pTI-9B-vxR"/>
                             <constraint firstItem="Mvf-09-wJ5" firstAttribute="leading" secondItem="KgT-CD-hFO" secondAttribute="leading" id="rvv-9q-YLu"/>
@@ -625,7 +625,7 @@
         <image name="passwordIcon" width="17" height="22"/>
         <image name="pinkButton" width="278" height="48"/>
         <image name="playButtonImage" width="147" height="147"/>
-        <image name="userIcon" width="22" height="18"/>
+        <image name="userIcon" width="24" height="24"/>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -644,7 +644,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="gPK-rW-TWn"/>
-        <segue reference="Ova-Mg-bAe"/>
+        <segue reference="zaW-6k-Tb0"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

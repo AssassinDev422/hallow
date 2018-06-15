@@ -158,6 +158,36 @@ class FirebaseUtilities {
             }
         }
     }
+        
+    static func saveAndResetUserConstants(ofType type: String, byUserID userID: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
+        let db = Firestore.firestore()
+        let formatterStored = DateFormatter()
+        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
+        let dateStored = formatterStored.string(from: NSDate() as Date)
+        
+        db.collection("user").document(userID).collection(type).addDocument(data: [
+            "Date Stored": dateStored,
+            "guide": guide,
+            "isFirstDay": isFirstDay,
+            "hasCompleted": hasCompleted,
+            "hasSeenCompletionScreen": hasSeenCompletionScreen,
+            "hasStartedListening": hasStartedListening,
+            "hasLoggedOutOnce": hasLoggedOutOnce,
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(userID)")
+                Constants.firebaseDocID = ""
+                Constants.guide = "Francis"
+                Constants.isFirstDay = true
+                Constants.hasCompleted = false
+                Constants.hasSeenCompletionScreen = false
+                Constants.hasStartedListening = false
+                Constants.hasLoggedOutOnce = false
+            }
+        }
+    }
     
     static func preOrderResponse(ofType type: String, byUserID userID: String, withEntry entry: String) {
         let db = Firestore.firestore()

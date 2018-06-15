@@ -33,6 +33,7 @@
 		B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */; };
 		B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */; };
 		B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */; };
+		B472AB3F20D4369900447042 /* ConstantsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B472AB3E20D4369900447042 /* ConstantsItem.swift */; };
 		B473D68120AC89C200D57E78 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68020AC89C200D57E78 /* JournalEntry.swift */; };
 		B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68220AC8A1C00D57E78 /* PrayerItem.swift */; };
 		B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B479569120BDC7FD00745E92 /* UIViewExtension.swift */; };
@@ -105,6 +106,7 @@
 		B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderViewController.swift; sourceTree = "<group>"; };
 		B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderSettingViewController.swift; sourceTree = "<group>"; };
 		B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsReminderViewController.swift; sourceTree = "<group>"; };
+		B472AB3E20D4369900447042 /* ConstantsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsItem.swift; sourceTree = "<group>"; };
 		B473D68020AC89C200D57E78 /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		B473D68220AC8A1C00D57E78 /* PrayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerItem.swift; sourceTree = "<group>"; };
 		B479569120BDC7FD00745E92 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -231,8 +233,8 @@
 		B41F4E0B20D0619400C0D118 /* PrayNow */ = {
 			isa = PBXGroup;
 			children = (
-				B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */,
 				B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */,
+				B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */,
 				B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */,
 				B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */,
 				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
@@ -264,6 +266,7 @@
 				B407175720B72A910091B524 /* PrayerTracking.swift */,
 				B473D68020AC89C200D57E78 /* JournalEntry.swift */,
 				B4EEEA7A20B4E90700B091F7 /* User.swift */,
+				B472AB3E20D4369900447042 /* ConstantsItem.swift */,
 				B45C11DC20BC737800CEEAA9 /* StatsItem.swift */,
 				B4EB8E9120B3450F000330EB /* Constants.swift */,
 				033704F5209E96990032703B /* Utilities.swift */,
@@ -487,6 +490,7 @@
 				B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */,
 				B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */,
 				B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */,
+				B472AB3F20D4369900447042 /* ConstantsItem.swift in Sources */,
 				B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */,
 				B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */,
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,

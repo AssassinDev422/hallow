@@ -39,7 +39,7 @@ class FirstDayReminderSettingViewController: UIViewController {
         
         let content = UNMutableNotificationContent()
         content.title = "Quick reminder to pray"
-        content.body = "Clikc here to open up Hallow"
+        content.body = "Click here to open up Hallow"
         content.sound = UNNotificationSound.default()
         
         let time = reminderTime.date

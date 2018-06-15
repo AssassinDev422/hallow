@@ -13,7 +13,7 @@ import JGProgressHUD
 class PasswordResetViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var emailField: UITextField!
-    
+        
     // MARK: - Life cycle
     
     override func viewDidLoad() {

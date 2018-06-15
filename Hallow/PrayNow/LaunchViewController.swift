@@ -18,6 +18,8 @@ class LaunchViewController: UIViewController {
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
     
+    var userConstants: ConstantsItem?
+    
     // MARK: - Life cycle
     
     override func viewDidLoad() {
@@ -29,6 +31,7 @@ class LaunchViewController: UIViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             if user != nil {
+                self.loadUserConstants(fromUser: user!.uid)
                 self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
             } else {
                 self.hideOutlets(shouldHide: false)
@@ -43,6 +46,25 @@ class LaunchViewController: UIViewController {
     }
     
     // MARK: - Functions
+    
+    private func loadUserConstants(fromUser userID: String) {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUser: userID) { results in
+            self.userConstants = results.map(ConstantsItem.init)[0]
+            Constants.firebaseDocID = self.userConstants!.docID
+            Constants.guide = self.userConstants!.guide
+            Constants.isFirstDay = self.userConstants!.isFirstDay
+            Constants.hasCompleted = self.userConstants!.hasCompleted
+            Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
+            Constants.hasStartedListening = self.userConstants!.hasStartedListening
+            Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
+            print("LOADED USER CONSTANTS")
+            print("Guide set at: \(Constants.guide)")
+            print("Has started listening set at: \(Constants.hasStartedListening)")
+            print("Guide pulled at: \(self.userConstants!.guide)")
+            print("DocID: \(self.userConstants!.docID)")
+        }
+    }
+    
     // Created so when the segue skips past this screen (when user is already logged in) it doesn't show the buttons
     
     private func hideOutlets(shouldHide: Bool) {

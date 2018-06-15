@@ -11,14 +11,12 @@ import AVFoundation
 import FirebaseStorage
 import JGProgressHUD
 
-// TODO: Weird blip after it finishes a song
-
 class GuideSelectorViewController: UIViewController {
     
     @IBOutlet weak var francisButtonOutlet: UIButton!
     @IBOutlet weak var abbyButtonOutlet: UIButton!
-    @IBOutlet weak var francisPlaySampleOutlet: UIButton! //TODO: Might have to delete
-    @IBOutlet weak var abbyPlaySampleOutlet: UIButton! //TODO: Might have to delete
+    @IBOutlet weak var francisPlaySampleOutlet: UIButton!
+    @IBOutlet weak var abbyPlaySampleOutlet: UIButton! 
     
     var francisIsPlaying: Bool = false
     var abbyIsPlaying: Bool = false

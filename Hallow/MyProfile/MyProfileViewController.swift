@@ -76,8 +76,9 @@ class MyProfileViewController: UIViewController {
 
     @IBAction func logOut(_ sender: Any) {
         do {
-        try Auth.auth().signOut()
-        performSegue(withIdentifier: "signOutSegue", sender: self)
+            try Auth.auth().signOut()
+            saveAndResetConstants()
+            performSegue(withIdentifier: "signOutSegue", sender: self)
         } catch let error {
             print(error.localizedDescription)
             self.errorAlert(message: "\(error.localizedDescription)")
@@ -85,6 +86,19 @@ class MyProfileViewController: UIViewController {
     }
     
     // MARK: - Functions
+        
+    private func saveAndResetConstants() {
+        if Constants.hasLoggedOutOnce == true {
+            FirebaseUtilities.deleteFile(ofType: "constants", byUser: self.userID!, withID: Constants.firebaseDocID)
+            FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: self.userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+            print("SAVED AND DELETED USER CONSTANTS")
+
+        } else {
+            FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: self.userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: true)
+            print("JUST SAVED USER CONSTANTS")
+        }
+        
+    }
     
     private func loadName() {
         FirebaseUtilities.loadUserData(loadField: "Name", byUser: self.userID!) {results in

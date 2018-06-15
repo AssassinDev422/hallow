@@ -12,10 +12,6 @@ import Firebase
 
 // TODO: Remove multiple downloaded files after playing
 
-// FIXME: PrayerSuper desc
-
-// FIXME: appearance in iPhone 5s (test with clicking back and forth in iPhone 8)
-
 class PrayNowViewController: UIViewController {
     
     @IBOutlet weak var prayNowLabel: UIButton!
@@ -52,7 +48,7 @@ class PrayNowViewController: UIViewController {
         super.viewWillAppear(animated)
         self.set(isLoading: true)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid 
+            self.userID = user?.uid
             if let prayer = self.prayer {
                 self.loadPrayerSession(withTitle: prayer.title, withLength: "10 mins")
                 print("Loading later prayer session")
@@ -152,6 +148,10 @@ class PrayNowViewController: UIViewController {
             paragraphStyle.lineSpacing = 10
             description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
             self.prayerSessionDescription2.attributedText = description2
+            
+            if self.prayerSessionTitle.text == "Day 9 of 9" {
+                Constants.hasCompleted = true
+            }
 
             FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: "5 mins") { result in
                 self.prayer5mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up

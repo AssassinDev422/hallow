@@ -63,6 +63,7 @@ class PrayerJourneySuperViewController: UIViewController {
     
     private func setNextPrayerAndLoad() {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+            self.set(isLoading: true)
             self.completedPrayers = results.map(PrayerTracking.init)
             print("Completed prayers: \(self.completedPrayers.count)")
             if self.completedPrayers.count > 0 {
@@ -117,7 +118,6 @@ class PrayerJourneySuperViewController: UIViewController {
             updateTableViewPosition()
             
             self.set(isLoading: false)
-            self.hud.dismiss(animated: false)
             
             print("Everything is loaded in superview")
             
@@ -145,7 +145,7 @@ class PrayerJourneySuperViewController: UIViewController {
     // Sets up hud
     
     let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .extraLight)
+        let hud = JGProgressHUD(style: .dark)
         hud.interactionType = .blockAllTouches
         return hud
     }()
@@ -157,7 +157,7 @@ class PrayerJourneySuperViewController: UIViewController {
         self.tableViewContainter.isHidden = isLoading
         self.playSelectedButtonOutlet.isHidden = isLoading
         if isLoading {
-            self.hud.show(in: view, animated: false)
+            self.hud.show(in: view, animated: true)
         } else {
             self.hud.dismiss(animated: false)
         }

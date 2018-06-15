@@ -11,7 +11,6 @@ import Firebase
 import JGProgressHUD
 
 // TODO: What happens if you try to create the same user with an existing email
-// TODO: Update person icon image
 
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
@@ -36,10 +35,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        Constants.isFirstDay = true
     }
     
     // MARK: - Actions
@@ -74,6 +69,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 let userID = Auth.auth().currentUser?.uid
                 FirebaseUtilities.saveUser(ofType: "user", withID: userID!, withName: name, withEmail: email, withPassword: password)
                 FirebaseUtilities.saveStats(byUserID: userID!, withTimeInPrayer: 0.0)
+                FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
                 print("\(email) created")
                 self.set(isLoading: false)
                 self.performSegue(withIdentifier: "signUpSegue", sender: self)
@@ -82,6 +78,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - Functions
+    
+
     
     private func errorAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)

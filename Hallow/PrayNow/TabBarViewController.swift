@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO: Update person icon image
-
 class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {

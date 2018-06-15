@@ -10,14 +10,13 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-// FIXME: Navigator VC exits when I go to log out v. log in
-// TODO: Update Navigator VC color
-
 class SignInViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-
+    
+    var userConstants: ConstantsItem?
+    
     // MARK: - Life cycle
     
     override func viewDidLoad() {
@@ -61,6 +60,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     self.set(isLoading: false)
                     return
                 } else {
+                    self.loadUserConstants(fromUser: user!.uid)
                     self.set(isLoading: false)
                     self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
@@ -69,6 +69,24 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - Functions
+    
+    private func loadUserConstants(fromUser userID: String) {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUser: userID) { results in
+            self.userConstants = results.map(ConstantsItem.init)[0]
+            Constants.firebaseDocID = self.userConstants!.docID
+            Constants.guide = self.userConstants!.guide
+            Constants.isFirstDay = self.userConstants!.isFirstDay
+            Constants.hasCompleted = self.userConstants!.hasCompleted
+            Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
+            Constants.hasStartedListening = self.userConstants!.hasStartedListening
+            Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
+            print("LOADED USER CONSTANTS")
+            print("Guide set at: \(Constants.guide)")
+            print("Has started listening set at: \(Constants.hasStartedListening)")
+            print("Guide pulled at: \(self.userConstants!.guide)")
+            print("DocID: \(self.userConstants!.docID)")
+        }
+    }
     
     private func errorAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)

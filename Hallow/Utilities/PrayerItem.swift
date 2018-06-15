@@ -13,7 +13,7 @@ class PrayerItem {
     var title = "Day 1"
     var description = "Sitting in silence"
     var description2 = "Placeholder"
-    var audioURLPath = "audio/Meditation - 10 mins - F - 1.m4a"  //FIXME: Update
+    var audioURLPath = "audio/Meditation - 10 mins - F - 1.m4a"  
     var length = "10 mins"
     
     init(firestoreDocument document: DocumentSnapshot) {

@@ -73,7 +73,6 @@ class DesignableUITextField: UITextField {
 
 // MARK: - Shadow
 
-// TODO: - Make it update real time in IB
 // Have to change class of each view / button / label to see it work
 
 @IBDesignable

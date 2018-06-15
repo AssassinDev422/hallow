@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 
-// TODO: Update play button image
 
 class PrayerJourneyTableViewController: UITableViewController {
     
