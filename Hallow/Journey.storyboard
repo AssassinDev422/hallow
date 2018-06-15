@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="O53-3a-Pbr">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Black.ttf">
+            <string>Montserrat-Black</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--My Journey-->
+        <scene sceneID="6wa-wg-mWR">
+            <objects>
+                <viewController id="O53-3a-Pbr" customClass="PrayerJourneySuperViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9KW-Lw-TGK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uY6-lr-YC0" customClass="GradientView" customModule="Hallow" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bottomColor">
+                                        <color key="value" name="purplishBlue"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="topColor">
+                                        <color key="value" name="deepLilac"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="npY-5V-HZ9">
+                                <rect key="frame" x="314" y="245" width="41" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="41" id="gSS-Dy-tvd"/>
+                                    <constraint firstAttribute="width" constant="41" id="yYs-oR-wcB"/>
+                                </constraints>
+                                <state key="normal" image="playButtonImage"/>
+                                <connections>
+                                    <action selector="playMainPrayerButton:" destination="O53-3a-Pbr" eventType="touchUpInside" id="g7q-aS-Khd"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87h-Ah-GeE">
+                                <rect key="frame" x="20" y="70" width="335" height="0.0"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="15"/>
+                                <color key="textColor" name="realWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52r-CO-xHO">
+                                <rect key="frame" x="20" y="175" width="284" height="180"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="kHb-Yu-q2E"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name=".SFNSText" family=".SF NS Text" pointSize="14"/>
+                                <color key="textColor" name="realWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ngb-NB-Z9w">
+                                <rect key="frame" x="0.0" y="375" width="375" height="292"/>
+                                <connections>
+                                    <segue destination="Yui-dT-MKA" kind="embed" id="IPp-UY-7ks"/>
+                                </connections>
+                            </containerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ge4-qU-YSu">
+                                <rect key="frame" x="20" y="85" width="335" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="EwX-DK-ZpR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
+                                <color key="textColor" name="realWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Zpu-6C-i49" firstAttribute="trailing" secondItem="ge4-qU-YSu" secondAttribute="trailing" constant="20" id="0bv-iN-1CF"/>
+                            <constraint firstItem="Ngb-NB-Z9w" firstAttribute="top" secondItem="52r-CO-xHO" secondAttribute="bottom" constant="20" id="1b7-gx-oZj"/>
+                            <constraint firstItem="npY-5V-HZ9" firstAttribute="centerY" secondItem="52r-CO-xHO" secondAttribute="centerY" id="1vP-mK-NFa"/>
+                            <constraint firstItem="52r-CO-xHO" firstAttribute="top" secondItem="ge4-qU-YSu" secondAttribute="bottom" constant="10" id="5CC-op-XL1"/>
+                            <constraint firstItem="uY6-lr-YC0" firstAttribute="top" secondItem="9KW-Lw-TGK" secondAttribute="top" id="Eh0-g1-0do"/>
+                            <constraint firstItem="Ngb-NB-Z9w" firstAttribute="leading" secondItem="Zpu-6C-i49" secondAttribute="leading" id="PIJ-Tr-uH7"/>
+                            <constraint firstItem="uY6-lr-YC0" firstAttribute="trailing" secondItem="9KW-Lw-TGK" secondAttribute="trailing" id="SMr-mW-IeF"/>
+                            <constraint firstItem="uY6-lr-YC0" firstAttribute="bottom" secondItem="9KW-Lw-TGK" secondAttribute="bottom" id="SkG-9O-cF6"/>
+                            <constraint firstItem="87h-Ah-GeE" firstAttribute="trailing" secondItem="ge4-qU-YSu" secondAttribute="trailing" id="V9v-pu-3Jk"/>
+                            <constraint firstItem="52r-CO-xHO" firstAttribute="leading" secondItem="Zpu-6C-i49" secondAttribute="leading" constant="20" id="aHg-78-gh4"/>
+                            <constraint firstItem="npY-5V-HZ9" firstAttribute="leading" secondItem="52r-CO-xHO" secondAttribute="trailing" constant="10" id="asj-gj-X4o"/>
+                            <constraint firstItem="87h-Ah-GeE" firstAttribute="leading" secondItem="ge4-qU-YSu" secondAttribute="leading" id="bUu-H3-ixE"/>
+                            <constraint firstItem="Zpu-6C-i49" firstAttribute="bottom" secondItem="Ngb-NB-Z9w" secondAttribute="bottom" id="cbG-yw-22K"/>
+                            <constraint firstItem="ge4-qU-YSu" firstAttribute="top" secondItem="87h-Ah-GeE" secondAttribute="bottom" constant="15" id="eAt-s6-46h"/>
+                            <constraint firstItem="npY-5V-HZ9" firstAttribute="trailing" secondItem="Zpu-6C-i49" secondAttribute="trailing" constant="-20" id="lOE-Wb-dPE"/>
+                            <constraint firstItem="ge4-qU-YSu" firstAttribute="leading" secondItem="52r-CO-xHO" secondAttribute="leading" id="mqr-wA-olj"/>
+                            <constraint firstItem="uY6-lr-YC0" firstAttribute="leading" secondItem="9KW-Lw-TGK" secondAttribute="leading" id="nGh-7k-T71"/>
+                            <constraint firstItem="Zpu-6C-i49" firstAttribute="top" secondItem="87h-Ah-GeE" secondAttribute="top" constant="-50" id="pmr-nm-N4S"/>
+                            <constraint firstItem="Zpu-6C-i49" firstAttribute="trailing" secondItem="Ngb-NB-Z9w" secondAttribute="trailing" id="wNz-hL-Xpw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Zpu-6C-i49"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="My Journey" image="compassIcon" id="5kb-LQ-qRn"/>
+                    <connections>
+                        <outlet property="playSelectedButtonOutlet" destination="npY-5V-HZ9" id="DC4-xX-00L"/>
+                        <outlet property="prayerDescription2Label" destination="52r-CO-xHO" id="pne-25-yqS"/>
+                        <outlet property="prayerDescriptionLabel" destination="ge4-qU-YSu" id="Uei-tI-vKg"/>
+                        <outlet property="prayerTitleLabel" destination="87h-Ah-GeE" id="sUO-Va-wtq"/>
+                        <outlet property="tableViewContainter" destination="Ngb-NB-Z9w" id="5S2-o7-QdJ"/>
+                        <segue destination="Lxh-fH-hZx" kind="presentation" identifier="returnToPrayNow" id="lRm-YO-SMD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eTw-dG-tFR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2249" y="650"/>
+        </scene>
+        <!--Prayer Journey Table View Controller-->
+        <scene sceneID="jBK-LG-KN1">
+            <objects>
+                <tableViewController id="Yui-dT-MKA" customClass="PrayerJourneyTableViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="GMO-XF-JqA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="292"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="76" id="B1B-js-spI" customClass="PrayerJourneyTableViewCell" customModule="Hallow" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="76"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="B1B-js-spI" id="RhU-FI-Uov">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCs-dt-WAP">
+                                            <rect key="frame" x="64" y="15" width="240" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="Jn2-Z0-fAj"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" name="darkIndigo"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1B-YC-4BF">
+                                            <rect key="frame" x="64" y="43.5" width="240" height="12"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                            <color key="textColor" name="darkIndigo"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DkJ-30-NEj">
+                                            <rect key="frame" x="314" y="17" width="41" height="41"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="41" id="W72-27-Lh5"/>
+                                                <constraint firstAttribute="width" constant="41" id="tpF-5f-j1I"/>
+                                            </constraints>
+                                            <state key="normal" image="emptyPlayButton"/>
+                                        </button>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmarkIcon" translatesAutoresizingMaskIntoConstraints="NO" id="aQ3-Xy-v9n">
+                                            <rect key="frame" x="20" y="25" width="24" height="25"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="tintColor" name="fadedPink"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="25" id="R47-VE-GEp"/>
+                                                <constraint firstAttribute="width" constant="24" id="rWO-rJ-yJi"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="SCs-dt-WAP" firstAttribute="top" secondItem="RhU-FI-Uov" secondAttribute="top" constant="15" id="EcI-y8-a15"/>
+                                        <constraint firstItem="SCs-dt-WAP" firstAttribute="leading" secondItem="aQ3-Xy-v9n" secondAttribute="trailing" constant="20" id="Fs6-Fu-2Pu"/>
+                                        <constraint firstItem="DkJ-30-NEj" firstAttribute="leading" secondItem="SCs-dt-WAP" secondAttribute="trailing" constant="10" id="M1L-7V-Txc"/>
+                                        <constraint firstItem="m1B-YC-4BF" firstAttribute="trailing" secondItem="SCs-dt-WAP" secondAttribute="trailing" id="VTH-Lw-N5K"/>
+                                        <constraint firstItem="DkJ-30-NEj" firstAttribute="centerY" secondItem="RhU-FI-Uov" secondAttribute="centerY" id="Y2S-Xz-xOw"/>
+                                        <constraint firstAttribute="leading" secondItem="aQ3-Xy-v9n" secondAttribute="leading" constant="-20" id="cMw-zX-SiL"/>
+                                        <constraint firstItem="m1B-YC-4BF" firstAttribute="leading" secondItem="SCs-dt-WAP" secondAttribute="leading" id="gPW-yB-nme"/>
+                                        <constraint firstAttribute="trailing" secondItem="DkJ-30-NEj" secondAttribute="trailing" constant="20" id="gV6-6S-DIg"/>
+                                        <constraint firstItem="aQ3-Xy-v9n" firstAttribute="centerY" secondItem="DkJ-30-NEj" secondAttribute="centerY" id="hHw-YS-h9T"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="m1B-YC-4BF" secondAttribute="bottom" constant="10" id="s8w-Ml-BYt"/>
+                                        <constraint firstItem="m1B-YC-4BF" firstAttribute="top" secondItem="SCs-dt-WAP" secondAttribute="bottom" constant="7.5" id="zNA-bm-8Nl"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="playCellButton" destination="DkJ-30-NEj" id="S67-9f-j5O"/>
+                                    <outlet property="prayerDescriptionLabel" destination="m1B-YC-4BF" id="GXn-67-Z2Z"/>
+                                    <outlet property="prayerTitleLabel" destination="SCs-dt-WAP" id="ZpS-vm-BcP"/>
+                                    <outlet property="statusImage" destination="aQ3-Xy-v9n" id="hEf-RG-NrK"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Yui-dT-MKA" id="VzV-V5-sTr"/>
+                            <outlet property="delegate" destination="Yui-dT-MKA" id="o54-mH-SkM"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="Lxh-fH-hZx" kind="presentation" identifier="tableReturnToPrayNowSegue" id="0Oe-eg-EVy"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lQY-Yu-ad8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3040.8000000000002" y="805.99700149925047"/>
+        </scene>
+        <!--UITabBarController-BXq-9Y-utP-->
+        <scene sceneID="QaS-HE-2f3">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="UITabBarController-BXq-9Y-utP" storyboardName="Main" referencedIdentifier="UITabBarController-BXq-9Y-utP" id="Lxh-fH-hZx" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g34-Pg-hx9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3680" y="452"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="checkmarkIcon" width="28" height="26"/>
+        <image name="compassIcon" width="24" height="24"/>
+        <image name="emptyPlayButton" width="42" height="42"/>
+        <image name="playButtonImage" width="147" height="147"/>
+        <namedColor name="darkIndigo">
+            <color red="0.097999997437000275" green="0.027000000700354576" blue="0.24300000071525574" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="deepLilac">
+            <color red="0.58399999140000003" green="0.48199999329999998" blue="0.72500002379999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="fadedPink">
+            <color red="0.83499997854232788" green="0.59600001573562622" blue="0.67100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="purplishBlue">
+            <color red="0.3799999952" green="0.067000001670000003" blue="0.97299999000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="realWhite">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="lRm-YO-SMD"/>
+    </inferredMetricsTieBreakers>
+    <color key="tintColor" name="white"/>
+</document>

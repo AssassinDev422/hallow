@@ -17,15 +17,23 @@
 		5087C9DF2973C039B0BB91C1 /* Pods_Hallow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */; };
 		B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */; };
 		B407175820B72A920091B524 /* PrayerTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B407175720B72A910091B524 /* PrayerTracking.swift */; };
+		B41F4E0620D05F9000C0D118 /* MyProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */; };
+		B41F4E0820D05FBB00C0D118 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */; };
 		B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */; };
 		B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */; };
 		B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */; };
 		B42B0CEE20A542E600FDAFB6 /* ReflectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */; };
+		B432057220D2E0C8000EB246 /* ProfileNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057120D2E0C8000EB246 /* ProfileNavigationViewController.swift */; };
+		B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057320D2EEA7000EB246 /* FeedbackViewController.swift */; };
+		B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057520D2EEB3000EB246 /* SupportViewController.swift */; };
 		B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */; };
+		B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */; };
+		B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */; };
 		B45C11DD20BC737800CEEAA9 /* StatsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DC20BC737800CEEAA9 /* StatsItem.swift */; };
 		B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */; };
 		B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */; };
 		B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */; };
+		B472AB3F20D4369900447042 /* ConstantsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B472AB3E20D4369900447042 /* ConstantsItem.swift */; };
 		B473D68120AC89C200D57E78 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68020AC89C200D57E78 /* JournalEntry.swift */; };
 		B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68220AC8A1C00D57E78 /* PrayerItem.swift */; };
 		B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B479569120BDC7FD00745E92 /* UIViewExtension.swift */; };
@@ -33,13 +41,39 @@
 		B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */; };
 		B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */; };
 		B4D3A0FB20A5F195009D69A5 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */; };
-		B4D3A10120A89D08009D69A5 /* PrayerJourneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A10020A89D08009D69A5 /* PrayerJourneyViewController.swift */; };
-		B4D3A10720A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A10620A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift */; };
+		B4E486D420D327030054FFFB /* LeftToRightSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D320D327030054FFFB /* LeftToRightSegue.swift */; };
+		B4E486D620D3274D0054FFFB /* RightToLeftSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D520D3274D0054FFFB /* RightToLeftSegue.swift */; };
+		B4E486D820D327580054FFFB /* FromTopSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D720D327580054FFFB /* FromTopSegue.swift */; };
+		B4E486DA20D329C90054FFFB /* LeftToRightUnwindSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E486D920D329C90054FFFB /* LeftToRightUnwindSegue.swift */; };
 		B4EB8E9220B3450F000330EB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EB8E9120B3450F000330EB /* Constants.swift */; };
 		B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EB8E9320B38174000330EB /* MyProfileViewController.swift */; };
 		B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */; };
 		B4EEEA7920B4AD3A00B091F7 /* JournalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EEEA7820B4AD3A00B091F7 /* JournalTableViewCell.swift */; };
 		B4EEEA7B20B4E90700B091F7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EEEA7A20B4E90700B091F7 /* User.swift */; };
+		B4F32A3620CC706A00EB93FF /* Montserrat in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3520CC706A00EB93FF /* Montserrat */; };
+		B4F32A4B20CC708A00EB93FF /* Montserrat-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3820CC707600EB93FF /* Montserrat-LightItalic.ttf */; };
+		B4F32A4C20CC708D00EB93FF /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3920CC707600EB93FF /* Montserrat-Medium.ttf */; };
+		B4F32A4D20CC709000EB93FF /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3A20CC707600EB93FF /* Montserrat-BoldItalic.ttf */; };
+		B4F32A4E20CC709200EB93FF /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3B20CC707600EB93FF /* Montserrat-Light.ttf */; };
+		B4F32A4F20CC709500EB93FF /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3C20CC707600EB93FF /* Montserrat-ThinItalic.ttf */; };
+		B4F32A5020CC709800EB93FF /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3D20CC707600EB93FF /* Montserrat-ExtraLight.ttf */; };
+		B4F32A5120CC709A00EB93FF /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3E20CC707600EB93FF /* Montserrat-Thin.ttf */; };
+		B4F32A5220CC70A000EB93FF /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A3F20CC707600EB93FF /* Montserrat-Bold.ttf */; };
+		B4F32A5320CC70A300EB93FF /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4020CC707600EB93FF /* Montserrat-MediumItalic.ttf */; };
+		B4F32A5420CC70A500EB93FF /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4120CC707600EB93FF /* Montserrat-BlackItalic.ttf */; };
+		B4F32A5520CC70AB00EB93FF /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4220CC707600EB93FF /* Montserrat-SemiBold.ttf */; };
+		B4F32A5620CC70AE00EB93FF /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4320CC707600EB93FF /* Montserrat-ExtraLightItalic.ttf */; };
+		B4F32A5720CC70C600EB93FF /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4420CC707600EB93FF /* Montserrat-ExtraBold.ttf */; };
+		B4F32A5820CC70C900EB93FF /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4520CC707600EB93FF /* OFL.txt */; };
+		B4F32A5920CC70CB00EB93FF /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4620CC707600EB93FF /* Montserrat-Black.ttf */; };
+		B4F32A5A20CC70CE00EB93FF /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4720CC707600EB93FF /* Montserrat-Regular.ttf */; };
+		B4F32A5B20CC70D000EB93FF /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4820CC707600EB93FF /* Montserrat-Italic.ttf */; };
+		B4F32A5C20CC70D200EB93FF /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4920CC707600EB93FF /* Montserrat-SemiBoldItalic.ttf */; };
+		B4F32A5D20CC70D500EB93FF /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F32A4A20CC707600EB93FF /* Montserrat-ExtraBoldItalic.ttf */; };
+		B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FB770F20D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift */; };
+		B4FB771220D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FB771120D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift */; };
+		B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FB771320D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift */; };
+		B4FB771620D1DCC100D2FEBA /* Journey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4FB771520D1DCC100D2FEBA /* Journey.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,15 +90,23 @@
 		944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hallow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryViewController.swift; sourceTree = "<group>"; };
 		B407175720B72A910091B524 /* PrayerTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTracking.swift; sourceTree = "<group>"; };
+		B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyProfile.storyboard; sourceTree = "<group>"; };
+		B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
 		B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayNowViewController.swift; sourceTree = "<group>"; };
 		B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
 		B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectViewController.swift; sourceTree = "<group>"; };
+		B432057120D2E0C8000EB246 /* ProfileNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNavigationViewController.swift; sourceTree = "<group>"; };
+		B432057320D2EEA7000EB246 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		B432057520D2EEB3000EB246 /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideSelectorViewController.swift; sourceTree = "<group>"; };
+		B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedViewController.swift; sourceTree = "<group>"; };
+		B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B45C11DC20BC737800CEEAA9 /* StatsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsItem.swift; sourceTree = "<group>"; };
 		B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderViewController.swift; sourceTree = "<group>"; };
 		B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderSettingViewController.swift; sourceTree = "<group>"; };
 		B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsReminderViewController.swift; sourceTree = "<group>"; };
+		B472AB3E20D4369900447042 /* ConstantsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsItem.swift; sourceTree = "<group>"; };
 		B473D68020AC89C200D57E78 /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		B473D68220AC8A1C00D57E78 /* PrayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerItem.swift; sourceTree = "<group>"; };
 		B479569120BDC7FD00745E92 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -72,13 +114,39 @@
 		B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
-		B4D3A10020A89D08009D69A5 /* PrayerJourneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneyViewController.swift; sourceTree = "<group>"; };
-		B4D3A10620A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneyCollectionViewCell.swift; sourceTree = "<group>"; };
+		B4E486D320D327030054FFFB /* LeftToRightSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftToRightSegue.swift; sourceTree = "<group>"; };
+		B4E486D520D3274D0054FFFB /* RightToLeftSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightToLeftSegue.swift; sourceTree = "<group>"; };
+		B4E486D720D327580054FFFB /* FromTopSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromTopSegue.swift; sourceTree = "<group>"; };
+		B4E486D920D329C90054FFFB /* LeftToRightUnwindSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftToRightUnwindSegue.swift; sourceTree = "<group>"; };
 		B4EB8E9120B3450F000330EB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B4EB8E9320B38174000330EB /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTableViewController.swift; sourceTree = "<group>"; };
 		B4EEEA7820B4AD3A00B091F7 /* JournalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTableViewCell.swift; sourceTree = "<group>"; };
 		B4EEEA7A20B4E90700B091F7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B4F32A3520CC706A00EB93FF /* Montserrat */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Montserrat; path = "../../2. Design/Montserrat"; sourceTree = "<group>"; };
+		B4F32A3820CC707600EB93FF /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-LightItalic.ttf"; sourceTree = "<group>"; };
+		B4F32A3920CC707600EB93FF /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.ttf"; sourceTree = "<group>"; };
+		B4F32A3A20CC707600EB93FF /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; };
+		B4F32A3B20CC707600EB93FF /* Montserrat-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.ttf"; sourceTree = "<group>"; };
+		B4F32A3C20CC707600EB93FF /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
+		B4F32A3D20CC707600EB93FF /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
+		B4F32A3E20CC707600EB93FF /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Thin.ttf"; sourceTree = "<group>"; };
+		B4F32A3F20CC707600EB93FF /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		B4F32A4020CC707600EB93FF /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; };
+		B4F32A4120CC707600EB93FF /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; };
+		B4F32A4220CC707600EB93FF /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		B4F32A4320CC707600EB93FF /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
+		B4F32A4420CC707600EB93FF /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
+		B4F32A4520CC707600EB93FF /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		B4F32A4620CC707600EB93FF /* Montserrat-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Black.ttf"; sourceTree = "<group>"; };
+		B4F32A4720CC707600EB93FF /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		B4F32A4820CC707600EB93FF /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Italic.ttf"; sourceTree = "<group>"; };
+		B4F32A4920CC707600EB93FF /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		B4F32A4A20CC707600EB93FF /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		B4FB770F20D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneyTableViewController.swift; sourceTree = "<group>"; };
+		B4FB771120D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneyTableViewCell.swift; sourceTree = "<group>"; };
+		B4FB771320D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerJourneySuperViewController.swift; sourceTree = "<group>"; };
+		B4FB771520D1DCC100D2FEBA /* Journey.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Journey.storyboard; sourceTree = "<group>"; };
 		D2D114C1D2E8CFE738D11A56 /* Pods-Hallow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hallow.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Hallow/Pods-Hallow.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,6 +165,7 @@
 		030C40C2209E718B006D9690 = {
 			isa = PBXGroup;
 			children = (
+				B4F32A3520CC706A00EB93FF /* Montserrat */,
 				030C40CD209E718B006D9690 /* Hallow */,
 				030C40CC209E718B006D9690 /* Products */,
 				E183EC09D801F70A4C9E5A4E /* Pods */,
@@ -116,40 +185,121 @@
 			isa = PBXGroup;
 			children = (
 				030C40CE209E718B006D9690 /* AppDelegate.swift */,
-				B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */,
+				B41F4E0920D060CE00C0D118 /* LogIn */,
+				B41F4E0B20D0619400C0D118 /* PrayNow */,
+				B41F4E0E20D0620000C0D118 /* PrayerJourney */,
+				B41F4E0A20D0616F00C0D118 /* MyProfile */,
+				B41F4E0F20D0621F00C0D118 /* Utilities */,
+				030C40D7209E718C006D9690 /* LaunchScreen.storyboard */,
+				B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */,
+				030C40D2209E718B006D9690 /* Main.storyboard */,
+				B4FB771520D1DCC100D2FEBA /* Journey.storyboard */,
+				B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */,
+				030C40D5209E718C006D9690 /* Assets.xcassets */,
+				030C40DA209E718C006D9690 /* Info.plist */,
+				030C40E2209E7875006D9690 /* GoogleService-Info.plist */,
+				B4F32A3720CC707600EB93FF /* Fonts */,
+			);
+			path = Hallow;
+			sourceTree = "<group>";
+		};
+		B41F4E0920D060CE00C0D118 /* LogIn */ = {
+			isa = PBXGroup;
+			children = (
 				B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */,
 				B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */,
 				B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */,
 				B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */,
-				B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */,
-				B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */,
-				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
-				B4D3A10020A89D08009D69A5 /* PrayerJourneyViewController.swift */,
-				B4D3A10620A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift */,
+			);
+			path = LogIn;
+			sourceTree = "<group>";
+		};
+		B41F4E0A20D0616F00C0D118 /* MyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				B432057120D2E0C8000EB246 /* ProfileNavigationViewController.swift */,
+				B4EB8E9320B38174000330EB /* MyProfileViewController.swift */,
 				B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */,
 				B4EEEA7820B4AD3A00B091F7 /* JournalTableViewCell.swift */,
 				B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */,
-				B4EB8E9320B38174000330EB /* MyProfileViewController.swift */,
 				B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */,
+				B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */,
+				B432057320D2EEA7000EB246 /* FeedbackViewController.swift */,
+				B432057520D2EEB3000EB246 /* SupportViewController.swift */,
+			);
+			path = MyProfile;
+			sourceTree = "<group>";
+		};
+		B41F4E0B20D0619400C0D118 /* PrayNow */ = {
+			isa = PBXGroup;
+			children = (
+				B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */,
+				B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */,
+				B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */,
+				B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */,
+				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
 				B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */,
 				B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */,
-				B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */,
+				B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */,
+			);
+			path = PrayNow;
+			sourceTree = "<group>";
+		};
+		B41F4E0E20D0620000C0D118 /* PrayerJourney */ = {
+			isa = PBXGroup;
+			children = (
+				B4FB771320D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift */,
+				B4FB770F20D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift */,
+				B4FB771120D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift */,
+			);
+			path = PrayerJourney;
+			sourceTree = "<group>";
+		};
+		B41F4E0F20D0621F00C0D118 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				B4E486D320D327030054FFFB /* LeftToRightSegue.swift */,
+				B4E486D920D329C90054FFFB /* LeftToRightUnwindSegue.swift */,
+				B4E486D520D3274D0054FFFB /* RightToLeftSegue.swift */,
+				B4E486D720D327580054FFFB /* FromTopSegue.swift */,
 				B473D68220AC8A1C00D57E78 /* PrayerItem.swift */,
 				B407175720B72A910091B524 /* PrayerTracking.swift */,
 				B473D68020AC89C200D57E78 /* JournalEntry.swift */,
 				B4EEEA7A20B4E90700B091F7 /* User.swift */,
+				B472AB3E20D4369900447042 /* ConstantsItem.swift */,
 				B45C11DC20BC737800CEEAA9 /* StatsItem.swift */,
 				B4EB8E9120B3450F000330EB /* Constants.swift */,
 				033704F5209E96990032703B /* Utilities.swift */,
 				033704F7209E980A0032703B /* FirebaseUtilities.swift */,
 				B479569120BDC7FD00745E92 /* UIViewExtension.swift */,
-				030C40D2209E718B006D9690 /* Main.storyboard */,
-				030C40D7209E718C006D9690 /* LaunchScreen.storyboard */,
-				030C40D5209E718C006D9690 /* Assets.xcassets */,
-				030C40DA209E718C006D9690 /* Info.plist */,
-				030C40E2209E7875006D9690 /* GoogleService-Info.plist */,
 			);
-			path = Hallow;
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B4F32A3720CC707600EB93FF /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				B4F32A3820CC707600EB93FF /* Montserrat-LightItalic.ttf */,
+				B4F32A3920CC707600EB93FF /* Montserrat-Medium.ttf */,
+				B4F32A3A20CC707600EB93FF /* Montserrat-BoldItalic.ttf */,
+				B4F32A3B20CC707600EB93FF /* Montserrat-Light.ttf */,
+				B4F32A3C20CC707600EB93FF /* Montserrat-ThinItalic.ttf */,
+				B4F32A3D20CC707600EB93FF /* Montserrat-ExtraLight.ttf */,
+				B4F32A3E20CC707600EB93FF /* Montserrat-Thin.ttf */,
+				B4F32A3F20CC707600EB93FF /* Montserrat-Bold.ttf */,
+				B4F32A4020CC707600EB93FF /* Montserrat-MediumItalic.ttf */,
+				B4F32A4120CC707600EB93FF /* Montserrat-BlackItalic.ttf */,
+				B4F32A4220CC707600EB93FF /* Montserrat-SemiBold.ttf */,
+				B4F32A4320CC707600EB93FF /* Montserrat-ExtraLightItalic.ttf */,
+				B4F32A4420CC707600EB93FF /* Montserrat-ExtraBold.ttf */,
+				B4F32A4520CC707600EB93FF /* OFL.txt */,
+				B4F32A4620CC707600EB93FF /* Montserrat-Black.ttf */,
+				B4F32A4720CC707600EB93FF /* Montserrat-Regular.ttf */,
+				B4F32A4820CC707600EB93FF /* Montserrat-Italic.ttf */,
+				B4F32A4920CC707600EB93FF /* Montserrat-SemiBoldItalic.ttf */,
+				B4F32A4A20CC707600EB93FF /* Montserrat-ExtraBoldItalic.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		E183EC09D801F70A4C9E5A4E /* Pods */ = {
@@ -203,6 +353,11 @@
 				TargetAttributes = {
 					030C40CA209E718B006D9690 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -229,9 +384,32 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4F32A4D20CC709000EB93FF /* Montserrat-BoldItalic.ttf in Resources */,
+				B4F32A5920CC70CB00EB93FF /* Montserrat-Black.ttf in Resources */,
+				B4F32A3620CC706A00EB93FF /* Montserrat in Resources */,
+				B41F4E0620D05F9000C0D118 /* MyProfile.storyboard in Resources */,
+				B4F32A5320CC70A300EB93FF /* Montserrat-MediumItalic.ttf in Resources */,
+				B4F32A5420CC70A500EB93FF /* Montserrat-BlackItalic.ttf in Resources */,
 				030C40D9209E718C006D9690 /* LaunchScreen.storyboard in Resources */,
+				B4F32A4E20CC709200EB93FF /* Montserrat-Light.ttf in Resources */,
+				B4F32A5220CC70A000EB93FF /* Montserrat-Bold.ttf in Resources */,
+				B4F32A5720CC70C600EB93FF /* Montserrat-ExtraBold.ttf in Resources */,
+				B4F32A5D20CC70D500EB93FF /* Montserrat-ExtraBoldItalic.ttf in Resources */,
+				B4F32A5A20CC70CE00EB93FF /* Montserrat-Regular.ttf in Resources */,
+				B4F32A4F20CC709500EB93FF /* Montserrat-ThinItalic.ttf in Resources */,
+				B4F32A5820CC70C900EB93FF /* OFL.txt in Resources */,
+				B4F32A4B20CC708A00EB93FF /* Montserrat-LightItalic.ttf in Resources */,
+				B4F32A5B20CC70D000EB93FF /* Montserrat-Italic.ttf in Resources */,
+				B4F32A5020CC709800EB93FF /* Montserrat-ExtraLight.ttf in Resources */,
+				B4F32A4C20CC708D00EB93FF /* Montserrat-Medium.ttf in Resources */,
+				B41F4E0820D05FBB00C0D118 /* LogIn.storyboard in Resources */,
 				030C40D6209E718C006D9690 /* Assets.xcassets in Resources */,
 				030C40E3209E7875006D9690 /* GoogleService-Info.plist in Resources */,
+				B4F32A5120CC709A00EB93FF /* Montserrat-Thin.ttf in Resources */,
+				B4FB771620D1DCC100D2FEBA /* Journey.storyboard in Resources */,
+				B4F32A5620CC70AE00EB93FF /* Montserrat-ExtraLightItalic.ttf in Resources */,
+				B4F32A5C20CC70D200EB93FF /* Montserrat-SemiBoldItalic.ttf in Resources */,
+				B4F32A5520CC70AB00EB93FF /* Montserrat-SemiBold.ttf in Resources */,
 				030C40D4209E718B006D9690 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,33 +480,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B432057220D2E0C8000EB246 /* ProfileNavigationViewController.swift in Sources */,
 				B4EEEA7B20B4E90700B091F7 /* User.swift in Sources */,
+				B4E486D420D327030054FFFB /* LeftToRightSegue.swift in Sources */,
+				B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */,
 				B407175820B72A920091B524 /* PrayerTracking.swift in Sources */,
 				B4D3A0FB20A5F195009D69A5 /* SignInViewController.swift in Sources */,
+				B4E486D620D3274D0054FFFB /* RightToLeftSegue.swift in Sources */,
 				B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */,
 				B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */,
 				B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */,
+				B472AB3F20D4369900447042 /* ConstantsItem.swift in Sources */,
 				B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */,
-				B4D3A10720A8FD36009D69A5 /* PrayerJourneyCollectionViewCell.swift in Sources */,
+				B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */,
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,
+				B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */,
 				B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */,
+				B4E486DA20D329C90054FFFB /* LeftToRightUnwindSegue.swift in Sources */,
 				033704F8209E980A0032703B /* FirebaseUtilities.swift in Sources */,
+				B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */,
+				B4E486D820D327580054FFFB /* FromTopSegue.swift in Sources */,
 				B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */,
 				B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */,
+				B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */,
 				B473D68120AC89C200D57E78 /* JournalEntry.swift in Sources */,
 				B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */,
 				B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */,
 				B45C11DD20BC737800CEEAA9 /* StatsItem.swift in Sources */,
-				B4D3A10120A89D08009D69A5 /* PrayerJourneyViewController.swift in Sources */,
 				B4EB8E9220B3450F000330EB /* Constants.swift in Sources */,
 				B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */,
 				030C40CF209E718B006D9690 /* AppDelegate.swift in Sources */,
 				B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */,
 				B4EEEA7920B4AD3A00B091F7 /* JournalTableViewCell.swift in Sources */,
 				033704F6209E96990032703B /* Utilities.swift in Sources */,
+				B4FB771220D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift in Sources */,
 				B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */,
 				B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */,
 				B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */,
+				B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */,
 				B42B0CEE20A542E600FDAFB6 /* ReflectViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -475,7 +664,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7943G7Y9QA;
+				DEVELOPMENT_TEAM = DHUN2XW8D4;
 				INFOPLIST_FILE = Hallow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -495,7 +684,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7943G7Y9QA;
+				DEVELOPMENT_TEAM = DHUN2XW8D4;
 				INFOPLIST_FILE = Hallow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
