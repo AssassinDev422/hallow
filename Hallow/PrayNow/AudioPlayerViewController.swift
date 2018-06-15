@@ -6,7 +6,7 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
-// This is the ui branch v2
+// This is now the master branch
 
 import UIKit
 import AVFoundation
