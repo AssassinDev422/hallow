@@ -72,6 +72,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
                 print("\(email) created")
                 self.set(isLoading: false)
+                LocalFirebaseData.name = name
                 self.performSegue(withIdentifier: "signUpSegue", sender: self)
             }
         }

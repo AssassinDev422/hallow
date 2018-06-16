@@ -48,7 +48,7 @@ class FirebaseUtilities {
         }
     }
     
-    static func loadUserData(loadField field: String, byUser userID: String,
+    static func loadUserData(byUser userID: String,
                                          _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
         db.collection("user").document(userID).getDocument { result, error in

@@ -30,7 +30,7 @@ class JournalTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         print("Total journal entries in viewDidLoad: \(self.journalEntries.count)")
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user!.uid
+            self.userID = user?.uid
             self.loadJournalEntries()
         }
     }

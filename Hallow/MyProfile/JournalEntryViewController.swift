@@ -49,7 +49,7 @@ class JournalEntryViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user!.uid
+            self.userID = user?.uid
         }
     }
     

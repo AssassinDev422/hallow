@@ -411,7 +411,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BYi-u1-ipc">
-                                <rect key="frame" x="48.5" y="599" width="278" height="48"/>
+                                <rect key="frame" x="48.5" y="579" width="278" height="48"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <state key="normal" title="AMEN" backgroundImage="pinkButton"/>
                                 <connections>
@@ -419,7 +419,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="B6A-57-Wcy">
-                                <rect key="frame" x="20" y="210" width="335" height="314"/>
+                                <rect key="frame" x="20" y="210" width="335" height="294"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
@@ -474,7 +474,7 @@
                             <constraint firstItem="B6A-57-Wcy" firstAttribute="leading" secondItem="ULa-xf-s1e" secondAttribute="leading" constant="20" id="3u6-tZ-jqV"/>
                             <constraint firstItem="VcP-bT-vJi" firstAttribute="top" secondItem="ULa-xf-s1e" secondAttribute="top" constant="20" id="6rc-yX-j6a"/>
                             <constraint firstItem="BYi-u1-ipc" firstAttribute="top" secondItem="B6A-57-Wcy" secondAttribute="bottom" constant="75" id="7yY-t8-i5v"/>
-                            <constraint firstItem="ULa-xf-s1e" firstAttribute="bottom" secondItem="BYi-u1-ipc" secondAttribute="bottom" constant="20" id="AxH-BO-6Sn"/>
+                            <constraint firstItem="ULa-xf-s1e" firstAttribute="bottom" secondItem="BYi-u1-ipc" secondAttribute="bottom" constant="40" id="AxH-BO-6Sn"/>
                             <constraint firstItem="B6A-57-Wcy" firstAttribute="centerX" secondItem="OLG-fj-M2p" secondAttribute="centerX" id="EJf-34-7Hk"/>
                             <constraint firstItem="B6A-57-Wcy" firstAttribute="top" secondItem="JmN-rK-bLG" secondAttribute="bottom" constant="30" id="L8T-kt-oen"/>
                             <constraint firstItem="JmN-rK-bLG" firstAttribute="leading" secondItem="ULa-xf-s1e" secondAttribute="leading" constant="20" id="NKo-Gg-kRg"/>
@@ -911,8 +911,7 @@ Please feel free to revisit the intro sessions until then!</string>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dvU-yh-ihA"/>
-        <segue reference="jnE-Hu-8Ka"/>
+        <segue reference="NrR-A9-qOp"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

@@ -41,11 +41,16 @@ class PrayerJourneySuperViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.set(isLoading: true)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user!.uid  //TODO: Potential bug - with new phone - unexpectedly found nil
-                self.setNextPrayerAndLoad()
+            self.userID = user?.uid  //TODO: Potential bug - with new phone - unexpectedly found nil
+                self.setNextPrayer()
+                self.pullUpPrayerData()
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateTableViewPosition()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -61,72 +66,49 @@ class PrayerJourneySuperViewController: UIViewController {
     
     // MARK: - Functions
     
-    private func setNextPrayerAndLoad() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
-            self.set(isLoading: true)
-            self.completedPrayers = results.map(PrayerTracking.init)
-            print("Completed prayers: \(self.completedPrayers.count)")
-            if self.completedPrayers.count > 0 {
-                for completedPrayer in self.completedPrayers {
-                    self.completedPrayersTitles.append(completedPrayer.title)
-                }
-                self.completedPrayersTitles.sort()
-                print("Completed prayers in array: \(self.completedPrayersTitles)")
-                self.nextPrayerTitle = self.completedPrayersTitles[self.completedPrayersTitles.count-1]
-                self.dayNumber = Int(String(self.nextPrayerTitle.last!))!
-                self.dayNumber += 1
-                let newDayNumber: String = String(self.dayNumber)
-                self.nextPrayerTitle.removeLast()
-                self.nextPrayerTitle.append(newDayNumber)
-                print(self.nextPrayerTitle)
-                if self.dayNumber == 10 {
-                    self.loadPrayerSession(withTitle: "Day 9", withLength: "10 mins")
-                } else {
-                    self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
-                    print("Loading prayer session: \(self.nextPrayerTitle)")
-                }
+    private func setNextPrayer() {
+        
+        self.completedPrayersTitles = LocalFirebaseData.completedPrayers
+        if self.completedPrayersTitles.count > 0 {
+            self.completedPrayersTitles.sort()
+            print("Completed prayers in array: \(self.completedPrayersTitles)")
+            self.nextPrayerTitle = self.completedPrayersTitles[self.completedPrayersTitles.count-1]
+            self.dayNumber = Int(String(self.nextPrayerTitle.last!))!
+            self.dayNumber += 1
+            let newDayNumber: String = String(self.dayNumber)
+            self.nextPrayerTitle.removeLast()
+            self.nextPrayerTitle.append(newDayNumber)
+            print(self.nextPrayerTitle)
+            if self.dayNumber == 10 {
+                LocalFirebaseData.nextPrayerTitle = "Day 9"
             } else {
-                print("Kept next prayer set as Day 1 since there are no completed prayers")
-                self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                LocalFirebaseData.nextPrayerTitle = self.nextPrayerTitle
+                print("Loading prayer session: \(self.nextPrayerTitle)")
             }
-        }
-    }
-    
-    private func loadPrayerSession(withTitle title: String, withLength length: String) {
-        self.set(isLoading: true)
-        FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: length) { result in
-            self.prayer = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
-            self.prayerTitleLabel.text = self.prayer!.title
-            self.prayerTitleLabel.text?.append(" of 9")
-            self.prayerDescriptionLabel.text = self.prayer!.description
-            
-            let description2 = NSMutableAttributedString(string: self.prayer!.description2)
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 10
-            description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
-            self.prayerDescription2Label.attributedText = description2
-            
-            self.checkIfLoaded()
-        }
-    }
-    
-    
-    func checkIfLoaded() {
-        let child = self.childViewControllers.first as! PrayerJourneyTableViewController
-
-        if self.everythingIsLoaded == true {
-            updateTableViewPosition()
-            
-            self.set(isLoading: false)
-            
-            print("Everything is loaded in superview")
-            
-            self.everythingIsLoaded = false
         } else {
-            print("Everything is not loaded in superview")
-            self.everythingIsLoaded = true
-            child.checkIfLoaded()
+            print("Kept next prayer set as Day 1 since there are no completed prayers")
+            LocalFirebaseData.nextPrayerTitle = "Day 1"
         }
+    }
+    
+    private func pullUpPrayerData() {
+        
+        print("NEXT PRAYER TITLE: \(LocalFirebaseData.nextPrayerTitle)")
+        print("LocalFirebaseData.prayers = \(LocalFirebaseData.prayers.count)")
+        
+        self.prayer = LocalFirebaseData.prayers.filter {$0.title == LocalFirebaseData.nextPrayerTitle} [0]
+        
+        
+        self.prayerTitleLabel.text = self.prayer!.title
+        self.prayerTitleLabel.text?.append(" of 9")
+        self.prayerDescriptionLabel.text = self.prayer!.description
+
+        let description2 = NSMutableAttributedString(string: self.prayer!.description2)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 10
+        description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
+        self.prayerDescription2Label.attributedText = description2
+        
     }
     
     private func updateTableViewPosition() {
@@ -139,27 +121,7 @@ class PrayerJourneySuperViewController: UIViewController {
             self.row = self.dayNumber - 1
             let indexPath = IndexPath(row: self.row, section: 0)
             child.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-        }
-    }
-    
-    // Sets up hud
-    
-    let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .dark)
-        hud.interactionType = .blockAllTouches
-        return hud
-    }()
-    
-    func set(isLoading: Bool) {
-        self.prayerTitleLabel.isHidden = isLoading
-        self.prayerDescriptionLabel.isHidden = isLoading
-        self.prayerDescription2Label.isHidden = isLoading
-        self.tableViewContainter.isHidden = isLoading
-        self.playSelectedButtonOutlet.isHidden = isLoading
-        if isLoading {
-            self.hud.show(in: view, animated: true)
-        } else {
-            self.hud.dismiss(animated: false)
+            child.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
         }
     }
     
