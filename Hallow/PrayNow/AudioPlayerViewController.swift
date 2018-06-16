@@ -224,6 +224,7 @@ class AudioPlayerViewController: UIViewController {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.performSegue(withIdentifier: "reflectSegue", sender: self)
             FirebaseUtilities.saveCompletedPrayer(byUserID: self.userID!, withPrayerTitle: self.prayer!.title)
+            LocalFirebaseData.completedPrayers.append(self.prayer!.title) // WIP - Jones
         }
     }
     

@@ -92,6 +92,10 @@ class MyProfileViewController: UIViewController {
             FirebaseUtilities.deleteFile(ofType: "constants", byUser: self.userID!, withID: Constants.firebaseDocID)
             FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: self.userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
             print("SAVED AND DELETED USER CONSTANTS")
+            
+            // WIP - Jones
+            LocalFirebaseData.completedPrayers = []
+            print("Local completed prayer \(LocalFirebaseData.completedPrayers)")
 
         } else {
             FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: self.userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: true)

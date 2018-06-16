@@ -17,6 +17,7 @@
 		5087C9DF2973C039B0BB91C1 /* Pods_Hallow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */; };
 		B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */; };
 		B407175820B72A920091B524 /* PrayerTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B407175720B72A910091B524 /* PrayerTracking.swift */; };
+		B412E56E20D4BEAD00AA54B9 /* LocalFirebaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B412E56D20D4BEAD00AA54B9 /* LocalFirebaseData.swift */; };
 		B41F4E0620D05F9000C0D118 /* MyProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */; };
 		B41F4E0820D05FBB00C0D118 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */; };
 		B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */; };
@@ -90,6 +91,7 @@
 		944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hallow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryViewController.swift; sourceTree = "<group>"; };
 		B407175720B72A910091B524 /* PrayerTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTracking.swift; sourceTree = "<group>"; };
+		B412E56D20D4BEAD00AA54B9 /* LocalFirebaseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFirebaseData.swift; sourceTree = "<group>"; };
 		B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyProfile.storyboard; sourceTree = "<group>"; };
 		B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
 		B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				B4EEEA7A20B4E90700B091F7 /* User.swift */,
 				B472AB3E20D4369900447042 /* ConstantsItem.swift */,
 				B45C11DC20BC737800CEEAA9 /* StatsItem.swift */,
+				B412E56D20D4BEAD00AA54B9 /* LocalFirebaseData.swift */,
 				B4EB8E9120B3450F000330EB /* Constants.swift */,
 				033704F5209E96990032703B /* Utilities.swift */,
 				033704F7209E980A0032703B /* FirebaseUtilities.swift */,
@@ -496,6 +499,7 @@
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,
 				B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */,
 				B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */,
+				B412E56E20D4BEAD00AA54B9 /* LocalFirebaseData.swift in Sources */,
 				B4E486DA20D329C90054FFFB /* LeftToRightUnwindSegue.swift in Sources */,
 				033704F8209E980A0032703B /* FirebaseUtilities.swift in Sources */,
 				B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */,

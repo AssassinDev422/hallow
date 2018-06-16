@@ -36,7 +36,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user!.uid
-            self.loadCompletedPrayers()
+            //self.loadCompletedPrayers()  WIP - Jones
         }
     }
     
@@ -59,16 +59,15 @@ class PrayerJourneyTableViewController: UITableViewController {
             self.checkIfLoaded()
         }
     }
-    
-    private func loadCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
-            self.completedPrayers = results.map(PrayerTracking.init)
-            print("Completed prayers: \(self.completedPrayers.count)")
-            self.tableView!.reloadData()
-            
-            
-        }
-    }
+
+// WIP - Jones
+//    private func loadCompletedPrayers() {
+//        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+//            self.completedPrayers = results.map(PrayerTracking.init)
+//            print("Completed prayers: \(self.completedPrayers.count)")
+//            self.tableView!.reloadData()
+//        }
+//    }
     
     func checkIfLoaded() {
         let parent = self.parent as! PrayerJourneySuperViewController
@@ -125,7 +124,10 @@ class PrayerJourneyTableViewController: UITableViewController {
         cell.prayerTitleLabel.text = prayer.title
         cell.prayerDescriptionLabel.text = prayer.description
         
-        let completed = self.completedPrayers.contains {$0.title == prayer.title}
+        //WIP - Jones
+        //let completed = self.completedPrayers.contains {$0.title == prayer.title}
+        let completed = LocalFirebaseData.completedPrayers.contains {$0 == prayer.title}
+        
         if completed == true {
             cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
             cell.statusImage.contentMode = .scaleToFill

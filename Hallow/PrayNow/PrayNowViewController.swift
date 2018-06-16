@@ -106,6 +106,7 @@ class PrayNowViewController: UIViewController {
                 if self.completedPrayers.count > 0 {
                     for completedPrayer in self.completedPrayers {
                         self.completedPrayersTitles.append(completedPrayer.title)
+                        LocalFirebaseData.completedPrayers.append(completedPrayer.title) // WIP - Jones
                     }
                     self.completedPrayersTitles.sort()
                     print("Completed prayers in array: \(self.completedPrayersTitles)")
@@ -120,8 +121,10 @@ class PrayNowViewController: UIViewController {
                         print("dayNumber was equal to 10 and we are performing segue")
                         Constants.hasCompleted = true
                         self.loadPrayerSession(withTitle: "Day 9", withLength: "10 mins")
+                        LocalFirebaseData.nextPrayer = "Day 9" // WIP - Jones
                     } else {
                         self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                        LocalFirebaseData.nextPrayer = self.nextPrayerTitle // WIP - Jones
                         print("Loading prayer session: \(self.nextPrayerTitle)")
                     }
                 } else {
