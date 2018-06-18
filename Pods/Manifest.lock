@@ -1,4 +1,12 @@
 PODS:
+  - AppCenter (1.6.0):
+    - AppCenter/Analytics (= 1.6.0)
+    - AppCenter/Crashes (= 1.6.0)
+  - AppCenter/Analytics (1.6.0):
+    - AppCenter/Core
+  - AppCenter/Core (1.6.0)
+  - AppCenter/Crashes (1.6.0):
+    - AppCenter/Core
   - BoringSSL (10.0):
     - BoringSSL/Implementation (= 10.0)
     - BoringSSL/Interface (= 10.0)
@@ -80,6 +88,7 @@ PODS:
   - Protobuf (3.5.0)
 
 DEPENDENCIES:
+  - AppCenter
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Firestore
@@ -88,6 +97,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AppCenter
     - BoringSSL
     - Firebase
     - FirebaseAnalytics
@@ -108,6 +118,7 @@ SPEC REPOS:
     - Protobuf
 
 SPEC CHECKSUMS:
+  AppCenter: 05e11ff99d3224131363abb61830172f5f28e53e
   BoringSSL: 32764dbaf5f5888cf51fbaa172a010126b41bcd4
   Firebase: cc13dfab1038c8b45d7903e01fc690451d6d0b24
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
@@ -127,6 +138,6 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
 
-PODFILE CHECKSUM: 018634729f8e1bf90aa9f40489e5a8db4eebc6ed
+PODFILE CHECKSUM: 43ef43acf3af5a994a301b6ba26b3a3d16b65e9a
 
 COCOAPODS: 1.5.2
