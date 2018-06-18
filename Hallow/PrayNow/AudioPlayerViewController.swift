@@ -306,8 +306,8 @@ class AudioPlayerViewController: UIViewController {
     
     private func setUpProgressControlUI() {
         let image = #imageLiteral(resourceName: "thumbIcon")
-        let newWidth = 2
-        let newHeight = 5
+        let newWidth = 3
+        let newHeight = 6
         UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
         image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
         
