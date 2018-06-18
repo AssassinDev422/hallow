@@ -51,7 +51,11 @@ class PasswordResetViewController: UIViewController, UITextFieldDelegate {
     
     private func sendReset() {
         set(isLoading: true)
-        if let email = self.emailField.text {
+        if let emailInit = self.emailField.text {
+            var email = emailInit
+            if email.last == " " {
+                email.removeLast()
+            }
             Auth.auth().sendPasswordReset(withEmail: email) { (error) in
                 if let error = error {
                     self.set(isLoading: false)

@@ -48,7 +48,7 @@ class FirebaseUtilities {
         }
     }
     
-    static func loadUserData(loadField field: String, byUser userID: String,
+    static func loadUserData(byUser userID: String,
                                          _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
         db.collection("user").document(userID).getDocument { result, error in
@@ -165,7 +165,7 @@ class FirebaseUtilities {
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         let dateStored = formatterStored.string(from: NSDate() as Date)
         
-        db.collection("user").document(userID).collection(type).addDocument(data: [
+        let ref = db.collection("user").document(userID).collection(type).addDocument(data: [
             "Date Stored": dateStored,
             "guide": guide,
             "isFirstDay": isFirstDay,
@@ -178,7 +178,6 @@ class FirebaseUtilities {
                 print("Error adding document: \(err)")
             } else {
                 print("Document added with ID: \(userID)")
-                Constants.firebaseDocID = ""
                 Constants.guide = "Francis"
                 Constants.isFirstDay = true
                 Constants.hasCompleted = false
@@ -187,6 +186,7 @@ class FirebaseUtilities {
                 Constants.hasLoggedOutOnce = false
             }
         }
+        Constants.firebaseDocID = ref.documentID
     }
     
     static func preOrderResponse(ofType type: String, byUserID userID: String, withEntry entry: String) {

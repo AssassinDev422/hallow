@@ -57,10 +57,17 @@ class ReflectViewController: UIViewController {
         if Constants.isFirstDay == true {
             performSegue(withIdentifier: "isFirstDaySegue", sender: self)
             Constants.isFirstDay = false
-        } else if Constants.hasCompleted == false {
-            performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
-        } else if Constants.hasCompleted == true {
-            performSegue(withIdentifier: "completedSegue", sender: self)
+        } else {
+            if Constants.hasCompleted == false {
+                performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+            } else {
+                if Constants.hasSeenCompletionScreen == false {
+                    performSegue(withIdentifier: "completedSegue", sender: self)
+                    Constants.hasSeenCompletionScreen = true
+                } else {
+                    performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+                }
+            }
         }
     }
     
@@ -68,18 +75,25 @@ class ReflectViewController: UIViewController {
         let entry = textField!.text
     
         FirebaseUtilities.saveReflection(ofType: "journal", byUserID: self.userID!, withEntry: entry!)
+        
+        print("CONSTANTS.ISFIRSTDAY: \(Constants.isFirstDay)")
+        print("CONSTANTS.HASCOMPLETED: \(Constants.hasCompleted)")
+        print("CONSTANTS.HASSEENCOMPLETIONSCREEN: \(Constants.hasSeenCompletionScreen)")
+
     
         if Constants.isFirstDay == true {
             performSegue(withIdentifier: "isFirstDaySegue", sender: self)
             Constants.isFirstDay = false
-        } else if Constants.hasCompleted == false {
-            performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
-        } else if Constants.hasCompleted == true {
-            if Constants.hasSeenCompletionScreen == true {
+        } else {
+            if Constants.hasCompleted == false {
                 performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
             } else {
-                performSegue(withIdentifier: "completedSegue", sender: self)
-                Constants.hasSeenCompletionScreen = true
+                if Constants.hasSeenCompletionScreen == false {
+                    performSegue(withIdentifier: "completedSegue", sender: self)
+                    Constants.hasSeenCompletionScreen = true
+                } else {
+                    performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
+                }
             }
         }
     }

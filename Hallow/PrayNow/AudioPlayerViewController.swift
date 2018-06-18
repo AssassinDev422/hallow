@@ -55,7 +55,7 @@ class AudioPlayerViewController: UIViewController {
             nowPrayingTitleLabel.text = self.prayer?.description
         }
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user!.uid
+            self.userID = user?.uid
             if self.readyToPlay == false {
                 self.readyToPlay = true
             } else {
@@ -117,6 +117,7 @@ class AudioPlayerViewController: UIViewController {
         }
         if self.alreadySaved == 0 {
             FirebaseUtilities.saveStartedPrayer(byUserID: self.userID!, withPrayerTitle: self.prayer!.title)
+            LocalFirebaseData.started += 1
             self.alreadySaved = 1
         }
     }
@@ -188,7 +189,7 @@ class AudioPlayerViewController: UIViewController {
     
     private func updateProgressControl(songCompleted: @escaping (Bool) -> Void) {
         if audioPlayer != nil {
-            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { [weak self] timer in
+            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
                 let percentComplete = self!.audioPlayer!.currentTime / self!.audioPlayer!.duration
                 self?.progressControlOutlet.setValue(Float(percentComplete), animated: true)
                 
@@ -224,6 +225,9 @@ class AudioPlayerViewController: UIViewController {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.performSegue(withIdentifier: "reflectSegue", sender: self)
             FirebaseUtilities.saveCompletedPrayer(byUserID: self.userID!, withPrayerTitle: self.prayer!.title)
+            LocalFirebaseData.completed += 1
+            LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
+            print("LOCAL COMPLETED IN COMPLETION HANDLER: \(LocalFirebaseData.completedPrayers.count)")
         }
     }
     
@@ -246,6 +250,7 @@ class AudioPlayerViewController: UIViewController {
             if results == [] {
                 print("No results file existed")
                 print("Time updated to: \(self.addedTimeTracker)")
+                LocalFirebaseData.timeTracker = self.addedTimeTracker
                 FirebaseUtilities.saveStats(byUserID: self.userID!, withTimeInPrayer: self.addedTimeTracker)
             } else {
                 self.stats = results.map(StatsItem.init)[0]
@@ -253,6 +258,7 @@ class AudioPlayerViewController: UIViewController {
                     print("time loaded: \(stats.timeInPrayer)")
                     stats.timeInPrayer += self.addedTimeTracker
                     print("time updated: \(stats.timeInPrayer)")
+                    LocalFirebaseData.timeTracker = stats.timeInPrayer
                     FirebaseUtilities.deleteFile(ofType: "stats", byUser: self.userID!, withID: stats.docID!)
                     FirebaseUtilities.saveStats(byUserID: self.userID!, withTimeInPrayer: stats.timeInPrayer)
                 } else {
@@ -267,7 +273,7 @@ class AudioPlayerViewController: UIViewController {
     let hud: JGProgressHUD = {
         let hud = JGProgressHUD(style: .dark)
         hud.indicatorView = JGProgressHUDRingIndicatorView() //Can change to JGProgressHUDPieIndicatorView()
-        hud.interactionType = .blockAllTouches
+        hud.interactionType = .blockNoTouches
         hud.detailTextLabel.text = "0% Complete"
         hud.textLabel.text = "Downloading"
         return hud
@@ -285,7 +291,6 @@ class AudioPlayerViewController: UIViewController {
     private func hideOutlets(shouldHide: Bool) {
         self.playPauseButton.isHidden = shouldHide
         self.progressControlOutlet.isHidden = shouldHide
-        self.exitButtonOutlet.isHidden = shouldHide
         self.timeLabel.isHidden = shouldHide
         self.nowPrayingLabel.isHidden = shouldHide
         self.nowPrayingTitleLabel.isHidden = shouldHide
@@ -301,8 +306,8 @@ class AudioPlayerViewController: UIViewController {
     
     private func setUpProgressControlUI() {
         let image = #imageLiteral(resourceName: "thumbIcon")
-        let newWidth = 2
-        let newHeight = 5
+        let newWidth = 3
+        let newHeight = 6
         UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
         image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
         

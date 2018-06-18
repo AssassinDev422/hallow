@@ -51,12 +51,21 @@ class PrayNowViewController: UIViewController {
             self.userID = user?.uid
             if let prayer = self.prayer {
                 self.loadPrayerSession(withTitle: prayer.title, withLength: "10 mins")
+                if prayer.title == "Day 9" {
+                    Constants.hasCompleted = true
+                } else {
+                    Constants.hasCompleted = false
+                }
                 print("Loading later prayer session")
                 print("prayerTitle: \(prayer.title)")
             } else {
                 self.setNextPrayerAndLoad()
             }
         }
+        
+        print("CONSTANTS.ISFIRSTDAY: \(Constants.isFirstDay)")
+        print("CONSTANTS.HASCOMPLETED: \(Constants.hasCompleted)")
+        print("CONSTANTS.HASSEENCOMPLETIONSCREEN: \(Constants.hasSeenCompletionScreen)")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -86,15 +95,6 @@ class PrayNowViewController: UIViewController {
             self.setSelectorBarPosition()
         }
     }
-
-    @IBAction func prayNowReleased(_ sender: Any) {
-        prayNowLabel.backgroundColor = UIColor(named: "purplishBlue")
-    }
-    
-    
-    @IBAction func prayNowPressed(_ sender: Any) {
-        prayNowLabel.backgroundColor = UIColor(named: "darkIndigo")
-    }
     
     // MARK: - Functions
     
@@ -106,6 +106,7 @@ class PrayNowViewController: UIViewController {
                 if self.completedPrayers.count > 0 {
                     for completedPrayer in self.completedPrayers {
                         self.completedPrayersTitles.append(completedPrayer.title)
+                        LocalFirebaseData.completedPrayers.append(completedPrayer.title)
                     }
                     self.completedPrayersTitles.sort()
                     print("Completed prayers in array: \(self.completedPrayersTitles)")
@@ -119,19 +120,30 @@ class PrayNowViewController: UIViewController {
                     if dayNumber == 10 {
                         print("dayNumber was equal to 10 and we are performing segue")
                         Constants.hasCompleted = true
+                        print("HAS COMPLETED: \(Constants.hasCompleted)")
                         self.loadPrayerSession(withTitle: "Day 9", withLength: "10 mins")
+                        LocalFirebaseData.nextPrayerTitle = "Day 9"
                     } else {
                         self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                        if self.nextPrayerTitle == "Day 9" {
+                            Constants.hasCompleted = true
+                        } else {
+                            Constants.hasCompleted = false
+                        }
+                        LocalFirebaseData.nextPrayerTitle = self.nextPrayerTitle
                         print("Loading prayer session: \(self.nextPrayerTitle)")
                     }
                 } else {
+                    Constants.hasCompleted = false
                     print("Kept next prayer set as Day 1 since there are no completed prayers")
                     self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                    LocalFirebaseData.nextPrayerTitle = "Day 1"
                 }
             }
         } else {
             print("Do not have user ID ***************")
             self.loadPrayerSession(withTitle: "Day 1", withLength: "10 mins")
+            LocalFirebaseData.nextPrayerTitle = "Day 1" 
         }
     }
     
@@ -148,10 +160,6 @@ class PrayNowViewController: UIViewController {
             paragraphStyle.lineSpacing = 10
             description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
             self.prayerSessionDescription2.attributedText = description2
-            
-            if self.prayerSessionTitle.text == "Day 9 of 9" {
-                Constants.hasCompleted = true
-            }
 
             FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: "5 mins") { result in
                 self.prayer5mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up

@@ -8,7 +8,10 @@
 
 import UIKit
 import Firebase
+import FirebaseFirestore
 import JGProgressHUD
+
+// FIXME: Think the error is in not waiting for this thing to save stuff / load before moving on
 
 // TODO: What happens if you try to create the same user with an existing email
 
@@ -59,7 +62,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     func signUp() {
         set(isLoading: true)
-        if let name = nameField.text, let email = emailField.text, let password = passwordField.text {
+        if let name = nameField.text, let emailInit = emailField.text, let password = passwordField.text {
+            var email = emailInit
+            if email.last == " " {
+                email.removeLast()
+            }
             Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
                 guard let email = authResult?.email, error == nil else {
                     self.set(isLoading: false)
@@ -67,24 +74,87 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
                 let userID = Auth.auth().currentUser?.uid
-                FirebaseUtilities.saveUser(ofType: "user", withID: userID!, withName: name, withEmail: email, withPassword: password)
-                FirebaseUtilities.saveStats(byUserID: userID!, withTimeInPrayer: 0.0)
-                FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+                self.saveDataForSignUp(withUserID: userID!, withName: name, withEmail: emailInit, withPassword: password)
                 print("\(email) created")
                 self.set(isLoading: false)
-                self.performSegue(withIdentifier: "signUpSegue", sender: self)
             }
         }
     }
     
     // MARK: - Functions
     
-
-    
     private func errorAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alert, animated: true)
+    }
+    
+    // MARK: - First time log in / sign up
+    
+    private func saveDataForSignUp(withUserID userID: String, withName name: String, withEmail email: String, withPassword password: String) {
+        
+        let db = Firestore.firestore()
+        db.collection("user").document(userID).setData([
+            "Name": name,
+            "Email": email,
+            "Password": password,
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added")
+                    self.saveStatsSignUp(byUserID: userID, withTimeInPrayer: 0.0)
+                    LocalFirebaseData.name = name
+                }
+        }
+    }
+    
+    private func saveStatsSignUp(byUserID userID: String, withTimeInPrayer timeInPrayer: Double) {
+        let db = Firestore.firestore()
+        db.collection("user").document(userID).collection("stats").addDocument(data: [
+            "Time in Prayer": timeInPrayer,
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added by user: \(userID)")
+                    self.saveSignUpConstants(ofType: "constants", byUserID: userID)
+                }
+        }
+    }
+    
+    private func saveSignUpConstants(ofType type: String, byUserID userID: String) {
+        let db = Firestore.firestore()
+        let formatterStored = DateFormatter()
+        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
+        let dateStored = formatterStored.string(from: NSDate() as Date)
+        
+        let ref = db.collection("user").document(userID).collection(type).addDocument(data: [
+            "Date Stored": dateStored,
+            "guide": "Francis",
+            "isFirstDay": true,
+            "hasCompleted": false,
+            "hasSeenCompletionScreen": false,
+            "hasStartedListening": false,
+            "hasLoggedOutOnce": false,
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added with ID: \(userID)")
+                    Constants.guide = "Francis"
+                    Constants.isFirstDay = true
+                    Constants.hasCompleted = false
+                    Constants.hasSeenCompletionScreen = false
+                    Constants.hasStartedListening = false
+                    Constants.hasLoggedOutOnce = false
+                    
+                    self.set(isLoading: false)
+                    self.performSegue(withIdentifier: "signUpSegue", sender: self)
+
+                }
+        }
+        Constants.firebaseDocID = ref.documentID
     }
     
     // Sets up loading hud

@@ -17,6 +17,13 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     var userConstants: ConstantsItem?
     
+    var userID: String?
+    
+    var userData: User?
+    var startedPrayers: [PrayerTracking] = []
+    var completedPrayers: [PrayerTracking] = []
+    var stats: StatsItem?
+    
     // MARK: - Life cycle
     
     override func viewDidLoad() {
@@ -53,16 +60,19 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     private func signIn() {
         set(isLoading: true)
-        if let email = self.emailField.text, let password = self.passwordField.text {
+        if let emailInit = self.emailField.text, let password = self.passwordField.text {
+            var email = emailInit
+            if email.last == " " {
+                email.removeLast()
+            }
             Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                 if let error = error {
                     self.errorAlert(message: "\(error.localizedDescription)")
                     self.set(isLoading: false)
                     return
                 } else {
+                    self.userID = user?.uid
                     self.loadUserConstants(fromUser: user!.uid)
-                    self.set(isLoading: false)
-                    self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
             }
         }
@@ -85,6 +95,48 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             print("Has started listening set at: \(Constants.hasStartedListening)")
             print("Guide pulled at: \(self.userConstants!.guide)")
             print("DocID: \(self.userConstants!.docID)")
+            
+            self.loadName()
+        }
+    }
+    
+    private func loadName() {
+        FirebaseUtilities.loadUserData(byUser: self.userID!) {results in
+            self.userData = results.map(User.init)[0]
+            print("USER DATA IN LAUNCH: \(String(describing: self.userData))")
+            LocalFirebaseData.name = self.userData!.name
+            
+            self.loadStartedPrayers()
+        }
+    }
+    
+    private func loadStartedPrayers() {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUser: self.userID!) {results in
+            self.startedPrayers = results.map(PrayerTracking.init)
+            print("STARTED PRAYERS IN LAUNCH: \(self.startedPrayers.count)")
+            LocalFirebaseData.started = self.startedPrayers.count
+            
+            self.loadCompletedPrayers()
+        }
+    }
+    
+    private func loadCompletedPrayers() {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+            self.completedPrayers = results.map(PrayerTracking.init)
+            print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
+            LocalFirebaseData.completed = self.completedPrayers.count
+            
+            self.loadTimeTracker()
+        }
+    }
+    
+    private func loadTimeTracker() {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) {results in
+            self.stats = results.map(StatsItem.init)[0]
+            LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
+            
+            self.set(isLoading: false)
+            self.performSegue(withIdentifier: "signInSegue", sender: self)
         }
     }
     

@@ -9,10 +9,8 @@
 import UIKit
 import Firebase
 
-
 class PrayerJourneyTableViewController: UITableViewController {
     
-    var prayers: [PrayerItem] = []
     var completedPrayers: [PrayerTracking] = []
     
     private let reuseIdentifier = "cell"
@@ -27,7 +25,6 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadAllPrayers()
     }
     
     // Firebase listener
@@ -35,8 +32,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user!.uid
-            self.loadCompletedPrayers()
+            self.userID = user?.uid
         }
     }
     
@@ -47,51 +43,6 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     
     // MARK: - Functions
-    
-    private func loadAllPrayers() {
-        FirebaseUtilities.loadAllDocumentsByGuideStandardLength(ofType: "prayer", byGuide: Constants.guide) { results in
-            self.prayers = results.map(PrayerItem.init)
-            self.prayers.sort{$0.title < $1.title}
-            print("Prayer guide: \(Constants.guide)")
-            print("Prayer sessions: \(self.prayers.count)")
-            self.tableView!.reloadData()
-            
-            self.checkIfLoaded()
-        }
-    }
-    
-    private func loadCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
-            self.completedPrayers = results.map(PrayerTracking.init)
-            print("Completed prayers: \(self.completedPrayers.count)")
-            self.tableView!.reloadData()
-            
-            
-        }
-    }
-    
-    func checkIfLoaded() {
-        let parent = self.parent as! PrayerJourneySuperViewController
-        if self.tableViewLoaded == true {
-            if parent.everythingIsLoaded == true {
-                updateTableViewPosition()
-                print("Everything is loaded in tableview")
-                parent.set(isLoading: false)
-                parent.hud.dismiss(animated: false)
-                
-                parent.everythingIsLoaded = false
-            } else {
-                print("Everything is not loaded in tableview")
-                parent.everythingIsLoaded = true
-                parent.checkIfLoaded()
-            }
-            self.tableViewLoaded = false
-        } else {
-            self.tableViewLoaded = true
-            checkIfLoaded()
-            print("Everything is not loaded in tableview v2")
-        }
-    }
     
     private func updateTableViewPosition() {
         let parent = self.parent as! PrayerJourneySuperViewController
@@ -113,19 +64,20 @@ class PrayerJourneyTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Prayer sessions: \(prayers.count)")
-        return prayers.count
+        print("Prayer sessions: \(LocalFirebaseData.prayers.count)")
+        return LocalFirebaseData.prayers.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PrayerJourneyTableViewCell
         
-        let prayer = prayers[indexPath.row]
+        let prayer = LocalFirebaseData.prayers[indexPath.row]
         cell.prayerTitleLabel.text = prayer.title
         cell.prayerDescriptionLabel.text = prayer.description
         
-        let completed = self.completedPrayers.contains {$0.title == prayer.title}
+        let completed = LocalFirebaseData.completedPrayers.contains {$0 == prayer.title}
+        
         if completed == true {
             cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
             cell.statusImage.contentMode = .scaleToFill
@@ -166,7 +118,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let prayer = prayers[indexPath.item]
+        let prayer = LocalFirebaseData.prayers[indexPath.item]
         let parent = self.parent as! PrayerJourneySuperViewController
         parent.prayer = prayer
         parent.prayerTitleLabel.text = prayer.title
@@ -186,7 +138,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let button:UIButton = sender as! UIButton? {
             let indexPath = button.tag
-            let prayer = prayers[indexPath]
+            let prayer = LocalFirebaseData.prayers[indexPath]
             prayNow.prayer = prayer
         }
     }

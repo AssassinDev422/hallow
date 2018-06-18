@@ -159,11 +159,11 @@
             </objects>
             <point key="canvasLocation" x="5168.8000000000002" y="-378.26086956521743"/>
         </scene>
-        <!--Me-->
+        <!--My Profile-->
         <scene sceneID="WB4-V6-P9E">
             <objects>
                 <navigationController storyboardIdentifier="UINavigationController-d03-Ua-0AP" id="d03-Ua-0AP" customClass="ProfileNavigationViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Me" image="userIcon2" id="xVO-ej-Uya"/>
+                    <tabBarItem key="tabBarItem" title="My Profile" image="userIcon2" id="xVO-ej-Uya"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="HuL-a2-O5D">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
