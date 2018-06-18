@@ -15,6 +15,7 @@ class PrayerItem {
     var description2 = "Placeholder"
     var audioURLPath = "audio/Meditation - 10 mins - F - 1.mp3"  
     var length = "10 mins"
+    var guide = "Francis"
     
     init(firestoreDocument document: DocumentSnapshot) {
         guard let data = document.data(),
@@ -22,6 +23,7 @@ class PrayerItem {
             let description = data["description"] as? String,
             let description2 = data["description2"] as? String,
             let audioFilePath = data["audio"] as? String,
+            let guide = data["guide"] as? String,
             let length = data["length"] as? String else {
                 fatalError("This prayer document could not be parsed. It's data was: \(document.data() ?? [:])")
         }
@@ -30,5 +32,6 @@ class PrayerItem {
         self.description2 = description2
         self.audioURLPath = audioFilePath
         self.length = length
+        self.guide = guide
     }
 }

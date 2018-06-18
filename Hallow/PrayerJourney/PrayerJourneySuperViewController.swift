@@ -96,7 +96,7 @@ class PrayerJourneySuperViewController: UIViewController {
         print("NEXT PRAYER TITLE: \(LocalFirebaseData.nextPrayerTitle)")
         print("LocalFirebaseData.prayers = \(LocalFirebaseData.prayers.count)")
         
-        self.prayer = LocalFirebaseData.prayers.filter {$0.title == LocalFirebaseData.nextPrayerTitle} [0]
+        self.prayer = LocalFirebaseData.prayers.filter {$0.title == LocalFirebaseData.nextPrayerTitle}.filter {$0.guide == Constants.guide} [0]
         
         
         self.prayerTitleLabel.text = self.prayer!.title

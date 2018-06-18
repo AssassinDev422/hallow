@@ -11,6 +11,10 @@ import Foundation
 class LocalFirebaseData {
     static var completedPrayers: [String] = []
     static var prayers: [PrayerItem] = []  //TODO: Have to pull in all lengths and guides etc.
+    static var prayers10mins: [PrayerItem] = []
+    static var prayers15mins: [PrayerItem] = []
+    static var prayers5mins: [PrayerItem] = []
+    
     static var nextPrayerTitle: String = "Day 1"
     
     static var name: String = ""

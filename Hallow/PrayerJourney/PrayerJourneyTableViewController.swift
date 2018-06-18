@@ -65,14 +65,14 @@ class PrayerJourneyTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("Prayer sessions: \(LocalFirebaseData.prayers.count)")
-        return LocalFirebaseData.prayers.count
+        return LocalFirebaseData.prayers.filter {$0.guide == Constants.guide}.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PrayerJourneyTableViewCell
         
-        let prayer = LocalFirebaseData.prayers[indexPath.row]
+        let prayer = LocalFirebaseData.prayers.filter {$0.guide == Constants.guide} [indexPath.row]
         cell.prayerTitleLabel.text = prayer.title
         cell.prayerDescriptionLabel.text = prayer.description
         
@@ -118,7 +118,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let prayer = LocalFirebaseData.prayers[indexPath.item]
+        let prayer = LocalFirebaseData.prayers.filter {$0.guide == Constants.guide} [indexPath.item]
         let parent = self.parent as! PrayerJourneySuperViewController
         parent.prayer = prayer
         parent.prayerTitleLabel.text = prayer.title
@@ -138,7 +138,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let button:UIButton = sender as! UIButton? {
             let indexPath = button.tag
-            let prayer = LocalFirebaseData.prayers[indexPath]
+            let prayer = LocalFirebaseData.prayers.filter {$0.guide == Constants.guide} [indexPath]
             prayNow.prayer = prayer
         }
     }

@@ -65,10 +65,10 @@ class FirebaseUtilities {
         }
     }
 
-    static func loadAllDocumentsByGuideStandardLength(ofType type: String, byGuide guide: String,
+    static func loadAllPrayersWithLength(ofType type: String, withLength length: String,
                                  _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
-        db.collection(type).whereField("guide", isEqualTo: guide).whereField("length", isEqualTo: "10 mins").getDocuments { result, error in
+        db.collection(type).whereField("length", isEqualTo: length).getDocuments { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
                     print("Got an error loading prayers from Firestore: \(error)")

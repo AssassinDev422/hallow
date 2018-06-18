@@ -39,7 +39,7 @@ class LaunchViewController: UIViewController {
                 self.userID = user?.uid
                 self.loadUserConstantsAndPrayers(fromUser: user!.uid)
             } else {
-                self.loadAllPrayers()
+                self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
             }
         }
@@ -107,32 +107,46 @@ class LaunchViewController: UIViewController {
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
             
-            self.loadAllPrayersWhenSkippingSignIn()
+            self.load10minPrayers(skippingSignIn: true)
 
         }
     }
     
-    private func loadAllPrayers() {
+    private func load10minPrayers(skippingSignIn: Bool) {
         LocalFirebaseData.prayers = []
+        LocalFirebaseData.prayers10mins = []
         print("LOCAL FIREBASE DATA PRAYERS PRE-LOAD: \(LocalFirebaseData.prayers.count)")
-        FirebaseUtilities.loadAllDocumentsByGuideStandardLength(ofType: "prayer", byGuide: Constants.guide) { results in
+        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "10 mins") { results in
             LocalFirebaseData.prayers = results.map(PrayerItem.init)
             LocalFirebaseData.prayers.sort{$0.title < $1.title}
+            LocalFirebaseData.prayers10mins = LocalFirebaseData.prayers
             print("LOCAL FIREBASE DATA PRAYERS POST LOAD: \(LocalFirebaseData.prayers.count)")
             
-            self.hideOutlets(shouldHide: false)
+            self.load15minPrayers(skippingSignIn: skippingSignIn)
         }
     }
     
-    private func loadAllPrayersWhenSkippingSignIn() {
-        LocalFirebaseData.prayers = []
-        print("LOCAL FIREBASE DATA PRAYERS PRE-LOAD: \(LocalFirebaseData.prayers.count)")
-        FirebaseUtilities.loadAllDocumentsByGuideStandardLength(ofType: "prayer", byGuide: Constants.guide) { results in
-            LocalFirebaseData.prayers = results.map(PrayerItem.init)
-            LocalFirebaseData.prayers.sort{$0.title < $1.title}
-            print("LOCAL FIREBASE DATA PRAYERS POST LOAD: \(LocalFirebaseData.prayers.count)")
+    private func load15minPrayers(skippingSignIn: Bool) {
+        LocalFirebaseData.prayers15mins = []
+        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "15 mins") { results in
+            LocalFirebaseData.prayers15mins = results.map(PrayerItem.init)
+            LocalFirebaseData.prayers15mins.sort{$0.title < $1.title}
             
-            self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
+            self.load5minPrayers(skippingSignIn: skippingSignIn)
+        }
+    }
+    
+    private func load5minPrayers(skippingSignIn: Bool) {
+        LocalFirebaseData.prayers5mins = []
+        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "5 mins") { results in
+            LocalFirebaseData.prayers5mins = results.map(PrayerItem.init)
+            LocalFirebaseData.prayers5mins.sort{$0.title < $1.title}
+            
+            if skippingSignIn == false {
+                self.hideOutlets(shouldHide: false)
+            } else {
+                self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
+            }
         }
     }
     
