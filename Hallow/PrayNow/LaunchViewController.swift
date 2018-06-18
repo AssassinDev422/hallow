@@ -38,7 +38,6 @@ class LaunchViewController: UIViewController {
             if user != nil {
                 self.userID = user?.uid
                 self.loadUserConstantsAndPrayers(fromUser: user!.uid)
-                self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
             } else {
                 self.loadAllPrayers()
                 print("no one is logged in")
@@ -108,7 +107,7 @@ class LaunchViewController: UIViewController {
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
             
-            self.loadAllPrayers()
+            self.loadAllPrayersWhenSkippingSignIn()
 
         }
     }
@@ -122,6 +121,18 @@ class LaunchViewController: UIViewController {
             print("LOCAL FIREBASE DATA PRAYERS POST LOAD: \(LocalFirebaseData.prayers.count)")
             
             self.hideOutlets(shouldHide: false)
+        }
+    }
+    
+    private func loadAllPrayersWhenSkippingSignIn() {
+        LocalFirebaseData.prayers = []
+        print("LOCAL FIREBASE DATA PRAYERS PRE-LOAD: \(LocalFirebaseData.prayers.count)")
+        FirebaseUtilities.loadAllDocumentsByGuideStandardLength(ofType: "prayer", byGuide: Constants.guide) { results in
+            LocalFirebaseData.prayers = results.map(PrayerItem.init)
+            LocalFirebaseData.prayers.sort{$0.title < $1.title}
+            print("LOCAL FIREBASE DATA PRAYERS POST LOAD: \(LocalFirebaseData.prayers.count)")
+            
+            self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
         }
     }
     

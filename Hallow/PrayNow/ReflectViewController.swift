@@ -75,6 +75,11 @@ class ReflectViewController: UIViewController {
         let entry = textField!.text
     
         FirebaseUtilities.saveReflection(ofType: "journal", byUserID: self.userID!, withEntry: entry!)
+        
+        print("CONSTANTS.ISFIRSTDAY: \(Constants.isFirstDay)")
+        print("CONSTANTS.HASCOMPLETED: \(Constants.hasCompleted)")
+        print("CONSTANTS.HASSEENCOMPLETIONSCREEN: \(Constants.hasSeenCompletionScreen)")
+
     
         if Constants.isFirstDay == true {
             performSegue(withIdentifier: "isFirstDaySegue", sender: self)

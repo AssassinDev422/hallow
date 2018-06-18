@@ -24,9 +24,9 @@ class GuideSelectorViewController: UIViewController {
     var abbyFirstPlay: Bool = true
     
     var francisSampleAudioPlayer: AVAudioPlayer = AVAudioPlayer()
-    var francisSampleAudioURLPath: String = "audio/Samples - F.m4a"
+    var francisSampleAudioURLPath: String = "audio/Samples - F.mp3"
     var abbySampleAudioPlayer: AVAudioPlayer = AVAudioPlayer()
-    var abbySampleAudioURLPath: String = "audio/Samples - A.m4a" 
+    var abbySampleAudioURLPath: String = "audio/Samples - A.mp3" 
     
     var francisTimer: Timer?
     var abbyTimer: Timer?

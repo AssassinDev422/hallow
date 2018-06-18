@@ -87,17 +87,11 @@ class MyProfileViewController: UIViewController {
     // MARK: - Functions
         
     private func saveAndResetConstants() {
-        if Constants.hasLoggedOutOnce == true {
-            FirebaseUtilities.deleteFile(ofType: "constants", byUser: self.userID!, withID: Constants.firebaseDocID)
-            FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: self.userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
-            print("SAVED AND DELETED USER CONSTANTS")
-            
-
-        } else {
-            FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: self.userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: true)
-            print("JUST SAVED USER CONSTANTS")
-        }
-        
+        print("HASCOMPLETED IN LOGOUT: \(Constants.hasCompleted)")
+        Constants.hasLoggedOutOnce = true
+        FirebaseUtilities.deleteFile(ofType: "constants", byUser: self.userID!, withID: Constants.firebaseDocID)
+        FirebaseUtilities.saveAndResetUserConstants(ofType: "constants", byUserID: self.userID!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+        print("SAVED AND DELETED USER CONSTANTS")
     }
     
     private func resetLocalFirebaseData() {

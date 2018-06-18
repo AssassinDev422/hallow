@@ -60,7 +60,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     private func signIn() {
         set(isLoading: true)
-        if let email = self.emailField.text, let password = self.passwordField.text {
+        if let emailInit = self.emailField.text, let password = self.passwordField.text {
+            var email = emailInit
+            if email.last == " " {
+                email.removeLast()
+            }
             Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                 if let error = error {
                     self.errorAlert(message: "\(error.localizedDescription)")
@@ -69,8 +73,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 } else {
                     self.userID = user?.uid
                     self.loadUserConstants(fromUser: user!.uid)
-                    self.set(isLoading: false)
-                    self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
             }
         }
@@ -132,7 +134,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) {results in
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
-                        
+            
+            self.set(isLoading: false)
+            self.performSegue(withIdentifier: "signInSegue", sender: self)
         }
     }
     

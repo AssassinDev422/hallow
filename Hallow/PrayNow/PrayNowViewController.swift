@@ -51,12 +51,21 @@ class PrayNowViewController: UIViewController {
             self.userID = user?.uid
             if let prayer = self.prayer {
                 self.loadPrayerSession(withTitle: prayer.title, withLength: "10 mins")
+                if prayer.title == "Day 9" {
+                    Constants.hasCompleted = true
+                } else {
+                    Constants.hasCompleted = false
+                }
                 print("Loading later prayer session")
                 print("prayerTitle: \(prayer.title)")
             } else {
                 self.setNextPrayerAndLoad()
             }
         }
+        
+        print("CONSTANTS.ISFIRSTDAY: \(Constants.isFirstDay)")
+        print("CONSTANTS.HASCOMPLETED: \(Constants.hasCompleted)")
+        print("CONSTANTS.HASSEENCOMPLETIONSCREEN: \(Constants.hasSeenCompletionScreen)")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -86,15 +95,6 @@ class PrayNowViewController: UIViewController {
             self.setSelectorBarPosition()
         }
     }
-
-    @IBAction func prayNowReleased(_ sender: Any) {
-        prayNowLabel.backgroundColor = UIColor(named: "purplishBlue")
-    }
-    
-    
-    @IBAction func prayNowPressed(_ sender: Any) {
-        prayNowLabel.backgroundColor = UIColor(named: "darkIndigo")
-    }
     
     // MARK: - Functions
     
@@ -120,11 +120,16 @@ class PrayNowViewController: UIViewController {
                     if dayNumber == 10 {
                         print("dayNumber was equal to 10 and we are performing segue")
                         Constants.hasCompleted = true
+                        print("HAS COMPLETED: \(Constants.hasCompleted)")
                         self.loadPrayerSession(withTitle: "Day 9", withLength: "10 mins")
                         LocalFirebaseData.nextPrayerTitle = "Day 9"
                     } else {
-                        Constants.hasCompleted = false
                         self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                        if self.nextPrayerTitle == "Day 9" {
+                            Constants.hasCompleted = true
+                        } else {
+                            Constants.hasCompleted = false
+                        }
                         LocalFirebaseData.nextPrayerTitle = self.nextPrayerTitle
                         print("Loading prayer session: \(self.nextPrayerTitle)")
                     }
