@@ -36,6 +36,7 @@ class AudioPlayerViewController: UIViewController {
     var alreadySaved = 0
     
     var addedTimeTracker = 0.00
+    var streak: Int = 0
     var stats: StatsItem?
     
     var readyToPlay = false
@@ -261,7 +262,11 @@ class AudioPlayerViewController: UIViewController {
                 print("No results file existed")
                 print("Time updated to: \(self.addedTimeTracker)")
                 LocalFirebaseData.timeTracker = self.addedTimeTracker
-                FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: self.addedTimeTracker)
+                self.streak = 1
+                LocalFirebaseData.streak = self.streak
+                FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: self.addedTimeTracker, withStreak: self.streak)
+                
+                
             } else {
                 self.stats = results.map(StatsItem.init)[0]
                 if let stats = self.stats {
@@ -269,8 +274,33 @@ class AudioPlayerViewController: UIViewController {
                     stats.timeInPrayer += self.addedTimeTracker
                     print("time updated: \(stats.timeInPrayer)")
                     LocalFirebaseData.timeTracker = stats.timeInPrayer
+                    
+                    print("Loaded stats: \(stats.streak)")
+                    let calendar = Calendar.current
+                    let mostRecentDay = calendar.component(.day, from: LocalFirebaseData.mostRecentPrayerDate)
+                    print("mostRecentDay: \(mostRecentDay)")
+                    let today = Date(timeIntervalSinceNow: 0)
+                    print("today: \(today)")
+                    let dayToday = calendar.component(.day, from: today)
+                    print("dayToday: \(dayToday)")
+                    let timeDifference = today.timeIntervalSince(LocalFirebaseData.mostRecentPrayerDate) / 3600
+                    print("timeDifference: \(timeDifference)")
+                    let dayDifference = dayToday - mostRecentDay
+                    print("dayDifference: \(dayDifference)")
+                    
+                    if timeDifference > 48 {
+                        stats.streak = 1
+                    } else {
+                        if dayDifference == 1 {
+                            stats.streak += 1
+                        }
+                    }
+                    
+                    print("Updated stats: \(stats.streak)")
+                    LocalFirebaseData.streak = stats.streak
+                    
                     FirebaseUtilities.deleteFile(ofType: "stats", byUserEmail: self.userEmail!, withID: stats.docID!)
-                    FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer)
+                    FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
                 } else {
                     print("Error: stats is nil")
                 }

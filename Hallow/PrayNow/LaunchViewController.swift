@@ -116,6 +116,14 @@ class LaunchViewController: UIViewController {
             self.completedPrayers = results.map(PrayerTracking.init)
             print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
             LocalFirebaseData.completed = self.completedPrayers.count
+            
+            var date: [Date] = []
+            for completedPrayer in self.completedPrayers {
+                date.append(completedPrayer.dateStored)
+            }
+            LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+            print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
+            print("firstObjectInDateArray: \(date.sorted()[0])")
 
             self.loadTimeTracker()
         }
@@ -125,6 +133,7 @@ class LaunchViewController: UIViewController {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) {results in
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
+            LocalFirebaseData.streak = self.stats!.streak
             
             self.load10minPrayers(skippingSignIn: true)
 
@@ -253,6 +262,7 @@ class LaunchViewController: UIViewController {
         LocalFirebaseData.timeTracker = 0.0
         LocalFirebaseData.started = 0
         LocalFirebaseData.completed = 0
+        LocalFirebaseData.streak = 0
         
         self.load10minPrayers(skippingSignIn: false)
     }

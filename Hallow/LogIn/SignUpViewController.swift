@@ -104,21 +104,26 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     print("Error adding document: \(err)")
                 } else {
                     print("Document added")
-                    self.saveStatsSignUp(byUserEmail: userEmail, withTimeInPrayer: 0.0)
+                    self.saveStatsSignUp(byUserEmail: userEmail, withTimeInPrayer: 0.0, withStreak: 0)
                     LocalFirebaseData.name = name
                 }
         }
     }
     
-    private func saveStatsSignUp(byUserEmail userEmail: String, withTimeInPrayer timeInPrayer: Double) {
+    private func saveStatsSignUp(byUserEmail userEmail: String, withTimeInPrayer timeInPrayer: Double, withStreak streak: Int) {
         let db = Firestore.firestore()
         db.collection("user").document(userEmail).collection("stats").addDocument(data: [
             "Time in Prayer": timeInPrayer,
+            "Streak": streak
             ]) { err in
                 if let err = err {
                     print("Error adding document: \(err)")
                 } else {
                     print("Document added by user: \(userEmail)")
+                    
+                    LocalFirebaseData.timeTracker = 0.00
+                    LocalFirebaseData.mostRecentPrayerDate = Date(timeIntervalSince1970: 0)
+                    
                     self.saveSignUpConstants(ofType: "constants", byUserEmail: userEmail)
                 }
         }

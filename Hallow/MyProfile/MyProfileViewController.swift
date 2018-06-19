@@ -68,6 +68,7 @@ class MyProfileViewController: UIViewController {
                 let minutes = LocalFirebaseData.timeTracker / 60.0
                 let minutesString = String(format: "%.0f", minutes)
                 self.minsNumber.text = minutesString
+                self.streakNumber.text = String(LocalFirebaseData.streak)
             }
         }
     }
@@ -157,6 +158,7 @@ class MyProfileViewController: UIViewController {
         LocalFirebaseData.timeTracker = 0.0
         LocalFirebaseData.started = 0
         LocalFirebaseData.completed = 0
+        LocalFirebaseData.streak = 0
         
         self.set(isSigningOut: false)
         self.performSegue(withIdentifier: "signOutSegue", sender: self)

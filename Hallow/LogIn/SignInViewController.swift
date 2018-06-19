@@ -129,6 +129,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
             LocalFirebaseData.completed = self.completedPrayers.count
             
+            var date: [Date] = []
+            for completedPrayer in self.completedPrayers {
+                date.append(completedPrayer.dateStored)
+            }
+            LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+            print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
+            print("firstObjectInDateArray: \(date.sorted()[0])")
+            
             self.loadTimeTracker()
         }
     }
@@ -137,6 +145,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) {results in
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
+            LocalFirebaseData.streak = self.stats!.streak
             
             self.set(isLoading: false)
             self.performSegue(withIdentifier: "signInSegue", sender: self)

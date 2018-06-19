@@ -208,10 +208,11 @@ class FirebaseUtilities {
         }
     }
     
-    static func saveStats(byUserEmail email: String, withTimeInPrayer timeInPrayer: Double) {
+    static func saveStats(byUserEmail email: String, withTimeInPrayer timeInPrayer: Double, withStreak streak: Int) {
         let db = Firestore.firestore()
         db.collection("user").document(email).collection("stats").addDocument(data: [
             "Time in Prayer": timeInPrayer,
+            "Streak": streak
             ]) { err in
                 if let err = err {
                     print("Error adding document: \(err)")
@@ -225,9 +226,8 @@ class FirebaseUtilities {
     
     static func saveCompletedPrayer(byUserEmail email: String, withPrayerTitle prayerTitle: String) {
         let db = Firestore.firestore()
-        let formatterStored = DateFormatter()
-        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
-        let dateStored = formatterStored.string(from: NSDate() as Date)
+        //WIP
+        let dateStored = Date(timeIntervalSinceNow: -1000000) // FIXME
         db.collection("user").document(email).collection("completedPrayers").addDocument(data: [
             "Date Stored": dateStored,
             "Prayer Title": prayerTitle,
@@ -242,9 +242,7 @@ class FirebaseUtilities {
     
     static func saveStartedPrayer(byUserEmail email: String, withPrayerTitle prayerTitle: String) {
         let db = Firestore.firestore()
-        let formatterStored = DateFormatter()
-        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
-        let dateStored = formatterStored.string(from: NSDate() as Date)
+        let dateStored = Date(timeIntervalSinceNow: 0)
         db.collection("user").document(email).collection("startedPrayers").addDocument(data: [
             "Date Stored": dateStored,
             "Prayer Title": prayerTitle,
