@@ -23,6 +23,7 @@ class PrayNowViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? //FIXME
     
     var prayer: PrayerItem?
     var completedPrayers: [PrayerTracking] = []
@@ -48,6 +49,8 @@ class PrayNowViewController: UIViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
+            print("USER EMAIL: \(String(describing: self.userEmail))-------------------------------")
             if let prayer = self.prayer {
                 self.setPrayerSessionWithoutLoading()
                 
@@ -62,12 +65,19 @@ class PrayNowViewController: UIViewController {
             } else {
                 self.set(isLoading: true)
                 self.setNextPrayerAndLoad()
-                
-                if Constants.isFirstDay == true {
-                    self.tabBarController?.tabBar.isHidden = true
-                }
+            }
+            print("***************Constants.isFirstDay in WillAppear = \(Constants.isFirstDay)")
+            if Constants.isFirstDay == true {
+                self.tabBarController?.tabBar.isHidden = true
+            } else {
+                self.tabBarController?.tabBar.isHidden = false
             }
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("***************Constants.isFirstDay in DidAppear = \(Constants.isFirstDay)")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -102,7 +112,7 @@ class PrayNowViewController: UIViewController {
     
     private func setNextPrayerAndLoad() {
         if self.userID != nil {
-            FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+            FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
                 self.completedPrayers = results.map(PrayerTracking.init)
                 print("Completed prayers: \(self.completedPrayers.count)")
                 if self.completedPrayers.count > 0 {

@@ -73,8 +73,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     self.errorAlert(message: "\(error!.localizedDescription)")
                     return
                 }
-                let userID = Auth.auth().currentUser?.uid
-                self.saveDataForSignUp(withUserID: userID!, withName: name, withEmail: emailInit, withPassword: password)
+                
+                self.saveDataForSignUp(withUserEmail: email, withName: name, withEmail: emailInit, withPassword: password)
                 print("\(email) created")
                 self.set(isLoading: false)
             }
@@ -91,10 +91,10 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - First time log in / sign up
     
-    private func saveDataForSignUp(withUserID userID: String, withName name: String, withEmail email: String, withPassword password: String) {
+    private func saveDataForSignUp(withUserEmail userEmail: String, withName name: String, withEmail email: String, withPassword password: String) {
         
         let db = Firestore.firestore()
-        db.collection("user").document(userID).setData([
+        db.collection("user").document(userEmail).setData([
             "Name": name,
             "Email": email,
             "Password": password,
@@ -103,33 +103,33 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     print("Error adding document: \(err)")
                 } else {
                     print("Document added")
-                    self.saveStatsSignUp(byUserID: userID, withTimeInPrayer: 0.0)
+                    self.saveStatsSignUp(byUserEmail: userEmail, withTimeInPrayer: 0.0)
                     LocalFirebaseData.name = name
                 }
         }
     }
     
-    private func saveStatsSignUp(byUserID userID: String, withTimeInPrayer timeInPrayer: Double) {
+    private func saveStatsSignUp(byUserEmail userEmail: String, withTimeInPrayer timeInPrayer: Double) {
         let db = Firestore.firestore()
-        db.collection("user").document(userID).collection("stats").addDocument(data: [
+        db.collection("user").document(userEmail).collection("stats").addDocument(data: [
             "Time in Prayer": timeInPrayer,
             ]) { err in
                 if let err = err {
                     print("Error adding document: \(err)")
                 } else {
-                    print("Document added by user: \(userID)")
-                    self.saveSignUpConstants(ofType: "constants", byUserID: userID)
+                    print("Document added by user: \(userEmail)")
+                    self.saveSignUpConstants(ofType: "constants", byUserEmail: userEmail)
                 }
         }
     }
     
-    private func saveSignUpConstants(ofType type: String, byUserID userID: String) {
+    private func saveSignUpConstants(ofType type: String, byUserEmail userEmail: String) {
         let db = Firestore.firestore()
         let formatterStored = DateFormatter()
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         let dateStored = formatterStored.string(from: NSDate() as Date)
         
-        let ref = db.collection("user").document(userID).collection(type).addDocument(data: [
+        let ref = db.collection("user").document(userEmail).collection(type).addDocument(data: [
             "Date Stored": dateStored,
             "guide": "Francis",
             "isFirstDay": true,
@@ -141,7 +141,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 if let err = err {
                     print("Error adding document: \(err)")
                 } else {
-                    print("Document added with ID: \(userID)")
+                    print("Document added with ID: \(userEmail)")
                     Constants.guide = "Francis"
                     Constants.isFirstDay = true
                     Constants.hasCompleted = false

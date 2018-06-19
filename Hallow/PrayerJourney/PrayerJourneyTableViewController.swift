@@ -17,6 +17,8 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? //FIXME
+
     
     var tableViewLoaded: Bool = false
     var row: Int = 0
@@ -33,6 +35,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
         }
     }
     

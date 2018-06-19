@@ -17,6 +17,8 @@ class JournalTableViewController: UITableViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? //FIXME
+
     
     // MARK: - Life cycle
     
@@ -31,6 +33,7 @@ class JournalTableViewController: UITableViewController {
         print("Total journal entries in viewDidLoad: \(self.journalEntries.count)")
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
             self.loadJournalEntries()
         }
     }
@@ -43,7 +46,7 @@ class JournalTableViewController: UITableViewController {
     // MARK: - Functions
     
     private func loadJournalEntries() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "journal", byUser: self.userID!) { results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "journal", byUserEmail: self.userEmail!) { results in
             self.set(isLoading: true)
             self.journalEntries = results.map(JournalEntry.init)
             self.journalEntries.sort{$0.dateStored > $1.dateStored}

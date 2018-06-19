@@ -18,6 +18,7 @@ class JournalEntryViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? //FIXME
 
     var journalEntry: JournalEntry?
     
@@ -50,6 +51,7 @@ class JournalEntryViewController: UIViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
         }
     }
     
@@ -73,8 +75,8 @@ class JournalEntryViewController: UIViewController {
         print("journalEntry?.entry: \(journalEntry?.entry ?? "Error")")
         let entry = textField!.text
         let docID = journalEntry?.docID
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserID: self.userID!, withEntry: entry!)
-        FirebaseUtilities.deleteFile(ofType: "journal", byUser: self.userID!, withID: docID!)
+        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: self.userEmail!, withEntry: entry!)
+        FirebaseUtilities.deleteFile(ofType: "journal", byUserEmail: self.userEmail!, withID: docID!)
         self.navigationController?.popViewController(animated: true)
     }
     

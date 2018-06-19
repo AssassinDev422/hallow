@@ -29,6 +29,7 @@ class AudioPlayerViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? //FIXME
     
     var controlTimer: Timer?
     
@@ -56,6 +57,7 @@ class AudioPlayerViewController: UIViewController {
         }
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
             if self.readyToPlay == false {
                 self.readyToPlay = true
             } else {
@@ -116,7 +118,7 @@ class AudioPlayerViewController: UIViewController {
             playPauseButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
         }
         if self.alreadySaved == 0 {
-            FirebaseUtilities.saveStartedPrayer(byUserID: self.userID!, withPrayerTitle: self.prayer!.title)
+            FirebaseUtilities.saveStartedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
             LocalFirebaseData.started += 1
             self.alreadySaved = 1
         }
@@ -224,7 +226,7 @@ class AudioPlayerViewController: UIViewController {
             self.audioPlayer!.pause()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.performSegue(withIdentifier: "reflectSegue", sender: self)
-            FirebaseUtilities.saveCompletedPrayer(byUserID: self.userID!, withPrayerTitle: self.prayer!.title)
+            FirebaseUtilities.saveCompletedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
             LocalFirebaseData.completed += 1
             LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
             print("LOCAL COMPLETED IN COMPLETION HANDLER: \(LocalFirebaseData.completedPrayers.count)")
@@ -245,13 +247,13 @@ class AudioPlayerViewController: UIViewController {
     // MARK: - Functions - Stats
     
     private func updateMyStats() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) { results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) { results in
             print("Results: \(results)")
             if results == [] {
                 print("No results file existed")
                 print("Time updated to: \(self.addedTimeTracker)")
                 LocalFirebaseData.timeTracker = self.addedTimeTracker
-                FirebaseUtilities.saveStats(byUserID: self.userID!, withTimeInPrayer: self.addedTimeTracker)
+                FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: self.addedTimeTracker)
             } else {
                 self.stats = results.map(StatsItem.init)[0]
                 if let stats = self.stats {
@@ -259,8 +261,8 @@ class AudioPlayerViewController: UIViewController {
                     stats.timeInPrayer += self.addedTimeTracker
                     print("time updated: \(stats.timeInPrayer)")
                     LocalFirebaseData.timeTracker = stats.timeInPrayer
-                    FirebaseUtilities.deleteFile(ofType: "stats", byUser: self.userID!, withID: stats.docID!)
-                    FirebaseUtilities.saveStats(byUserID: self.userID!, withTimeInPrayer: stats.timeInPrayer)
+                    FirebaseUtilities.deleteFile(ofType: "stats", byUserEmail: self.userEmail!, withID: stats.docID!)
+                    FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer)
                 } else {
                     print("Error: stats is nil")
                 }

@@ -16,6 +16,8 @@ class ReflectViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? //FIXME
+
 
     // MARK: - Life cycle
 
@@ -35,6 +37,7 @@ class ReflectViewController: UIViewController {
         print("REFLECT VIEW WILL APPEAR*************")
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid  //FIXME: Thread error - found nil when clicking logout when user was unwrapped "!"
+            self.userEmail = user?.email
         }
     }
     
@@ -74,7 +77,7 @@ class ReflectViewController: UIViewController {
     private func save() {
         let entry = textField!.text
     
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserID: self.userID!, withEntry: entry!)
+        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: self.userEmail!, withEntry: entry!)
         
         print("CONSTANTS.ISFIRSTDAY: \(Constants.isFirstDay)")
         print("CONSTANTS.HASCOMPLETED: \(Constants.hasCompleted)")

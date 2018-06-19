@@ -22,6 +22,8 @@ class LaunchViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? //FIXME
+
     
     var userConstants: ConstantsItem?
     
@@ -37,7 +39,8 @@ class LaunchViewController: UIViewController {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             if user != nil {
                 self.userID = user?.uid
-                self.loadUserConstantsAndPrayers(fromUser: user!.uid)
+                self.userEmail = user?.email
+                self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
             } else {
                 self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
@@ -52,8 +55,8 @@ class LaunchViewController: UIViewController {
     
     // MARK: - Functions
     
-    private func loadUserConstantsAndPrayers(fromUser userID: String) {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUser: userID) { results in
+    private func loadUserConstantsAndPrayers(fromUserEmail userEmail: String) {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUserEmail: userEmail) { results in
             self.userConstants = results.map(ConstantsItem.init)[0]
             Constants.firebaseDocID = self.userConstants!.docID
             Constants.guide = self.userConstants!.guide
@@ -62,6 +65,7 @@ class LaunchViewController: UIViewController {
             Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
             Constants.hasStartedListening = self.userConstants!.hasStartedListening
             Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
+            print("************Constants.isFirstDay in launch: \(Constants.isFirstDay)")
             print("LOADED USER CONSTANTS")
             print("Guide set at: \(Constants.guide)")
             print("Has started listening set at: \(Constants.hasStartedListening)")
@@ -73,7 +77,7 @@ class LaunchViewController: UIViewController {
     }
     
     private func loadName() {
-        FirebaseUtilities.loadUserData(byUser: self.userID!) {results in
+        FirebaseUtilities.loadUserData(byUserEmail: self.userEmail!) {results in
             self.userData = results.map(User.init)[0]
             print("USER DATA IN LAUNCH: \(String(describing: self.userData))")
             LocalFirebaseData.name = self.userData!.name
@@ -83,7 +87,7 @@ class LaunchViewController: UIViewController {
     }
     
     private func loadStartedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: self.userEmail!) {results in
             self.startedPrayers = results.map(PrayerTracking.init)
             print("STARTED PRAYERS IN LAUNCH: \(self.startedPrayers.count)")
             LocalFirebaseData.started = self.startedPrayers.count
@@ -93,7 +97,7 @@ class LaunchViewController: UIViewController {
     }
     
     private func loadCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
             self.completedPrayers = results.map(PrayerTracking.init)
             print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
             LocalFirebaseData.completed = self.completedPrayers.count
@@ -103,7 +107,7 @@ class LaunchViewController: UIViewController {
     }
     
     private func loadTimeTracker() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) {results in
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
             
