@@ -143,7 +143,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="21K-RI-c7e">
-                                <rect key="frame" x="63" y="547" width="250" height="29"/>
+                                <rect key="frame" x="63" y="544" width="250" height="29"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="31a-uT-57j"/>
@@ -165,18 +165,18 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Hd-K9-cbQ">
-                                <rect key="frame" x="63" y="575" width="83" height="5"/>
+                                <rect key="frame" x="63" y="572" width="83" height="5"/>
                                 <color key="backgroundColor" name="fadedPink"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="Gng-jz-GC7"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleAspectFit" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nIG-NJ-1Xj" customClass="DesignableButton" customModule="Hallow" customModuleProvider="target">
-                                <rect key="frame" x="129.5" y="401" width="116" height="116"/>
+                                <rect key="frame" x="132.5" y="404" width="110" height="110"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="116" id="D9L-0V-2QP"/>
-                                    <constraint firstAttribute="width" constant="116" id="fdy-ei-PIa"/>
+                                    <constraint firstAttribute="height" constant="110" id="D9L-0V-2QP"/>
+                                    <constraint firstAttribute="width" constant="110" id="fdy-ei-PIa"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="34"/>
                                 <state key="normal" image="playButtonImage">
@@ -407,7 +407,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="B6A-57-Wcy">
-                                <rect key="frame" x="20" y="210" width="335" height="294"/>
+                                <rect key="frame" x="20" y="190" width="335" height="314"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
@@ -464,7 +464,7 @@
                             <constraint firstItem="BYi-u1-ipc" firstAttribute="top" secondItem="B6A-57-Wcy" secondAttribute="bottom" constant="75" id="7yY-t8-i5v"/>
                             <constraint firstItem="ULa-xf-s1e" firstAttribute="bottom" secondItem="BYi-u1-ipc" secondAttribute="bottom" constant="40" id="AxH-BO-6Sn"/>
                             <constraint firstItem="B6A-57-Wcy" firstAttribute="centerX" secondItem="OLG-fj-M2p" secondAttribute="centerX" id="EJf-34-7Hk"/>
-                            <constraint firstItem="B6A-57-Wcy" firstAttribute="top" secondItem="JmN-rK-bLG" secondAttribute="bottom" constant="30" id="L8T-kt-oen"/>
+                            <constraint firstItem="B6A-57-Wcy" firstAttribute="top" secondItem="JmN-rK-bLG" secondAttribute="bottom" constant="10" id="L8T-kt-oen"/>
                             <constraint firstItem="JmN-rK-bLG" firstAttribute="leading" secondItem="ULa-xf-s1e" secondAttribute="leading" constant="20" id="NKo-Gg-kRg"/>
                             <constraint firstItem="VcP-bT-vJi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Br0-AR-h54" secondAttribute="trailing" constant="50" id="RJy-MB-ca6"/>
                             <constraint firstItem="JmN-rK-bLG" firstAttribute="top" secondItem="ULa-xf-s1e" secondAttribute="top" constant="50" id="U8X-A7-lsZ"/>
@@ -895,7 +895,7 @@ Please feel free to revisit the intro sessions until then!</string>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="nek-eA-lDZ"/>
+        <segue reference="MfL-On-nYD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

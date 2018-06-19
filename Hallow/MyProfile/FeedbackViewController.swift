@@ -16,7 +16,7 @@ class FeedbackViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String? 
     
     // MARK: - Life cycle
     

@@ -30,13 +30,13 @@ class MyProfileViewController: UIViewController {
     @IBOutlet weak var completedNumber: UILabel!
     @IBOutlet weak var completedLabel: UILabel!
     
-    @IBOutlet weak var startedNumber: UILabel!
-    @IBOutlet weak var startedLabel: UILabel!
+    @IBOutlet weak var streakNumber: UILabel!
+    @IBOutlet weak var streakLabel: UILabel!
     
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String? 
     
     var storedUserID: String?
     var storedUserEmail: String?
@@ -63,7 +63,7 @@ class MyProfileViewController: UIViewController {
             if let user = user?.uid {
                 self.userID = user
                 self.nameOutlet.text = LocalFirebaseData.name
-                self.startedNumber.text = String(LocalFirebaseData.started)
+                //WIP - self.streakNumber.text = String(LocalFirebaseData.started)
                 self.completedNumber.text = String(LocalFirebaseData.completed)
                 let minutes = LocalFirebaseData.timeTracker / 60.0
                 let minutesString = String(format: "%.0f", minutes)
@@ -87,8 +87,6 @@ class MyProfileViewController: UIViewController {
     }
     
     // MARK: - Functions
-    
-    //WIP - set delete and segue and log out
     
     private func logOutData(ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
         print("IN LOG OUT DATA FUNCTION")

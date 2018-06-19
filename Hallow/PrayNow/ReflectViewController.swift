@@ -10,13 +10,17 @@ import UIKit
 import FirebaseFirestore
 import Firebase
 
-class ReflectViewController: UIViewController {
+class ReflectViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var textField: UITextView!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String?
+    
+    var frame: CGRect?
+    
+    var prayerTitle: String?
 
 
     // MARK: - Life cycle
@@ -25,6 +29,8 @@ class ReflectViewController: UIViewController {
         super.viewDidLoad()
         textField!.layer.borderWidth = 0.5
         textField!.layer.borderColor = UIColor.white.cgColor
+        
+        textField.delegate = self
                 
         setUpDoneButton()
 
@@ -36,7 +42,7 @@ class ReflectViewController: UIViewController {
         super.viewDidAppear(animated)
         print("REFLECT VIEW WILL APPEAR*************")
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid  //FIXME: Thread error - found nil when clicking logout when user was unwrapped "!"
+            self.userID = user?.uid
             self.userEmail = user?.email
         }
     }
@@ -77,7 +83,7 @@ class ReflectViewController: UIViewController {
     private func save() {
         let entry = textField!.text
     
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: self.userEmail!, withEntry: entry!)
+        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: self.userEmail!, withEntry: entry!, withTitle: prayerTitle!)
         
         print("CONSTANTS.ISFIRSTDAY: \(Constants.isFirstDay)")
         print("CONSTANTS.HASCOMPLETED: \(Constants.hasCompleted)")
@@ -138,6 +144,18 @@ class ReflectViewController: UIViewController {
     
     @objc private func doneClicked() {
         view.endEditing(true)
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        print("Did begin editing")
+        self.frame = textView.frame
+        var newFrame = self.frame!
+        newFrame.size.height = self.frame!.height / 2.5
+        textView.frame = newFrame
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textView.frame = self.frame!
     }
     
 }

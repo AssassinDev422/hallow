@@ -119,10 +119,10 @@ class FirebaseUtilities {
         }
     }
     
-    static func saveReflection(ofType type: String, byUserEmail email: String, withEntry entry: String) {
+    static func saveReflection(ofType type: String, byUserEmail email: String, withEntry entry: String, withTitle title: String) {
         let db = Firestore.firestore()
         let formatter = DateFormatter()
-        formatter.dateFormat = "E, MMM d, yyyy"
+        formatter.dateFormat = "M/d/yy"
         let date = formatter.string(from: NSDate() as Date)
         let formatterStored = DateFormatter()
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
@@ -131,7 +131,8 @@ class FirebaseUtilities {
         db.collection("user").document(email).collection(type).addDocument(data: [
             "Date": date,
             "Date Stored": dateStored,
-            "Entry": entry
+            "Entry": entry,
+            "Prayer Title": title
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")

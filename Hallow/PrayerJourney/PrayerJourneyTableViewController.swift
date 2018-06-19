@@ -17,7 +17,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String?
 
     
     var tableViewLoaded: Bool = false

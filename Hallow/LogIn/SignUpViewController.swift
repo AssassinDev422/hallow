@@ -11,8 +11,6 @@ import Firebase
 import FirebaseFirestore
 import JGProgressHUD
 
-// FIXME: Think the error is in not waiting for this thing to save stuff / load before moving on
-
 // TODO: What happens if you try to create the same user with an existing email
 
 
@@ -26,6 +24,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         nameField.delegate = self
         nameField.tag = 0
         emailField.delegate = self
@@ -34,6 +33,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         passwordField.tag = 2
         
         setUpDoneButton()
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -68,13 +68,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 email.removeLast()
             }
             Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-                guard let email = authResult?.email, error == nil else {
+                guard let email = authResult?.email,
+                    error == nil else {
                     self.set(isLoading: false)
                     self.errorAlert(message: "\(error!.localizedDescription)")
                     return
                 }
                 
-                self.saveDataForSignUp(withUserEmail: email, withName: name, withEmail: emailInit, withPassword: password)
+                self.saveDataForSignUp(withUserEmail: email, withName: name, withEmail: emailInit, withPassword: "Confidential")
                 print("\(email) created")
                 self.set(isLoading: false)
             }

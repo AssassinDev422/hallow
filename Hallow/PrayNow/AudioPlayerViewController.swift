@@ -29,7 +29,7 @@ class AudioPlayerViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String? 
     
     var controlTimer: Timer?
     
@@ -39,6 +39,9 @@ class AudioPlayerViewController: UIViewController {
     var stats: StatsItem?
     
     var readyToPlay = false
+    
+    var pathReference: StorageReference?
+    var downloadTask: StorageDownloadTask?
     
     // MARK: - Life cycle
    
@@ -95,6 +98,10 @@ class AudioPlayerViewController: UIViewController {
     }
     
     @IBAction func exitButtonReleased(_ sender: Any) {
+        if self.downloadTask != nil {
+            self.downloadTask?.cancel()
+            print("Canceled download")
+        }
         exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
     }
     
@@ -128,15 +135,16 @@ class AudioPlayerViewController: UIViewController {
         let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: prayer.audioURLPath)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
+            self.set(isLoading: false)
             setupAudioPlayer(file: prayer)
             return
         }
         
         print("attempting to download: \(prayer.audioURLPath)...")
         self.set(isLoading: true)
-        let pathReference = Storage.storage().reference(withPath: prayer.audioURLPath)
+        self.pathReference = Storage.storage().reference(withPath: prayer.audioURLPath)
         
-        let downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
+        self.downloadTask = self.pathReference!.write(toFile: destinationFileURL) { (url, error) in
             if let error = error {
                 print("error downloading file: \(error)")
             } else {
@@ -145,7 +153,7 @@ class AudioPlayerViewController: UIViewController {
             }
         }
         
-        downloadTask.observe(.progress) { snapshot in
+        self.downloadTask!.observe(.progress) { snapshot in
             // Download reported progress
             let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
             // Update the progress indicator
@@ -302,6 +310,17 @@ class AudioPlayerViewController: UIViewController {
     // Unwind
     
     @IBAction func returnFromSegueActions(sender: UIStoryboardSegue){
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationViewController = segue.destination
+        if let ReflectViewController = destinationViewController as? ReflectViewController {
+            let prayerTitle = "\(self.prayer!.title) - \(self.prayer!.description)"
+            print("PRAYER TITLE IN REFLECT SEGUE: \(prayerTitle)")
+            ReflectViewController.prayerTitle = prayerTitle
+        }
     }
     
     // MARK: - Design

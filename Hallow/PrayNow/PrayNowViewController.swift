@@ -23,7 +23,7 @@ class PrayNowViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String? 
     
     var prayer: PrayerItem?
     var completedPrayers: [PrayerTracking] = []

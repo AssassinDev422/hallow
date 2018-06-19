@@ -17,7 +17,7 @@ class JournalTableViewController: UITableViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String? 
 
     
     // MARK: - Life cycle
@@ -88,6 +88,7 @@ class JournalTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! JournalTableViewCell
         let journalEntry = journalEntries[indexPath.row]
         
+        cell.titleField.text = journalEntry.prayerTitle
         cell.dateField.text = journalEntry.date
         cell.entryField.text = journalEntry.entry
         

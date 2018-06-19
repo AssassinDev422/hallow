@@ -22,7 +22,12 @@ class LaunchViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? //FIXME
+    var userEmail: String?
+        
+    var storedUserID: String?
+    var storedUserEmail: String?
+    
+    var newFirebaseDocID: String?
 
     
     var userConstants: ConstantsItem?
@@ -32,6 +37,11 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideOutlets(shouldHide: true)
+        
+        if Constants.newBuild == true {
+            firebaseLogOut()
+            Constants.newBuild = false
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +50,12 @@ class LaunchViewController: UIViewController {
             if user != nil {
                 self.userID = user?.uid
                 self.userEmail = user?.email
-                self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
+                if Constants.newBuild == true {
+                    self.logOut()
+                    Constants.newBuild = false
+                } else {
+                    self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
+                }
             } else {
                 self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
@@ -160,6 +175,86 @@ class LaunchViewController: UIViewController {
         self.signInOutlet.isHidden = shouldHide
         self.signUpOutlet.isHidden = shouldHide
         self.prayerChallengeLabel.isHidden = shouldHide
+    }
+    
+    // Log out when deploying a new build
+    
+    private func logOut() {
+        self.storedUserID = self.userID
+        self.storedUserEmail = self.userEmail
+        logOutData(ofType: "constants", byUserEmail: self.storedUserEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+    }
+    
+    private func logOutData(ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
+        print("IN LOG OUT DATA FUNCTION")
+        let db = Firestore.firestore()
+        let formatterStored = DateFormatter()
+        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
+        let dateStored = formatterStored.string(from: NSDate() as Date)
+        
+        let ref = db.collection("user").document(userEmail).collection(type).addDocument(data: [
+            "Date Stored": dateStored,
+            "guide": guide,
+            "isFirstDay": isFirstDay,
+            "hasCompleted": hasCompleted,
+            "hasSeenCompletionScreen": hasSeenCompletionScreen,
+            "hasStartedListening": hasStartedListening,
+            "hasLoggedOutOnce": hasLoggedOutOnce,
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added with ID: \(userEmail)")
+                    Constants.guide = "Francis"
+                    Constants.isFirstDay = true
+                    Constants.hasCompleted = false
+                    Constants.hasSeenCompletionScreen = false
+                    Constants.hasStartedListening = false
+                    Constants.hasLoggedOutOnce = false
+                    
+                    self.deleteFile(ofType: "constants", byUserEmail: userEmail, withID: Constants.firebaseDocID)
+                }
+        }
+        newFirebaseDocID = ref.documentID
+    }
+    
+    private func deleteFile(ofType type: String, byUserEmail userEmail: String, withID document: String) {
+        print("IN DELETE FILE FUNCTION")
+        let db = Firestore.firestore()
+        db.collection("user").document(userEmail).collection(type).document(document).delete() { error in
+            if let error = error {
+                print("Error removing document: \(error)")
+            } else {
+                print("Document successfully removed with ID: \(document)")
+                
+                Constants.firebaseDocID = self.newFirebaseDocID!
+                Constants.hasLoggedOutOnce = true
+                self.firebaseLogOut()
+            }
+        }
+    }
+    
+    private func firebaseLogOut() {
+        do {
+            try Auth.auth().signOut()
+            print("FIREBASE LOG OUT FUNCTION")
+            self.resetLocalFirebaseData()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func resetLocalFirebaseData() {
+        print("IN RESET LOCAL DATA FUNCTION")
+        LocalFirebaseData.completedPrayers = []
+        print("COUNT OF LOCAL FIREBASE DATA COMPLETED PRAYERS: \(LocalFirebaseData.completedPrayers.count)")
+        LocalFirebaseData.nextPrayerTitle = "Day 1"
+        LocalFirebaseData.name = ""
+        LocalFirebaseData.timeTracker = 0.0
+        LocalFirebaseData.started = 0
+        LocalFirebaseData.completed = 0
+        
+        self.load10minPrayers(skippingSignIn: false)
     }
 
 }
