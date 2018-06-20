@@ -50,7 +50,9 @@ class PrayNowViewController: UIViewController {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
             self.userEmail = user?.email
-            FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: self.userEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+            if let email = user?.email {
+                FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+            }
             print("USER EMAIL: \(String(describing: self.userEmail))-------------------------------")
             if let prayer = self.prayer {
                 self.setPrayerSessionWithoutLoading()

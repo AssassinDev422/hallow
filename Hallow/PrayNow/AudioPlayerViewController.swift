@@ -85,7 +85,9 @@ class AudioPlayerViewController: UIViewController {
         audioPlayer?.stop()
         progressControlOutlet.setValue(Float(0.0), animated: false)
         updateMyStats()
-        FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: self.userEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+        if let email = self.userEmail {
+            FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+        }
     }
     
     // MARK: - Actions
@@ -276,25 +278,20 @@ class AudioPlayerViewController: UIViewController {
                     print("time updated: \(stats.timeInPrayer)")
                     LocalFirebaseData.timeTracker = stats.timeInPrayer
                     
+                    // Update streak
                     print("Loaded stats: \(stats.streak)")
                     let calendar = Calendar.current
-                    let mostRecentDay = calendar.component(.day, from: LocalFirebaseData.mostRecentPrayerDate)
-                    print("mostRecentDay: \(mostRecentDay)")
                     let today = Date(timeIntervalSinceNow: 0)
-                    print("today: \(today)")
-                    let dayToday = calendar.component(.day, from: today)
-                    print("dayToday: \(dayToday)")
+                    print("Most recent prayer date: \(LocalFirebaseData.mostRecentPrayerDate)")
                     let timeDifference = today.timeIntervalSince(LocalFirebaseData.mostRecentPrayerDate) / 3600
-                    print("timeDifference: \(timeDifference)")
-                    let dayDifference = dayToday - mostRecentDay
-                    print("dayDifference: \(dayDifference)")
+                    print("timeDifference in hours: \(timeDifference)")
+                    let isNextDay = calendar.isDateInYesterday(LocalFirebaseData.mostRecentPrayerDate)
+                    print("isNextDay: \(isNextDay)")
                     
-                    if timeDifference > 48 {
-                        stats.streak = 1
+                    if isNextDay == true {
+                        stats.streak += 1
                     } else {
-                        if dayDifference == 1 {
-                            stats.streak += 1
-                        }
+                        stats.streak = 1
                     }
                     
                     print("Updated stats: \(stats.streak)")

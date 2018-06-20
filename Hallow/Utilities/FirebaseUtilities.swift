@@ -227,7 +227,7 @@ class FirebaseUtilities {
     static func saveCompletedPrayer(byUserEmail email: String, withPrayerTitle prayerTitle: String) {
         let db = Firestore.firestore()
         //WIP
-        let dateStored = Date(timeIntervalSinceNow: -1000000) // FIXME
+        let dateStored = Date(timeIntervalSinceNow: 0)
         db.collection("user").document(email).collection("completedPrayers").addDocument(data: [
             "Date Stored": dateStored,
             "Prayer Title": prayerTitle,

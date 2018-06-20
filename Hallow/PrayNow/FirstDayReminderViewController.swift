@@ -26,9 +26,9 @@ class FirstDayReminderViewController: UIViewController {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             print("User: \(String(describing: user))")
             self.userEmail = user?.email
-            if let user = user?.uid {
+            if let user = user?.uid, let email = self.userEmail {
                 self.userID = user
-                FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: self.userEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+                FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
             }
         }
     }

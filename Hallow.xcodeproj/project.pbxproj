@@ -334,6 +334,7 @@
 				030C40C8209E718B006D9690 /* Frameworks */,
 				030C40C9209E718B006D9690 /* Resources */,
 				52B41825253F44146326EC99 /* [CP] Embed Pods Frameworks */,
+				3EEDF32E3BCE369D07378365 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -420,6 +421,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3EEDF32E3BCE369D07378365 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Hallow/Pods-Hallow-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AppCenter/AppCenterDistributeResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppCenterDistributeResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Hallow/Pods-Hallow-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		52B41825253F44146326EC99 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
