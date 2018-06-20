@@ -285,7 +285,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kea-gJ-RfM">
-                                        <rect key="frame" x="20" y="66.5" width="50.5" height="21"/>
+                                        <rect key="frame" x="20" y="66.5" width="42" height="20"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="17"/>
                                         <color key="textColor" name="beige"/>
                                         <nil key="highlightedColor"/>
@@ -407,7 +407,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="B6A-57-Wcy">
-                                <rect key="frame" x="20" y="190" width="335" height="314"/>
+                                <rect key="frame" x="20" y="150" width="335" height="354"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
@@ -423,7 +423,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What did you take away from today's session?" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-rK-bLG">
-                                <rect key="frame" x="20" y="70" width="335" height="110"/>
+                                <rect key="frame" x="20" y="70" width="335" height="70"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -533,7 +533,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hva-bT-qKr">
-                                        <rect key="frame" x="20" y="220" width="335" height="43"/>
+                                        <rect key="frame" x="20" y="215" width="335" height="43"/>
                                         <string key="text">
 
 
@@ -543,7 +543,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We are currently building the full version with a lot more content.  In the meantime feel free to re-listen to the 9 sessions." lineBreakMode="wordWrap" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GoO-fN-186">
-                                        <rect key="frame" x="20" y="200" width="335" height="64.5"/>
+                                        <rect key="frame" x="20" y="195" width="335" height="64.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
@@ -576,7 +576,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXj-as-Oux">
-                                        <rect key="frame" x="20" y="284.5" width="335" height="86"/>
+                                        <rect key="frame" x="20" y="279.5" width="335" height="86"/>
                                         <string key="text">We hope you've enjoyed it so far!  Click below if you want to be added to the pre-order list for the full version at $4.99 / mo.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
@@ -602,7 +602,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations on completing your intro to Hallow!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qzt-MN-c6a">
-                                <rect key="frame" x="20" y="70" width="335" height="110"/>
+                                <rect key="frame" x="20" y="70" width="335" height="105"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -655,16 +655,16 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eAD-Np-fey">
-                                <rect key="frame" x="20" y="147" width="335" height="173"/>
+                                <rect key="frame" x="20" y="167" width="335" height="133"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to set up a reminder each day?" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w48-FA-BB1">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="110"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="70"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can update this at any point in your profile" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2UW-oI-lJH">
-                                        <rect key="frame" x="0.0" y="130" width="335" height="43"/>
+                                        <rect key="frame" x="0.0" y="90" width="335" height="43"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
@@ -672,7 +672,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="JgL-2j-yQO">
-                                <rect key="frame" x="37.5" y="420" width="300" height="48"/>
+                                <rect key="frame" x="37.5" y="400" width="300" height="48"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrn-fj-wuF">
                                         <rect key="frame" x="0.0" y="0.0" width="135" height="48"/>
@@ -755,7 +755,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </date>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great!  Just pick a time" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6fi-W8-qQx">
-                                <rect key="frame" x="20" y="70" width="335" height="73.5"/>
+                                <rect key="frame" x="20" y="70" width="335" height="35"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>

@@ -44,6 +44,8 @@ class AudioPlayerViewController: UIViewController {
     var pathReference: StorageReference?
     var downloadTask: StorageDownloadTask?
     
+    var completedPrayers: [PrayerTracking] = []
+    
     // MARK: - Life cycle
    
     override func viewDidLoad() {
@@ -84,7 +86,6 @@ class AudioPlayerViewController: UIViewController {
         audioPlayer?.currentTime = 0
         audioPlayer?.stop()
         progressControlOutlet.setValue(Float(0.0), animated: false)
-        updateMyStats()
         if let email = self.userEmail {
             FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
         }
@@ -106,6 +107,7 @@ class AudioPlayerViewController: UIViewController {
             self.downloadTask?.cancel()
             print("Canceled download")
         }
+        updateMyStats()
         exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
     }
     
@@ -238,7 +240,7 @@ class AudioPlayerViewController: UIViewController {
             self.audioPlayer!.pause()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.performSegue(withIdentifier: "reflectSegue", sender: self)
-            FirebaseUtilities.saveCompletedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
+            self.loadAndSaveCompletedPrayers()
             LocalFirebaseData.completed += 1
             LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
             print("LOCAL COMPLETED IN COMPLETION HANDLER: \(LocalFirebaseData.completedPrayers.count)")
@@ -258,7 +260,31 @@ class AudioPlayerViewController: UIViewController {
     
     // MARK: - Functions - Stats
     
+    private func loadAndSaveCompletedPrayers() {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
+            self.completedPrayers = results.map(PrayerTracking.init)
+            print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
+            LocalFirebaseData.completed = self.completedPrayers.count
+            
+            if self.completedPrayers.count > 0 {
+                var date: [Date] = []
+                for completedPrayer in self.completedPrayers {
+                    date.append(completedPrayer.dateStored)
+                }
+                LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+                print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
+                print("firstObjectInDateArray: \(date.sorted()[0])")
+            }
+            
+            
+            self.updateMyStats()
+            FirebaseUtilities.saveCompletedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
+        }
+    }
+    
+    
     private func updateMyStats() {
+        
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) { results in
             print("Results: \(results)")
             if results == [] {
@@ -286,12 +312,15 @@ class AudioPlayerViewController: UIViewController {
                     let timeDifference = today.timeIntervalSince(LocalFirebaseData.mostRecentPrayerDate) / 3600
                     print("timeDifference in hours: \(timeDifference)")
                     let isNextDay = calendar.isDateInYesterday(LocalFirebaseData.mostRecentPrayerDate)
+                    let isToday = calendar.isDateInToday(LocalFirebaseData.mostRecentPrayerDate)
                     print("isNextDay: \(isNextDay)")
                     
                     if isNextDay == true {
                         stats.streak += 1
                     } else {
-                        stats.streak = 1
+                        if isToday == false {
+                            stats.streak = 1
+                        }
                     }
                     
                     print("Updated stats: \(stats.streak)")

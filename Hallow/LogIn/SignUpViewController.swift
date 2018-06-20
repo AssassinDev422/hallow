@@ -13,7 +13,6 @@ import JGProgressHUD
 
 // TODO: What happens if you try to create the same user with an existing email
 
-
 class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var nameField: UITextField!
