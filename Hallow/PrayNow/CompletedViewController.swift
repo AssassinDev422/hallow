@@ -14,8 +14,8 @@ class CompletedViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? 
-    
+    var userEmail: String?
+        
     // MARK: - Life cycle
     // Firebase listener
     
@@ -24,6 +24,7 @@ class CompletedViewController: UIViewController {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
             self.userEmail = user?.email
+            FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: self.userEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
         }
     }
     

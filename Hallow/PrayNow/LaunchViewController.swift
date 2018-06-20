@@ -37,11 +37,6 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideOutlets(shouldHide: true)
-        
-        if Constants.newBuild == true {
-            firebaseLogOut()
-            Constants.newBuild = false
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,12 +45,7 @@ class LaunchViewController: UIViewController {
             if user != nil {
                 self.userID = user?.uid
                 self.userEmail = user?.email
-                if Constants.newBuild == true {
-                    self.logOut()
-                    Constants.newBuild = false
-                } else {
-                    self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
-                }
+                self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
             } else {
                 self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
@@ -117,13 +107,16 @@ class LaunchViewController: UIViewController {
             print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
             LocalFirebaseData.completed = self.completedPrayers.count
             
-            var date: [Date] = []
-            for completedPrayer in self.completedPrayers {
-                date.append(completedPrayer.dateStored)
+            if self.completedPrayers.count > 0 {
+                var date: [Date] = []
+                for completedPrayer in self.completedPrayers {
+                    date.append(completedPrayer.dateStored)
+                }
+                LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+                print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
+                print("firstObjectInDateArray: \(date.sorted()[0])")
             }
-            LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
-            print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
-            print("firstObjectInDateArray: \(date.sorted()[0])")
+            
 
             self.loadTimeTracker()
         }

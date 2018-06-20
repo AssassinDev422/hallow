@@ -85,6 +85,7 @@ class AudioPlayerViewController: UIViewController {
         audioPlayer?.stop()
         progressControlOutlet.setValue(Float(0.0), animated: false)
         updateMyStats()
+        FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: self.userEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
     }
     
     // MARK: - Actions

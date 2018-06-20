@@ -267,5 +267,48 @@ class FirebaseUtilities {
             }
         }
     }
+    
+    // MARK: - Periodic save of data
+    
+    static func saveConstants(ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
+        print("IN LOG OUT DATA FUNCTION")
+        let db = Firestore.firestore()
+        let formatterStored = DateFormatter()
+        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
+        let dateStored = formatterStored.string(from: NSDate() as Date)
+        
+        let ref = db.collection("user").document(userEmail).collection(type).addDocument(data: [
+            "Date Stored": dateStored,
+            "guide": guide,
+            "isFirstDay": isFirstDay,
+            "hasCompleted": hasCompleted,
+            "hasSeenCompletionScreen": hasSeenCompletionScreen,
+            "hasStartedListening": hasStartedListening,
+            "hasLoggedOutOnce": hasLoggedOutOnce,
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added with ID: \(userEmail)")
+                    
+                    
+                }
+        }
+        self.deleteConstantsFile(ofType: "constants", byUserEmail: userEmail, withID: Constants.firebaseDocID, setNewID: ref.documentID)
+    }
+    
+    static func deleteConstantsFile(ofType type: String, byUserEmail userEmail: String, withID document: String, setNewID newID: String) {
+        print("IN DELETE FILE FUNCTION")
+        let db = Firestore.firestore()
+        db.collection("user").document(userEmail).collection(type).document(document).delete() { error in
+            if let error = error {
+                print("Error removing document: \(error)")
+            } else {
+                print("Document successfully removed with ID: \(document)")
+                
+                Constants.firebaseDocID = newID
+            }
+        }
+    }
         
 }

@@ -84,12 +84,12 @@ class MyProfileViewController: UIViewController {
         self.set(isSigningOut: true)
         self.storedUserID = self.userID
         self.storedUserEmail = self.userEmail
-        logOutData(ofType: "constants", byUserEmail: self.storedUserEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+        saveConstants(ofType: "constants", byUserEmail: self.storedUserEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
     }
     
     // MARK: - Functions
     
-    private func logOutData(ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
+    private func saveConstants(ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
         print("IN LOG OUT DATA FUNCTION")
         let db = Firestore.firestore()
         let formatterStored = DateFormatter()
@@ -109,12 +109,7 @@ class MyProfileViewController: UIViewController {
                     print("Error adding document: \(err)")
                 } else {
                     print("Document added with ID: \(userEmail)")
-                    Constants.guide = "Francis"
-                    Constants.isFirstDay = true
-                    Constants.hasCompleted = false
-                    Constants.hasSeenCompletionScreen = false
-                    Constants.hasStartedListening = false
-                    Constants.hasLoggedOutOnce = false
+
                     
                     self.deleteFile(ofType: "constants", byUserEmail: userEmail, withID: Constants.firebaseDocID)
                 }
@@ -132,7 +127,6 @@ class MyProfileViewController: UIViewController {
                 print("Document successfully removed with ID: \(document)")
                 
                 Constants.firebaseDocID = self.newFirebaseDocID!
-                Constants.hasLoggedOutOnce = true
                 self.firebaseLogOut()
             }
         }
@@ -150,6 +144,14 @@ class MyProfileViewController: UIViewController {
     }
     
     private func resetLocalFirebaseData() {
+        Constants.hasLoggedOutOnce = true
+        Constants.guide = "Francis"
+        Constants.isFirstDay = true
+        Constants.hasCompleted = false
+        Constants.hasSeenCompletionScreen = false
+        Constants.hasStartedListening = false
+        Constants.hasLoggedOutOnce = false
+        
         print("IN RESET LOCAL DATA FUNCTION")
         LocalFirebaseData.completedPrayers = []
         print("COUNT OF LOCAL FIREBASE DATA COMPLETED PRAYERS: \(LocalFirebaseData.completedPrayers.count)")

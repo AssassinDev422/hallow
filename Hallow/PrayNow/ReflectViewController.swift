@@ -64,15 +64,15 @@ class ReflectViewController: UIViewController, UITextViewDelegate {
     }
     @IBAction func exitButton(_ sender: Any) {
         if Constants.isFirstDay == true {
-            performSegue(withIdentifier: "isFirstDaySegue", sender: self)
             Constants.isFirstDay = false
+            performSegue(withIdentifier: "isFirstDaySegue", sender: self)
         } else {
             if Constants.hasCompleted == false {
                 performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
             } else {
                 if Constants.hasSeenCompletionScreen == false {
-                    performSegue(withIdentifier: "completedSegue", sender: self)
                     Constants.hasSeenCompletionScreen = true
+                    performSegue(withIdentifier: "completedSegue", sender: self)
                 } else {
                     performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
                 }
