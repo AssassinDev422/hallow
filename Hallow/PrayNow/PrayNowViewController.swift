@@ -51,7 +51,7 @@ class PrayNowViewController: UIViewController {
             self.userID = user?.uid
             self.userEmail = user?.email
             if let email = user?.email {
-                FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+                FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
             }
             print("USER EMAIL: \(String(describing: self.userEmail))-------------------------------")
             if let prayer = self.prayer {

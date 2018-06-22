@@ -87,7 +87,7 @@ class AudioPlayerViewController: UIViewController {
         audioPlayer?.stop()
         progressControlOutlet.setValue(Float(0.0), animated: false)
         if let email = self.userEmail {
-            FirebaseUtilities.saveConstants(ofType: "constants", byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+            FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
         }
     }
     
@@ -326,8 +326,7 @@ class AudioPlayerViewController: UIViewController {
                     print("Updated stats: \(stats.streak)")
                     LocalFirebaseData.streak = stats.streak
                     
-                    FirebaseUtilities.deleteFile(ofType: "stats", byUserEmail: self.userEmail!, withID: stats.docID!)
-                    FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
+                    FirebaseUtilities.updateStats(withDocID: stats.docID!, byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
                 } else {
                     print("Error: stats is nil")
                 }

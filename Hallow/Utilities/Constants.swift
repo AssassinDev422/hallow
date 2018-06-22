@@ -11,6 +11,7 @@ import Foundation
 class Constants {
     static var firebaseDocID: String = ""
     static var firstFirebaseDocID: String = ""
+    
     static var guide: String = "Francis"
     static var isFirstDay: Bool = false
     static var hasCompleted: Bool = false

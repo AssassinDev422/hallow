@@ -78,8 +78,7 @@ class JournalEntryViewController: UIViewController, UITextViewDelegate {
         print("journalEntry?.entry: \(journalEntry?.entry ?? "Error")")
         let entry = textField!.text
         let docID = journalEntry?.docID
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: self.userEmail!, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
-        FirebaseUtilities.deleteFile(ofType: "journal", byUserEmail: self.userEmail!, withID: docID!)
+        FirebaseUtilities.updateReflection(withDocID: docID!, byUserEmail: self.userEmail!, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
         self.navigationController?.popViewController(animated: true)
     }
     

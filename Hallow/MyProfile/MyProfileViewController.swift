@@ -12,8 +12,6 @@ import JGProgressHUD
 
 //TODO: Add privacy, terms and conditions
 
-//WIPHallow - delete commented
-
 class MyProfileViewController: UIViewController {
 
     @IBOutlet weak var topBorderOutlet: UIImageView!
@@ -63,7 +61,6 @@ class MyProfileViewController: UIViewController {
             if let user = user?.uid {
                 self.userID = user
                 self.nameOutlet.text = LocalFirebaseData.name
-                //WIP - self.streakNumber.text = String(LocalFirebaseData.started)
                 self.completedNumber.text = String(LocalFirebaseData.completed)
                 let minutes = LocalFirebaseData.timeTracker / 60.0
                 let minutesString = String(format: "%.0f", minutes)
@@ -84,19 +81,20 @@ class MyProfileViewController: UIViewController {
         self.set(isSigningOut: true)
         self.storedUserID = self.userID
         self.storedUserEmail = self.userEmail
-        saveConstants(ofType: "constants", byUserEmail: self.storedUserEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+        Constants.hasLoggedOutOnce = true
+        updateConstants(withID: Constants.firebaseDocID, ofType: "constants", byUserEmail: self.storedUserEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
     }
     
     // MARK: - Functions
     
-    private func saveConstants(ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
+    private func updateConstants(withID docID: String, ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
         print("IN LOG OUT DATA FUNCTION")
         let db = Firestore.firestore()
         let formatterStored = DateFormatter()
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         let dateStored = formatterStored.string(from: NSDate() as Date)
         
-        let ref = db.collection("user").document(userEmail).collection(type).addDocument(data: [
+        db.collection("user").document(userEmail).collection(type).document(docID).updateData([
             "Date Stored": dateStored,
             "guide": guide,
             "isFirstDay": isFirstDay,
@@ -108,28 +106,10 @@ class MyProfileViewController: UIViewController {
                 if let err = err {
                     print("Error adding document: \(err)")
                 } else {
-                    print("Document added with ID: \(userEmail)")
-
-                    
-                    self.deleteFile(ofType: "constants", byUserEmail: userEmail, withID: Constants.firebaseDocID)
+                    print("Document updated with user: \(userEmail)")
                 }
         }
-        newFirebaseDocID = ref.documentID
-    }
-    
-    private func deleteFile(ofType type: String, byUserEmail userEmail: String, withID document: String) {
-        print("IN DELETE FILE FUNCTION")
-        let db = Firestore.firestore()
-        db.collection("user").document(userEmail).collection(type).document(document).delete() { error in
-            if let error = error {
-                print("Error removing document: \(error)")
-            } else {
-                print("Document successfully removed with ID: \(document)")
-                
-                Constants.firebaseDocID = self.newFirebaseDocID!
-                self.firebaseLogOut()
-            }
-        }
+        self.firebaseLogOut()
     }
     
     private func firebaseLogOut() {

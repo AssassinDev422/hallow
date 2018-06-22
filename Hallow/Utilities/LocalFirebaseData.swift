@@ -23,4 +23,6 @@ class LocalFirebaseData {
     static var completed: Int = 0
     static var mostRecentPrayerDate: Date = Date(timeIntervalSince1970: 0)
     static var streak: Int = 0
+    
+    static var statsDocID: String = ""
 }
