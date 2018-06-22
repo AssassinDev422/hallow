@@ -241,8 +241,6 @@ class AudioPlayerViewController: UIViewController {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.performSegue(withIdentifier: "reflectSegue", sender: self)
             self.loadAndSaveCompletedPrayers()
-            LocalFirebaseData.completed += 1
-            LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
             print("LOCAL COMPLETED IN COMPLETION HANDLER: \(LocalFirebaseData.completedPrayers.count)")
         }
     }
@@ -276,6 +274,8 @@ class AudioPlayerViewController: UIViewController {
                 print("firstObjectInDateArray: \(date.sorted()[0])")
             }
             
+            LocalFirebaseData.completed += 1
+            LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
             
             self.updateMyStats()
             FirebaseUtilities.saveCompletedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
