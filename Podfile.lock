@@ -91,6 +91,7 @@ PODS:
 
 DEPENDENCIES:
   - AppCenter
+  - AppCenter/Distribute
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Firestore
