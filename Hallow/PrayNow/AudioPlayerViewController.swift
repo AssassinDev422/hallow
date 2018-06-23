@@ -8,6 +8,8 @@
 
 // This is now the master branch
 
+// Comment - test for merge
+
 import UIKit
 import AVFoundation
 import FirebaseStorage
@@ -29,15 +31,22 @@ class AudioPlayerViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? 
     
     var controlTimer: Timer?
     
     var alreadySaved = 0
     
     var addedTimeTracker = 0.00
+    var streak: Int = 0
     var stats: StatsItem?
     
     var readyToPlay = false
+    
+    var pathReference: StorageReference?
+    var downloadTask: StorageDownloadTask?
+    
+    var completedPrayers: [PrayerTracking] = []
     
     // MARK: - Life cycle
    
@@ -56,6 +65,7 @@ class AudioPlayerViewController: UIViewController {
         }
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
             if self.readyToPlay == false {
                 self.readyToPlay = true
             } else {
@@ -78,7 +88,9 @@ class AudioPlayerViewController: UIViewController {
         audioPlayer?.currentTime = 0
         audioPlayer?.stop()
         progressControlOutlet.setValue(Float(0.0), animated: false)
-        updateMyStats()
+        if let email = self.userEmail {
+            FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+        }
     }
     
     // MARK: - Actions
@@ -93,6 +105,11 @@ class AudioPlayerViewController: UIViewController {
     }
     
     @IBAction func exitButtonReleased(_ sender: Any) {
+        if self.downloadTask != nil {
+            self.downloadTask?.cancel()
+            print("Canceled download")
+        }
+        updateMyStats()
         exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
     }
     
@@ -116,7 +133,7 @@ class AudioPlayerViewController: UIViewController {
             playPauseButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
         }
         if self.alreadySaved == 0 {
-            FirebaseUtilities.saveStartedPrayer(byUserID: self.userID!, withPrayerTitle: self.prayer!.title)
+            FirebaseUtilities.saveStartedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
             LocalFirebaseData.started += 1
             self.alreadySaved = 1
         }
@@ -126,15 +143,16 @@ class AudioPlayerViewController: UIViewController {
         let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: prayer.audioURLPath)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
+            self.set(isLoading: false)
             setupAudioPlayer(file: prayer)
             return
         }
         
         print("attempting to download: \(prayer.audioURLPath)...")
         self.set(isLoading: true)
-        let pathReference = Storage.storage().reference(withPath: prayer.audioURLPath)
+        self.pathReference = Storage.storage().reference(withPath: prayer.audioURLPath)
         
-        let downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
+        self.downloadTask = self.pathReference!.write(toFile: destinationFileURL) { (url, error) in
             if let error = error {
                 print("error downloading file: \(error)")
             } else {
@@ -143,7 +161,7 @@ class AudioPlayerViewController: UIViewController {
             }
         }
         
-        downloadTask.observe(.progress) { snapshot in
+        self.downloadTask!.observe(.progress) { snapshot in
             // Download reported progress
             let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
             // Update the progress indicator
@@ -224,9 +242,7 @@ class AudioPlayerViewController: UIViewController {
             self.audioPlayer!.pause()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.performSegue(withIdentifier: "reflectSegue", sender: self)
-            FirebaseUtilities.saveCompletedPrayer(byUserID: self.userID!, withPrayerTitle: self.prayer!.title)
-            LocalFirebaseData.completed += 1
-            LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
+            self.loadAndSaveCompletedPrayers()
             print("LOCAL COMPLETED IN COMPLETION HANDLER: \(LocalFirebaseData.completedPrayers.count)")
         }
     }
@@ -244,14 +260,44 @@ class AudioPlayerViewController: UIViewController {
     
     // MARK: - Functions - Stats
     
+    private func loadAndSaveCompletedPrayers() {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
+            self.completedPrayers = results.map(PrayerTracking.init)
+            print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
+            LocalFirebaseData.completed = self.completedPrayers.count
+            
+            if self.completedPrayers.count > 0 {
+                var date: [Date] = []
+                for completedPrayer in self.completedPrayers {
+                    date.append(completedPrayer.dateStored)
+                }
+                LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+                print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
+                print("firstObjectInDateArray: \(date.sorted()[0])")
+            }
+            
+            LocalFirebaseData.completed += 1
+            LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
+            
+            self.updateMyStats()
+            FirebaseUtilities.saveCompletedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
+        }
+    }
+    
+    
     private func updateMyStats() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) { results in
+        
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) { results in
             print("Results: \(results)")
             if results == [] {
                 print("No results file existed")
                 print("Time updated to: \(self.addedTimeTracker)")
                 LocalFirebaseData.timeTracker = self.addedTimeTracker
-                FirebaseUtilities.saveStats(byUserID: self.userID!, withTimeInPrayer: self.addedTimeTracker)
+                self.streak = 1
+                LocalFirebaseData.streak = self.streak
+                FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: self.addedTimeTracker, withStreak: self.streak)
+                
+                
             } else {
                 self.stats = results.map(StatsItem.init)[0]
                 if let stats = self.stats {
@@ -259,8 +305,30 @@ class AudioPlayerViewController: UIViewController {
                     stats.timeInPrayer += self.addedTimeTracker
                     print("time updated: \(stats.timeInPrayer)")
                     LocalFirebaseData.timeTracker = stats.timeInPrayer
-                    FirebaseUtilities.deleteFile(ofType: "stats", byUser: self.userID!, withID: stats.docID!)
-                    FirebaseUtilities.saveStats(byUserID: self.userID!, withTimeInPrayer: stats.timeInPrayer)
+                    
+                    // Update streak
+                    print("Loaded stats: \(stats.streak)")
+                    let calendar = Calendar.current
+                    let today = Date(timeIntervalSinceNow: 0)
+                    print("Most recent prayer date: \(LocalFirebaseData.mostRecentPrayerDate)")
+                    let timeDifference = today.timeIntervalSince(LocalFirebaseData.mostRecentPrayerDate) / 3600
+                    print("timeDifference in hours: \(timeDifference)")
+                    let isNextDay = calendar.isDateInYesterday(LocalFirebaseData.mostRecentPrayerDate)
+                    let isToday = calendar.isDateInToday(LocalFirebaseData.mostRecentPrayerDate)
+                    print("isNextDay: \(isNextDay)")
+                    
+                    if isNextDay == true {
+                        stats.streak += 1
+                    } else {
+                        if isToday == false {
+                            stats.streak = 1
+                        }
+                    }
+                    
+                    print("Updated stats: \(stats.streak)")
+                    LocalFirebaseData.streak = stats.streak
+                    
+                    FirebaseUtilities.updateStats(withDocID: stats.docID!, byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
                 } else {
                     print("Error: stats is nil")
                 }
@@ -300,6 +368,17 @@ class AudioPlayerViewController: UIViewController {
     // Unwind
     
     @IBAction func returnFromSegueActions(sender: UIStoryboardSegue){
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationViewController = segue.destination
+        if let ReflectViewController = destinationViewController as? ReflectViewController {
+            let prayerTitle = "\(self.prayer!.title) - \(self.prayer!.description)"
+            print("PRAYER TITLE IN REFLECT SEGUE: \(prayerTitle)")
+            ReflectViewController.prayerTitle = prayerTitle
+        }
     }
     
     // MARK: - Design

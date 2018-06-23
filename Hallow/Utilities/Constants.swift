@@ -11,6 +11,7 @@ import Foundation
 class Constants {
     static var firebaseDocID: String = ""
     static var firstFirebaseDocID: String = ""
+    
     static var guide: String = "Francis"
     static var isFirstDay: Bool = false
     static var hasCompleted: Bool = false
@@ -23,4 +24,5 @@ class Constants {
     static var reminderSet: Bool = false
     static var firstReminder: Bool = false
     static var iPhoneX: Bool = false
+
 }

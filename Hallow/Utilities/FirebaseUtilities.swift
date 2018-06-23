@@ -31,10 +31,10 @@ class FirebaseUtilities {
         }
     }
     
-    static func loadAllDocumentsFromUser(ofType type: String, byUser userID: String,
+    static func loadAllDocumentsFromUser(ofType type: String, byUserEmail email: String,
                                         _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
-        db.collection("user").document(userID).collection(type).getDocuments { result, error in
+        db.collection("user").document(email).collection(type).getDocuments { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
                     print("Got an error loading files from Firestore: \(error)")
@@ -48,10 +48,10 @@ class FirebaseUtilities {
         }
     }
     
-    static func loadUserData(byUser userID: String,
+    static func loadUserData(byUserEmail email: String,
                                          _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
-        db.collection("user").document(userID).getDocument { result, error in
+        db.collection("user").document(email).getDocument { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
                     print("Got an error loading files from Firestore: \(error)")
@@ -65,10 +65,10 @@ class FirebaseUtilities {
         }
     }
 
-    static func loadAllDocumentsByGuideStandardLength(ofType type: String, byGuide guide: String,
+    static func loadAllPrayersWithLength(ofType type: String, withLength length: String,
                                  _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
-        db.collection(type).whereField("guide", isEqualTo: guide).whereField("length", isEqualTo: "10 mins").getDocuments { result, error in
+        db.collection(type).whereField("length", isEqualTo: length).getDocuments { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
                     print("Got an error loading prayers from Firestore: \(error)")
@@ -106,7 +106,7 @@ class FirebaseUtilities {
     
     static func saveUser(ofType type: String, withID ID: String, withName name: String, withEmail email: String, withPassword password: String) {
         let db = Firestore.firestore()
-        db.collection(type).document(ID).setData([
+        db.collection(type).document(email).setData([
             "Name": name,
             "Email": email,
             "Password": password,
@@ -119,53 +119,159 @@ class FirebaseUtilities {
         }
     }
     
-    static func saveReflection(ofType type: String, byUserID userID: String, withEntry entry: String) {
+    static func saveReflection(ofType type: String, byUserEmail email: String, withEntry entry: String, withTitle title: String) {
         let db = Firestore.firestore()
         let formatter = DateFormatter()
-        formatter.dateFormat = "E, MMM d, yyyy"
+        formatter.dateFormat = "M/d/yy"
         let date = formatter.string(from: NSDate() as Date)
         let formatterStored = DateFormatter()
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         let dateStored = formatterStored.string(from: NSDate() as Date)
         
-        db.collection("user").document(userID).collection(type).addDocument(data: [
+        db.collection("user").document(email).collection(type).addDocument(data: [
             "Date": date,
             "Date Stored": dateStored,
-            "Entry": entry
+            "Entry": entry,
+            "Prayer Title": title
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
         } else {
-                print("Document added with ID: \(userID)")
+                print("Document added with ID: \(email)")
             }
         }
     }
     
-    static func sendFeedback(ofType type: String, byUserID userID: String, withEntry entry: String) {
+    static func updateReflection(withDocID docID: String, byUserEmail email: String, withEntry entry: String, withTitle title: String) {
+        let db = Firestore.firestore()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d/yy"
+        let date = formatter.string(from: NSDate() as Date)
+        let formatterStored = DateFormatter()
+        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
+        let dateStored = formatterStored.string(from: NSDate() as Date)
+        
+        db.collection("user").document(email).collection("journal").document(docID).updateData([
+            "Date": date,
+            "Date Stored": dateStored,
+            "Entry": entry,
+            "Prayer Title": title
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(email)")
+            }
+        }
+    }
+    
+    static func sendFeedback(ofType type: String, byUserEmail email: String, withEntry entry: String) {
         let db = Firestore.firestore()
         let formatterStored = DateFormatter()
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         let dateStored = formatterStored.string(from: NSDate() as Date)
         
-        db.collection("user").document(userID).collection(type).addDocument(data: [
+        db.collection("user").document(email).collection(type).addDocument(data: [
             "Date Stored": dateStored,
             "Entry": entry
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
             } else {
-                print("Document added with ID: \(userID)")
+                print("Document added with ID: \(email)")
             }
         }
     }
-        
-    static func saveAndResetUserConstants(ofType type: String, byUserID userID: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
+    
+    static func preOrderResponse(ofType type: String, byUserEmail email: String, withEntry entry: String) {
         let db = Firestore.firestore()
         let formatterStored = DateFormatter()
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         let dateStored = formatterStored.string(from: NSDate() as Date)
         
-        let ref = db.collection("user").document(userID).collection(type).addDocument(data: [
+        db.collection("user").document(email).collection(type).addDocument(data: [
+            "Date Stored": dateStored,
+            "Entry": entry
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(email)")
+            }
+        }
+    }
+    
+    static func saveStats(byUserEmail email: String, withTimeInPrayer timeInPrayer: Double, withStreak streak: Int) {
+        let db = Firestore.firestore()
+        db.collection("user").document(email).collection("stats").addDocument(data: [
+            "Time in Prayer": timeInPrayer,
+            "Streak": streak
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added by user: \(email)")
+                }
+        }
+    }
+    
+    static func updateStats(withDocID docID: String, byUserEmail email: String, withTimeInPrayer timeInPrayer: Double, withStreak streak: Int) {
+        let db = Firestore.firestore()
+        db.collection("user").document(email).collection("stats").document(docID).updateData([
+            "Time in Prayer": timeInPrayer,
+            "Streak": streak
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added by user: \(email)")
+            }
+        }
+    }
+    
+    // MARK: - Track progress
+    
+    static func saveCompletedPrayer(byUserEmail email: String, withPrayerTitle prayerTitle: String) {
+        let db = Firestore.firestore()
+        //WIP
+        let dateStored = Date(timeIntervalSinceNow: 0)
+        db.collection("user").document(email).collection("completedPrayers").addDocument(data: [
+            "Date Stored": dateStored,
+            "Prayer Title": prayerTitle,
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added by user: \(email)")
+            }
+        }
+    }
+    
+    static func saveStartedPrayer(byUserEmail email: String, withPrayerTitle prayerTitle: String) {
+        let db = Firestore.firestore()
+        let dateStored = Date(timeIntervalSinceNow: 0)
+        db.collection("user").document(email).collection("startedPrayers").addDocument(data: [
+            "Date Stored": dateStored,
+            "Prayer Title": prayerTitle,
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added by user: \(email)")
+                }
+        }
+    }
+    
+    // MARK: - Periodic save of data
+    
+    static func updateConstantsFile(withDocID docID: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
+        print("Updating document now")
+        let db = Firestore.firestore()
+        let formatterStored = DateFormatter()
+        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
+        let dateStored = formatterStored.string(from: NSDate() as Date)
+        
+        db.collection("user").document(userEmail).collection("constants").document(docID).updateData([
             "Date Stored": dateStored,
             "guide": guide,
             "isFirstDay": isFirstDay,
@@ -173,99 +279,12 @@ class FirebaseUtilities {
             "hasSeenCompletionScreen": hasSeenCompletionScreen,
             "hasStartedListening": hasStartedListening,
             "hasLoggedOutOnce": hasLoggedOutOnce,
-        ]) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
-            } else {
-                print("Document added with ID: \(userID)")
-                Constants.guide = "Francis"
-                Constants.isFirstDay = true
-                Constants.hasCompleted = false
-                Constants.hasSeenCompletionScreen = false
-                Constants.hasStartedListening = false
-                Constants.hasLoggedOutOnce = false
-            }
-        }
-        Constants.firebaseDocID = ref.documentID
-    }
-    
-    static func preOrderResponse(ofType type: String, byUserID userID: String, withEntry entry: String) {
-        let db = Firestore.firestore()
-        let formatterStored = DateFormatter()
-        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
-        let dateStored = formatterStored.string(from: NSDate() as Date)
-        
-        db.collection("user").document(userID).collection(type).addDocument(data: [
-            "Date Stored": dateStored,
-            "Entry": entry
-        ]) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
-            } else {
-                print("Document added with ID: \(userID)")
-            }
-        }
-    }
-    
-    static func saveStats(byUserID userID: String, withTimeInPrayer timeInPrayer: Double) {
-        let db = Firestore.firestore()
-        db.collection("user").document(userID).collection("stats").addDocument(data: [
-            "Time in Prayer": timeInPrayer,
             ]) { err in
                 if let err = err {
                     print("Error adding document: \(err)")
                 } else {
-                    print("Document added by user: \(userID)")
+                    print("Document updated for the user: \(userEmail)")
                 }
-        }
-    }
-    
-    // MARK: - Track progress
-    
-    static func saveCompletedPrayer(byUserID userID: String, withPrayerTitle prayerTitle: String) {
-        let db = Firestore.firestore()
-        let formatterStored = DateFormatter()
-        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
-        let dateStored = formatterStored.string(from: NSDate() as Date)
-        db.collection("user").document(userID).collection("completedPrayers").addDocument(data: [
-            "Date Stored": dateStored,
-            "Prayer Title": prayerTitle,
-        ]) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
-            } else {
-                print("Document added by user: \(userID)")
-            }
-        }
-    }
-    
-    static func saveStartedPrayer(byUserID userID: String, withPrayerTitle prayerTitle: String) {
-        let db = Firestore.firestore()
-        let formatterStored = DateFormatter()
-        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
-        let dateStored = formatterStored.string(from: NSDate() as Date)
-        db.collection("user").document(userID).collection("startedPrayers").addDocument(data: [
-            "Date Stored": dateStored,
-            "Prayer Title": prayerTitle,
-            ]) { err in
-                if let err = err {
-                    print("Error adding document: \(err)")
-                } else {
-                    print("Document added by user: \(userID)")
-                }
-        }
-    }
-    
-    // MARK: - Delete file
-    
-    static func deleteFile(ofType type: String, byUser userID: String, withID document: String) {
-        let db = Firestore.firestore()
-        db.collection("user").document(userID).collection(type).document(document).delete() { error in
-            if let error = error {
-                print("Error removing document: \(error)")
-            } else {
-                print("Document successfully removed!")
-            }
         }
     }
         

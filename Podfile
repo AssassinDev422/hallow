@@ -12,5 +12,6 @@ target 'Hallow' do
   pod 'Firebase/Auth'
   pod 'JGProgressHUD'
   pod 'AppCenter'
+  pod 'AppCenter/Distribute'
   
 end

@@ -22,6 +22,13 @@ class LaunchViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String?
+        
+    var storedUserID: String?
+    var storedUserEmail: String?
+    
+    var newFirebaseDocID: String?
+
     
     var userConstants: ConstantsItem?
     
@@ -37,9 +44,10 @@ class LaunchViewController: UIViewController {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             if user != nil {
                 self.userID = user?.uid
-                self.loadUserConstantsAndPrayers(fromUser: user!.uid)
+                self.userEmail = user?.email
+                self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
             } else {
-                self.loadAllPrayers()
+                self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
             }
         }
@@ -52,8 +60,8 @@ class LaunchViewController: UIViewController {
     
     // MARK: - Functions
     
-    private func loadUserConstantsAndPrayers(fromUser userID: String) {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUser: userID) { results in
+    private func loadUserConstantsAndPrayers(fromUserEmail userEmail: String) {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUserEmail: userEmail) { results in
             self.userConstants = results.map(ConstantsItem.init)[0]
             Constants.firebaseDocID = self.userConstants!.docID
             Constants.guide = self.userConstants!.guide
@@ -62,6 +70,7 @@ class LaunchViewController: UIViewController {
             Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
             Constants.hasStartedListening = self.userConstants!.hasStartedListening
             Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
+            print("************Constants.isFirstDay in launch: \(Constants.isFirstDay)")
             print("LOADED USER CONSTANTS")
             print("Guide set at: \(Constants.guide)")
             print("Has started listening set at: \(Constants.hasStartedListening)")
@@ -73,7 +82,7 @@ class LaunchViewController: UIViewController {
     }
     
     private func loadName() {
-        FirebaseUtilities.loadUserData(byUser: self.userID!) {results in
+        FirebaseUtilities.loadUserData(byUserEmail: self.userEmail!) {results in
             self.userData = results.map(User.init)[0]
             print("USER DATA IN LAUNCH: \(String(describing: self.userData))")
             LocalFirebaseData.name = self.userData!.name
@@ -83,7 +92,7 @@ class LaunchViewController: UIViewController {
     }
     
     private func loadStartedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: self.userEmail!) {results in
             self.startedPrayers = results.map(PrayerTracking.init)
             print("STARTED PRAYERS IN LAUNCH: \(self.startedPrayers.count)")
             LocalFirebaseData.started = self.startedPrayers.count
@@ -93,46 +102,72 @@ class LaunchViewController: UIViewController {
     }
     
     private func loadCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
             self.completedPrayers = results.map(PrayerTracking.init)
             print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
             LocalFirebaseData.completed = self.completedPrayers.count
+            
+            if self.completedPrayers.count > 0 {
+                var date: [Date] = []
+                for completedPrayer in self.completedPrayers {
+                    date.append(completedPrayer.dateStored)
+                }
+                LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+                print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
+                print("firstObjectInDateArray: \(date.sorted()[0])")
+            }
+            
 
             self.loadTimeTracker()
         }
     }
     
     private func loadTimeTracker() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) {results in
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
+            LocalFirebaseData.streak = self.stats!.streak
             
-            self.loadAllPrayersWhenSkippingSignIn()
+            self.load10minPrayers(skippingSignIn: true)
 
         }
     }
     
-    private func loadAllPrayers() {
+    private func load10minPrayers(skippingSignIn: Bool) {
         LocalFirebaseData.prayers = []
+        LocalFirebaseData.prayers10mins = []
         print("LOCAL FIREBASE DATA PRAYERS PRE-LOAD: \(LocalFirebaseData.prayers.count)")
-        FirebaseUtilities.loadAllDocumentsByGuideStandardLength(ofType: "prayer", byGuide: Constants.guide) { results in
+        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "10 mins") { results in
             LocalFirebaseData.prayers = results.map(PrayerItem.init)
             LocalFirebaseData.prayers.sort{$0.title < $1.title}
+            LocalFirebaseData.prayers10mins = LocalFirebaseData.prayers
             print("LOCAL FIREBASE DATA PRAYERS POST LOAD: \(LocalFirebaseData.prayers.count)")
             
-            self.hideOutlets(shouldHide: false)
+            self.load15minPrayers(skippingSignIn: skippingSignIn)
         }
     }
     
-    private func loadAllPrayersWhenSkippingSignIn() {
-        LocalFirebaseData.prayers = []
-        print("LOCAL FIREBASE DATA PRAYERS PRE-LOAD: \(LocalFirebaseData.prayers.count)")
-        FirebaseUtilities.loadAllDocumentsByGuideStandardLength(ofType: "prayer", byGuide: Constants.guide) { results in
-            LocalFirebaseData.prayers = results.map(PrayerItem.init)
-            LocalFirebaseData.prayers.sort{$0.title < $1.title}
-            print("LOCAL FIREBASE DATA PRAYERS POST LOAD: \(LocalFirebaseData.prayers.count)")
+    private func load15minPrayers(skippingSignIn: Bool) {
+        LocalFirebaseData.prayers15mins = []
+        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "15 mins") { results in
+            LocalFirebaseData.prayers15mins = results.map(PrayerItem.init)
+            LocalFirebaseData.prayers15mins.sort{$0.title < $1.title}
             
-            self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
+            self.load5minPrayers(skippingSignIn: skippingSignIn)
+        }
+    }
+    
+    private func load5minPrayers(skippingSignIn: Bool) {
+        LocalFirebaseData.prayers5mins = []
+        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "5 mins") { results in
+            LocalFirebaseData.prayers5mins = results.map(PrayerItem.init)
+            LocalFirebaseData.prayers5mins.sort{$0.title < $1.title}
+            
+            if skippingSignIn == false {
+                self.hideOutlets(shouldHide: false)
+            } else {
+                self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
+            }
         }
     }
     

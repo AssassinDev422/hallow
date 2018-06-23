@@ -14,7 +14,8 @@ class CompletedViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    
+    var userEmail: String?
+        
     // MARK: - Life cycle
     // Firebase listener
     
@@ -22,6 +23,10 @@ class CompletedViewController: UIViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
+            if let email = self.userEmail {
+                FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+            }
         }
     }
     
@@ -33,12 +38,12 @@ class CompletedViewController: UIViewController {
     // MARK: - Actions
 
     @IBAction func addToListButton(_ sender: Any) {
-        FirebaseUtilities.preOrderResponse(ofType: "preOrderResponse", byUserID: self.userID!, withEntry: "Yes")
+        FirebaseUtilities.preOrderResponse(ofType: "preOrderResponse", byUserEmail: self.userEmail!, withEntry: "Yes")
         performSegue(withIdentifier: "repeatPrayerSegue", sender: self)
     }
     
     @IBAction func noThanksButton(_ sender: Any) {
-        FirebaseUtilities.preOrderResponse(ofType: "preOrderResponse", byUserID: self.userID!, withEntry: "No")
+        FirebaseUtilities.preOrderResponse(ofType: "preOrderResponse", byUserEmail: self.userEmail!, withEntry: "No")
         performSegue(withIdentifier: "repeatPrayerSegue", sender: self)
     }
     

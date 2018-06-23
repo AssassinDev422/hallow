@@ -209,7 +209,7 @@
     </scenes>
     <resources>
         <image name="checkmarkIcon" width="28" height="26"/>
-        <image name="compassIcon" width="24" height="24"/>
+        <image name="compassIcon" width="18" height="18"/>
         <image name="emptyPlayButton" width="42" height="42"/>
         <image name="playButtonImage" width="147" height="147"/>
         <namedColor name="darkIndigo">

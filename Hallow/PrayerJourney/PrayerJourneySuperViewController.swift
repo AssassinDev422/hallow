@@ -20,6 +20,7 @@ class PrayerJourneySuperViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? 
     
     var prayer: PrayerItem?
     var completedPrayers: [PrayerTracking] = []
@@ -43,8 +44,9 @@ class PrayerJourneySuperViewController: UIViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid  //TODO: Potential bug - with new phone - unexpectedly found nil
-                self.setNextPrayer()
-                self.pullUpPrayerData()
+            self.userEmail = user?.email
+            self.setNextPrayer()
+            self.pullUpPrayerData()
         }
     }
     
@@ -96,7 +98,7 @@ class PrayerJourneySuperViewController: UIViewController {
         print("NEXT PRAYER TITLE: \(LocalFirebaseData.nextPrayerTitle)")
         print("LocalFirebaseData.prayers = \(LocalFirebaseData.prayers.count)")
         
-        self.prayer = LocalFirebaseData.prayers.filter {$0.title == LocalFirebaseData.nextPrayerTitle} [0]
+        self.prayer = LocalFirebaseData.prayers.filter {$0.title == LocalFirebaseData.nextPrayerTitle}.filter {$0.guide == Constants.guide} [0]
         
         
         self.prayerTitleLabel.text = self.prayer!.title

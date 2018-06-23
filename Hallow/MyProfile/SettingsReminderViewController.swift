@@ -16,6 +16,11 @@ class SettingsReminderViewController: UIViewController {
     @IBOutlet weak var updateButtonOutlet: UIButton!
     
     @IBOutlet weak var removeReminderOutlet: UIButton!
+    
+    var trigger: UNCalendarNotificationTrigger?
+    var hour: Int?
+    var minute: Int?
+    var ampm: String = "AM"
         
     // MARK: - Life cycle
     
@@ -26,7 +31,7 @@ class SettingsReminderViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setUpDisplay()
+        loadDisplay()
     }
     
     // MARK: - Actions
@@ -61,24 +66,25 @@ class SettingsReminderViewController: UIViewController {
     // MARK: - Functions
     
     
-    private func setUpDisplay() {
+    private func loadDisplay() {
+        
         if Constants.reminderSet == true {
             
             updateButtonOutlet.setTitle("UPDATE", for: .normal)
             reminderTime.isHidden = false
             removeReminderOutlet.isHidden = false
             
-            let compare = Date(timeIntervalSince1970: 1)
-            if Constants.reminderTime < compare {
-                currentReminderLabel.text = "No reminder currently set"
-            } else {
-                reminderTime.date = Constants.reminderTime
-                let formatter = DateFormatter()
-                formatter.dateFormat = "h:mm a"
-                let currentTime = formatter.string(from: Constants.reminderTime)
-                currentReminderLabel.text = "Current reminder set to: \(currentTime)"
-                print("\(String(describing: currentReminderLabel.text))")
-            }
+            let center = UNUserNotificationCenter.current()
+            center.getPendingNotificationRequests { result in
+                print("RESULT COUNT: \(String(describing: result.count))")
+                self.trigger = result[0].trigger as? UNCalendarNotificationTrigger
+                
+                self.hour = self.trigger?.dateComponents.hour
+                self.minute = self.trigger?.dateComponents.minute
+                
+                self.setDisplay()
+                
+                }
             
         } else {
             updateButtonOutlet.setTitle("ENABLE REMINDERS", for: .normal)
@@ -87,7 +93,39 @@ class SettingsReminderViewController: UIViewController {
             currentReminderLabel.text = "No reminder currently set"
         }
     }
-    
+
+    private func setDisplay() {
+
+        if self.hour == nil {
+            
+            self.currentReminderLabel.text = "No reminder currently set"
+            
+        } else {
+            
+            var hour = self.hour!
+            let minute = self.minute!
+            
+            if hour > 12 {
+                hour = hour - 12
+                self.ampm = "PM"
+            } else {
+                self.ampm = "AM"
+            }
+            
+            print("Current reminder set to: \(hour):\(minute) \(self.ampm)")
+                
+            let formatter = DateFormatter()
+            formatter.dateFormat = "h:mm a"
+            let currentTime = formatter.string(from: Constants.reminderTime)
+            currentReminderLabel.text = "Current reminder set to: \(currentTime)"
+            print("\(String(describing: currentReminderLabel.text))")
+            
+            self.reminderTime.date = Constants.reminderTime
+        
+        }
+    }
+
+
     private func allowFirstReminder() {
         print("allowFirstReminder run")
         let center = UNUserNotificationCenter.current()

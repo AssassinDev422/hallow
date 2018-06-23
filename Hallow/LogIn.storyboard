@@ -128,7 +128,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in to pick up where you left off" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKs-pN-MK8">
-                                <rect key="frame" x="90" y="147" width="195" height="49"/>
+                                <rect key="frame" x="90.5" y="147" width="195" height="49"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="z3F-Om-13s"/>
                                 </constraints>
@@ -253,7 +253,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive an email to reset your password" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cV-tS-nCb">
-                                <rect key="frame" x="48" y="197" width="280" height="49"/>
+                                <rect key="frame" x="47.5" y="197" width="280" height="49"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="20"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -307,7 +307,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a guide" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UPN-mM-tbH">
-                                <rect key="frame" x="41" y="125" width="293" height="43"/>
+                                <rect key="frame" x="41.5" y="125" width="293" height="43"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="35"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -486,7 +486,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account to save progress" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0QV-wk-cTR">
-                                <rect key="frame" x="71" y="102" width="233" height="49"/>
+                                <rect key="frame" x="71.5" y="102" width="233" height="49"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="qfb-tZ-qJ2"/>
                                 </constraints>
@@ -526,7 +526,6 @@
                                 </state>
                                 <connections>
                                     <action selector="signUpButton:" destination="8cw-gR-UXF" eventType="touchUpInside" id="vVN-as-e6c"/>
-                                    <segue destination="Ie1-Hc-9yg" kind="presentation" identifier="signUpSegue" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="guQ-Mt-WBW"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password must be 6 characters or longer" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNH-zq-HYr">
@@ -595,6 +594,7 @@
                         <outlet property="emailField" destination="fLi-0X-ete" id="rBR-of-odm"/>
                         <outlet property="nameField" destination="Phe-Ha-Jfb" id="xvt-Wl-kwy"/>
                         <outlet property="passwordField" destination="ZZF-c4-nQP" id="yy8-0c-ch7"/>
+                        <segue destination="Ie1-Hc-9yg" kind="presentation" identifier="signUpSegue" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="Ha6-td-VMG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6g-lQ-6vt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -626,9 +626,6 @@
         <image name="pinkButton" width="278" height="48"/>
         <image name="playButtonImage" width="147" height="147"/>
         <image name="userIcon" width="24" height="24"/>
-        <namedColor name="beige">
-            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

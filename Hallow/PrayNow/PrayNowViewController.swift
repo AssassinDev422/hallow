@@ -23,6 +23,7 @@ class PrayNowViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String? 
     
     var prayer: PrayerItem?
     var completedPrayers: [PrayerTracking] = []
@@ -46,26 +47,40 @@ class PrayNowViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.set(isLoading: true)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
+            if let email = user?.email {
+                FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+            }
+            print("USER EMAIL: \(String(describing: self.userEmail))-------------------------------")
             if let prayer = self.prayer {
-                self.loadPrayerSession(withTitle: prayer.title, withLength: "10 mins")
+                self.setPrayerSessionWithoutLoading()
+                
                 if prayer.title == "Day 9" {
                     Constants.hasCompleted = true
                 } else {
                     Constants.hasCompleted = false
                 }
-                print("Loading later prayer session")
-                print("prayerTitle: \(prayer.title)")
+                
+                print("prayerTitle in Pray Now will appear: \(prayer.title)")
+                
             } else {
+                self.set(isLoading: true)
                 self.setNextPrayerAndLoad()
             }
+            print("***************Constants.isFirstDay in WillAppear = \(Constants.isFirstDay)")
+            if Constants.isFirstDay == true {
+                self.tabBarController?.tabBar.isHidden = true
+            } else {
+                self.tabBarController?.tabBar.isHidden = false
+            }
         }
-        
-        print("CONSTANTS.ISFIRSTDAY: \(Constants.isFirstDay)")
-        print("CONSTANTS.HASCOMPLETED: \(Constants.hasCompleted)")
-        print("CONSTANTS.HASSEENCOMPLETIONSCREEN: \(Constants.hasSeenCompletionScreen)")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("***************Constants.isFirstDay in DidAppear = \(Constants.isFirstDay)")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -100,7 +115,7 @@ class PrayNowViewController: UIViewController {
     
     private func setNextPrayerAndLoad() {
         if self.userID != nil {
-            FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+            FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
                 self.completedPrayers = results.map(PrayerTracking.init)
                 print("Completed prayers: \(self.completedPrayers.count)")
                 if self.completedPrayers.count > 0 {
@@ -121,10 +136,10 @@ class PrayNowViewController: UIViewController {
                         print("dayNumber was equal to 10 and we are performing segue")
                         Constants.hasCompleted = true
                         print("HAS COMPLETED: \(Constants.hasCompleted)")
-                        self.loadPrayerSession(withTitle: "Day 9", withLength: "10 mins")
+                        self.setPrayerSession(withTitle: "Day 9")
                         LocalFirebaseData.nextPrayerTitle = "Day 9"
                     } else {
-                        self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                        self.setPrayerSession(withTitle: self.nextPrayerTitle)
                         if self.nextPrayerTitle == "Day 9" {
                             Constants.hasCompleted = true
                         } else {
@@ -136,41 +151,66 @@ class PrayNowViewController: UIViewController {
                 } else {
                     Constants.hasCompleted = false
                     print("Kept next prayer set as Day 1 since there are no completed prayers")
-                    self.loadPrayerSession(withTitle: self.nextPrayerTitle, withLength: "10 mins")
+                    self.setPrayerSession(withTitle: self.nextPrayerTitle)
                     LocalFirebaseData.nextPrayerTitle = "Day 1"
                 }
             }
         } else {
             print("Do not have user ID ***************")
-            self.loadPrayerSession(withTitle: "Day 1", withLength: "10 mins")
+            self.setPrayerSession(withTitle: "Day 1")
             LocalFirebaseData.nextPrayerTitle = "Day 1" 
         }
     }
     
-    private func loadPrayerSession(withTitle title: String, withLength length: String) {
-        FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: length) { result in
-            self.prayer10mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
-            self.prayer = self.prayer10mins
-            self.prayerSessionTitle.text = self.prayer!.title
-            self.prayerSessionTitle.text?.append(" of 9")
-            self.prayerSessionDescription.text = self.prayer!.description
-            
-            let description2 = NSMutableAttributedString(string: self.prayer!.description2)
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 10
-            description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
-            self.prayerSessionDescription2.attributedText = description2
+    private func setPrayerSession(withTitle title: String) {
+        
+        self.prayer5mins = LocalFirebaseData.prayers5mins.filter {$0.title == title}.filter {$0.guide == Constants.guide} [0]
+        
+        print("IN NEW SET METHOD 5 MINS - PRAYER TITLE: \(String(describing: self.prayer5mins?.title))")
+        print("IN NEW SET METHOD 5 MINS - PRAYER GUIDE: \(String(describing: self.prayer5mins?.guide))")
+        print("IN NEW SET METHOD 5 MINS - PRAYER LENGTH: \(String(describing: self.prayer5mins?.length))")
 
-            FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: "5 mins") { result in
-                self.prayer5mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
-            }
-            FirebaseUtilities.loadSpecificDocumentByGuideAndLength(ofType: "prayer", withTitle: title, byGuide: Constants.guide, withLength: "15 mins") { result in
-                self.prayer15mins = PrayerItem(firestoreDocument: result[0]) //TODO: Potential bug - Abby's Day 1 gets messed up
-            }
-            
-            self.set(isLoading: false)
-            self.hud.dismiss(animated: false)
-        }
+        self.prayer10mins = LocalFirebaseData.prayers10mins.filter {$0.title == title}.filter {$0.guide == Constants.guide} [0]
+        self.prayer15mins = LocalFirebaseData.prayers15mins.filter {$0.title == title}.filter {$0.guide == Constants.guide} [0]
+                
+        self.prayer = self.prayer10mins
+        
+        
+        self.prayerSessionTitle.text = self.prayer!.title
+        self.prayerSessionTitle.text?.append(" of 9")
+        self.prayerSessionDescription.text = self.prayer!.description
+        
+        let description2 = NSMutableAttributedString(string: self.prayer!.description2)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 10
+        description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
+        self.prayerSessionDescription2.attributedText = description2
+        
+        self.set(isLoading: false)
+    }
+    
+    private func setPrayerSessionWithoutLoading() {
+        
+        self.prayer5mins = LocalFirebaseData.prayers5mins.filter {$0.title == prayer!.title}.filter {$0.guide == Constants.guide} [0]
+        
+        print("IN NO LOADING SET METHOD 5 MINS - PRAYER TITLE: \(String(describing: self.prayer5mins?.title))")
+        print("IN NO LOADING SET METHOD 5 MINS - PRAYER GUIDE: \(String(describing: self.prayer5mins?.guide))")
+        print("IN NO LOADING SET METHOD 5 MINS - PRAYER LENGTH: \(String(describing: self.prayer5mins?.length))")
+        
+        self.prayer10mins = LocalFirebaseData.prayers10mins.filter {$0.title == prayer!.title}.filter {$0.guide == Constants.guide} [0]
+        self.prayer15mins = LocalFirebaseData.prayers15mins.filter {$0.title == prayer!.title}.filter {$0.guide == Constants.guide} [0]
+        
+        self.prayer = self.prayer10mins
+        
+        self.prayerSessionTitle.text = self.prayer!.title
+        self.prayerSessionTitle.text?.append(" of 9")
+        self.prayerSessionDescription.text = self.prayer!.description
+        
+        let description2 = NSMutableAttributedString(string: self.prayer!.description2)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 10
+        description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
+        self.prayerSessionDescription2.attributedText = description2
     }
     
     private func setSelectorBarPosition() {
@@ -217,6 +257,7 @@ class PrayNowViewController: UIViewController {
                 self.prayer?.length = self.prayerLength
                 let prayer = self.prayer
                 print("Prayer length selected: \(prayer!.length)")
+                print("PRAYER GUIDE IN SEGUE: \(prayer!.guide)")
                 AudioPlayerViewController.prayer = prayer
                 print("Prayer title in prepare for segue: \(prayer!.title)")  //TODO: Potential bug - Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
             }

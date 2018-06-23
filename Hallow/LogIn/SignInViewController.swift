@@ -18,6 +18,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     var userConstants: ConstantsItem?
     
     var userID: String?
+    var userEmail: String?
     
     var userData: User?
     var startedPrayers: [PrayerTracking] = []
@@ -72,7 +73,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     return
                 } else {
                     self.userID = user?.uid
-                    self.loadUserConstants(fromUser: user!.uid)
+                    self.userEmail = user?.email
+                    self.loadUserConstants(fromUserEmail: self.userEmail!)
                 }
             }
         }
@@ -80,12 +82,13 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Functions
     
-    private func loadUserConstants(fromUser userID: String) {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUser: userID) { results in
+    private func loadUserConstants(fromUserEmail userEmail: String) {
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUserEmail: self.userEmail!) { results in
             self.userConstants = results.map(ConstantsItem.init)[0]
             Constants.firebaseDocID = self.userConstants!.docID
             Constants.guide = self.userConstants!.guide
             Constants.isFirstDay = self.userConstants!.isFirstDay
+            print("************Constants.isFirstDay in sign in: \(Constants.isFirstDay)")
             Constants.hasCompleted = self.userConstants!.hasCompleted
             Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
             Constants.hasStartedListening = self.userConstants!.hasStartedListening
@@ -101,7 +104,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func loadName() {
-        FirebaseUtilities.loadUserData(byUser: self.userID!) {results in
+        FirebaseUtilities.loadUserData(byUserEmail: self.userEmail!) {results in
             self.userData = results.map(User.init)[0]
             print("USER DATA IN LAUNCH: \(String(describing: self.userData))")
             LocalFirebaseData.name = self.userData!.name
@@ -111,7 +114,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func loadStartedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: self.userEmail!) {results in
             self.startedPrayers = results.map(PrayerTracking.init)
             print("STARTED PRAYERS IN LAUNCH: \(self.startedPrayers.count)")
             LocalFirebaseData.started = self.startedPrayers.count
@@ -121,19 +124,28 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func loadCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
             self.completedPrayers = results.map(PrayerTracking.init)
             print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
             LocalFirebaseData.completed = self.completedPrayers.count
+            
+            var date: [Date] = []
+            for completedPrayer in self.completedPrayers {
+                date.append(completedPrayer.dateStored)
+            }
+            LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+            print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
+            print("firstObjectInDateArray: \(date.sorted()[0])")
             
             self.loadTimeTracker()
         }
     }
     
     private func loadTimeTracker() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUser: self.userID!) {results in
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) {results in
             self.stats = results.map(StatsItem.init)[0]
             LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
+            LocalFirebaseData.streak = self.stats!.streak
             
             self.set(isLoading: false)
             self.performSegue(withIdentifier: "signInSegue", sender: self)

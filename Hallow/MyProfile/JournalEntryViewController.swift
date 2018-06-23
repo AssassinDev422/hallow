@@ -11,13 +11,17 @@ import Firebase
 
 //TODO: Delay in updating the journal view after clicking update
 
-class JournalEntryViewController: UIViewController {
+class JournalEntryViewController: UIViewController, UITextViewDelegate {
     
+    @IBOutlet weak var titleField: UILabel!
     @IBOutlet weak var textField: UITextView!
     @IBOutlet weak var dateField: UILabel!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
+    var userEmail: String?
+    
+    var frame: CGRect?
 
     var journalEntry: JournalEntry?
     
@@ -26,17 +30,14 @@ class JournalEntryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        textField.delegate = self
+        
+        titleField.text = journalEntry?.prayerTitle
         textField.text = journalEntry?.entry
         dateField.text = journalEntry?.date
         
         textField!.layer.borderWidth = 0
         textField!.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
-        
-        textField!.layer.masksToBounds = false
-        textField!.layer.shadowColor = UIColor.lightGray.cgColor
-        textField!.layer.shadowOpacity = 0.8
-        textField!.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
-        textField!.layer.shadowRadius = 2
         
         navigationItem.title = "Journal Entry"
         
@@ -50,6 +51,7 @@ class JournalEntryViewController: UIViewController {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
+            self.userEmail = user?.email
         }
     }
     
@@ -62,19 +64,21 @@ class JournalEntryViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+        print("tap gesture")
     }
     
-    @IBAction func updateButton(_ sender: Any) {
+    
+    @IBAction func updateButtonPressed(_ sender: Any) {
+        print("update button pressed")
         update()
-        print("Button is pressed")
     }
+    
     
     private func update() {
         print("journalEntry?.entry: \(journalEntry?.entry ?? "Error")")
         let entry = textField!.text
         let docID = journalEntry?.docID
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserID: self.userID!, withEntry: entry!)
-        FirebaseUtilities.deleteFile(ofType: "journal", byUser: self.userID!, withID: docID!)
+        FirebaseUtilities.updateReflection(withDocID: docID!, byUserEmail: self.userEmail!, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -93,6 +97,20 @@ class JournalEntryViewController: UIViewController {
     
     @objc private func doneClicked() {
         view.endEditing(true)
+    }
+    
+    // MARK: - Design
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        print("Did begin editing")
+        self.frame = textView.frame
+        var newFrame = self.frame!
+        newFrame.size.height = self.frame!.height / 2.5
+        textView.frame = newFrame
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textView.frame = self.frame!
     }
     
 }
