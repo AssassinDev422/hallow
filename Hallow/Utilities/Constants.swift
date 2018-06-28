@@ -24,5 +24,7 @@ class Constants {
     static var reminderSet: Bool = false
     static var firstReminder: Bool = false
     static var iPhoneX: Bool = false
+    
+    static var pausedTime: Double = 0.00
 
 }

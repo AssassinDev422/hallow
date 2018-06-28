@@ -13,5 +13,6 @@ target 'Hallow' do
   pod 'JGProgressHUD'
   pod 'AppCenter'
   pod 'AppCenter/Distribute'
+  pod 'ReachabilitySwift', :inhibit_warnings => true
   
 end

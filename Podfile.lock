@@ -88,6 +88,7 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - Protobuf (3.5.0)
+  - ReachabilitySwift (4.1.0)
 
 DEPENDENCIES:
   - AppCenter
@@ -97,6 +98,7 @@ DEPENDENCIES:
   - Firebase/Firestore
   - Firebase/Storage
   - JGProgressHUD
+  - ReachabilitySwift
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -119,6 +121,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
+    - ReachabilitySwift
 
 SPEC CHECKSUMS:
   AppCenter: 05e11ff99d3224131363abb61830172f5f28e53e
@@ -140,7 +143,8 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
+  ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
 
-PODFILE CHECKSUM: 9c5038005d1c21642034b1259644580411ab1841
+PODFILE CHECKSUM: bb3a6bdc122dfd78be957127c4330322536bea65
 
 COCOAPODS: 1.5.2

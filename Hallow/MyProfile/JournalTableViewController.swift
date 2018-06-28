@@ -30,17 +30,18 @@ class JournalTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("Total journal entries in viewDidLoad: \(self.journalEntries.count)")
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
             self.userEmail = user?.email
             self.loadJournalEntries()
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Functions
@@ -50,7 +51,6 @@ class JournalTableViewController: UITableViewController {
             self.set(isLoading: true)
             self.journalEntries = results.map(JournalEntry.init)
             self.journalEntries.sort{$0.dateStored > $1.dateStored}
-            print("Journal count in private function: \(self.journalEntries.count)")
             self.tableView!.reloadData()
             self.set(isLoading: false)
         }

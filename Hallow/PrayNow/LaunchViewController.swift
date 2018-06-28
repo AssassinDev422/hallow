@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Reachability
 
 class LaunchViewController: UIViewController {
     
@@ -29,7 +30,6 @@ class LaunchViewController: UIViewController {
     
     var newFirebaseDocID: String?
 
-    
     var userConstants: ConstantsItem?
     
     // MARK: - Life cycle
@@ -46,16 +46,19 @@ class LaunchViewController: UIViewController {
                 self.userID = user?.uid
                 self.userEmail = user?.email
                 self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
+                FirebaseUtilities.loadProfilePicture(byUserEmail: self.userEmail!)
             } else {
                 self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
             }
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Functions
@@ -70,12 +73,6 @@ class LaunchViewController: UIViewController {
             Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
             Constants.hasStartedListening = self.userConstants!.hasStartedListening
             Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
-            print("************Constants.isFirstDay in launch: \(Constants.isFirstDay)")
-            print("LOADED USER CONSTANTS")
-            print("Guide set at: \(Constants.guide)")
-            print("Has started listening set at: \(Constants.hasStartedListening)")
-            print("Guide pulled at: \(self.userConstants!.guide)")
-            print("DocID: \(self.userConstants!.docID)")
             
             self.loadName()
         }
@@ -84,7 +81,6 @@ class LaunchViewController: UIViewController {
     private func loadName() {
         FirebaseUtilities.loadUserData(byUserEmail: self.userEmail!) {results in
             self.userData = results.map(User.init)[0]
-            print("USER DATA IN LAUNCH: \(String(describing: self.userData))")
             LocalFirebaseData.name = self.userData!.name
             
             self.loadStartedPrayers()
@@ -94,7 +90,6 @@ class LaunchViewController: UIViewController {
     private func loadStartedPrayers() {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: self.userEmail!) {results in
             self.startedPrayers = results.map(PrayerTracking.init)
-            print("STARTED PRAYERS IN LAUNCH: \(self.startedPrayers.count)")
             LocalFirebaseData.started = self.startedPrayers.count
             
             self.loadCompletedPrayers()
@@ -113,8 +108,6 @@ class LaunchViewController: UIViewController {
                     date.append(completedPrayer.dateStored)
                 }
                 LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
-                print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
-                print("firstObjectInDateArray: \(date.sorted()[0])")
             }
             
 
@@ -136,12 +129,10 @@ class LaunchViewController: UIViewController {
     private func load10minPrayers(skippingSignIn: Bool) {
         LocalFirebaseData.prayers = []
         LocalFirebaseData.prayers10mins = []
-        print("LOCAL FIREBASE DATA PRAYERS PRE-LOAD: \(LocalFirebaseData.prayers.count)")
         FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "10 mins") { results in
             LocalFirebaseData.prayers = results.map(PrayerItem.init)
             LocalFirebaseData.prayers.sort{$0.title < $1.title}
             LocalFirebaseData.prayers10mins = LocalFirebaseData.prayers
-            print("LOCAL FIREBASE DATA PRAYERS POST LOAD: \(LocalFirebaseData.prayers.count)")
             
             self.load15minPrayers(skippingSignIn: skippingSignIn)
         }
@@ -178,5 +169,6 @@ class LaunchViewController: UIViewController {
         self.signUpOutlet.isHidden = shouldHide
         self.prayerChallengeLabel.isHidden = shouldHide
     }
+    
 
 }

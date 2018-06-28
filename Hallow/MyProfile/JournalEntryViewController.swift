@@ -53,29 +53,28 @@ class JournalEntryViewController: UIViewController, UITextViewDelegate {
             self.userID = user?.uid
             self.userEmail = user?.email
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-        print("tap gesture")
     }
     
     
     @IBAction func updateButtonPressed(_ sender: Any) {
-        print("update button pressed")
         update()
     }
     
     
     private func update() {
-        print("journalEntry?.entry: \(journalEntry?.entry ?? "Error")")
         let entry = textField!.text
         let docID = journalEntry?.docID
         FirebaseUtilities.updateReflection(withDocID: docID!, byUserEmail: self.userEmail!, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
@@ -102,7 +101,6 @@ class JournalEntryViewController: UIViewController, UITextViewDelegate {
     // MARK: - Design
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        print("Did begin editing")
         self.frame = textView.frame
         var newFrame = self.frame!
         newFrame.size.height = self.frame!.height / 2.5

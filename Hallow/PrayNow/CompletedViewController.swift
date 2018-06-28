@@ -28,11 +28,13 @@ class CompletedViewController: UIViewController {
                 FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
             }
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
@@ -52,7 +54,6 @@ class CompletedViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "repeatPrayerSegue", let destination = segue.destination as? UITabBarController {
                 destination.selectedIndex = 1
-                print("prepare for segue happened")
         }
     }
 

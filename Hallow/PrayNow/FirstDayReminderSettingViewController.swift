@@ -21,6 +21,16 @@ class FirstDayReminderSettingViewController: UIViewController {
         reminderTime.setValue(UIColor.white, forKeyPath: "textColor")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
+    }
+    
     // MARK: - Actions
     
     @IBAction func setUpReminderButton(_ sender: Any) {
@@ -45,7 +55,6 @@ class FirstDayReminderSettingViewController: UIViewController {
         let time = reminderTime.date
         let triggerDaily = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
-        print("triggerDaily value: \(triggerDaily)")
         
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
@@ -56,7 +65,6 @@ class FirstDayReminderSettingViewController: UIViewController {
         })
 
         Constants.reminderTime = reminderTime.date
-        print("Set constants value to: \(Constants.reminderTime)")
         performSegue(withIdentifier: "finishFirstDaySegue", sender: self)
 
     }
@@ -65,10 +73,8 @@ class FirstDayReminderSettingViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "finishFirstDaySegue" {
-            print("*************segue identifier finishing first day segue")
             if let destination = segue.destination as? UITabBarController {
                 destination.selectedIndex = 1
-                print("prepare for segue happened")
             }
         }
     }

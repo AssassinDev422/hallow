@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import UIKit
 
 class LocalFirebaseData {
     static var completedPrayers: [String] = []
-    static var prayers: [PrayerItem] = []  //TODO: Have to pull in all lengths and guides etc.
+    static var lockedPrayers: [String] = ["Day 9+"]
+    
+    static var prayers: [PrayerItem] = []
     static var prayers10mins: [PrayerItem] = []
     static var prayers15mins: [PrayerItem] = []
     static var prayers5mins: [PrayerItem] = []
@@ -25,4 +28,6 @@ class LocalFirebaseData {
     static var streak: Int = 0
     
     static var statsDocID: String = ""
+    
+    static var profilePicture: UIImage = #imageLiteral(resourceName: "profileWithCircle")
 }

@@ -45,11 +45,13 @@ class FeedbackViewController: UIViewController {
             self.userID = user?.uid
             self.userEmail = user?.email
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions

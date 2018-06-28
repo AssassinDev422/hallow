@@ -16,6 +16,10 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.11</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to set profile picture within application</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to set profile picture within application</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

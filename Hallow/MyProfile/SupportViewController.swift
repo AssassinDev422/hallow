@@ -10,9 +10,26 @@ import UIKit
 
 class SupportViewController: UIViewController {
 
+    @IBOutlet weak var versionBuildOutlet: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Contact & Support"
+        
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"]  as? String  {
+            versionBuildOutlet.text = "Version \(version)"
+        }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
 
 }

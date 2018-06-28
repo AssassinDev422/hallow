@@ -8,6 +8,8 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseStorage
+import UIKit
 
 class FirebaseUtilities {
     
@@ -285,6 +287,57 @@ class FirebaseUtilities {
                 } else {
                     print("Document updated for the user: \(userEmail)")
                 }
+        }
+    }
+    
+    // MARK: - Upload an image
+    
+    static func uploadProfilePicture(withImage image: UIImage, byUserEmail userEmail: String) {
+        let storageRef = Storage.storage().reference()
+        let refString = "profilePictures/\(userEmail).png"
+        let imageRef = storageRef.child(refString)
+        let data = UIImageJPEGRepresentation(image, 0.5)
+        
+        imageRef.delete { error in
+            if error != nil {
+                print("Error in deleting image")
+                imageRef.putData(data!, metadata: nil) { (metadata, error) in
+                    guard metadata != nil else {
+                        print("Error occured in uploading the image")
+                        return
+                    }
+                    print("Successfully uploaded image")
+                }
+            } else {
+                print("No error in deleting image")
+                imageRef.putData(data!, metadata: nil) { (metadata, error) in
+                    guard metadata != nil else {
+                        print("Error occured in uploading the image")
+                        return
+                    }
+                    print("Successfully uploaded image")
+                }
+            }
+        }
+    }
+    
+    static func loadProfilePicture(byUserEmail userEmail: String) {
+        let path = "profilePictures/\(userEmail).png"
+        
+        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: path)
+        
+        print("attempting to download: \(path)...")
+        
+        let pathReference = Storage.storage().reference(withPath: path)
+        
+        pathReference.write(toFile: destinationFileURL) { (url, error) in
+            if let error = error {
+                print("Error downloading image: \(error)")
+            } else {
+                print("Downloaded image: \(path)")
+                let fileURL = Utilities.urlInDocumentsDirectory(forPath: path)
+                LocalFirebaseData.profilePicture = UIImage(contentsOfFile: fileURL.path)!
+            }
         }
     }
         

@@ -39,6 +39,16 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
+    }
+    
     // MARK: - Actions
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -75,6 +85,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     self.userID = user?.uid
                     self.userEmail = user?.email
                     self.loadUserConstants(fromUserEmail: self.userEmail!)
+                    FirebaseUtilities.loadProfilePicture(byUserEmail: self.userEmail!)
                 }
             }
         }
@@ -88,16 +99,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             Constants.firebaseDocID = self.userConstants!.docID
             Constants.guide = self.userConstants!.guide
             Constants.isFirstDay = self.userConstants!.isFirstDay
-            print("************Constants.isFirstDay in sign in: \(Constants.isFirstDay)")
             Constants.hasCompleted = self.userConstants!.hasCompleted
             Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
             Constants.hasStartedListening = self.userConstants!.hasStartedListening
             Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
-            print("LOADED USER CONSTANTS")
-            print("Guide set at: \(Constants.guide)")
-            print("Has started listening set at: \(Constants.hasStartedListening)")
-            print("Guide pulled at: \(self.userConstants!.guide)")
-            print("DocID: \(self.userConstants!.docID)")
             
             self.loadName()
         }
@@ -106,7 +111,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     private func loadName() {
         FirebaseUtilities.loadUserData(byUserEmail: self.userEmail!) {results in
             self.userData = results.map(User.init)[0]
-            print("USER DATA IN LAUNCH: \(String(describing: self.userData))")
             LocalFirebaseData.name = self.userData!.name
             
             self.loadStartedPrayers()
@@ -116,7 +120,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     private func loadStartedPrayers() {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: self.userEmail!) {results in
             self.startedPrayers = results.map(PrayerTracking.init)
-            print("STARTED PRAYERS IN LAUNCH: \(self.startedPrayers.count)")
             LocalFirebaseData.started = self.startedPrayers.count
             
             self.loadCompletedPrayers()
@@ -126,7 +129,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     private func loadCompletedPrayers() {
         FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
             self.completedPrayers = results.map(PrayerTracking.init)
-            print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
             LocalFirebaseData.completed = self.completedPrayers.count
             
             var date: [Date] = []
@@ -134,8 +136,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 date.append(completedPrayer.dateStored)
             }
             LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
-            print("mostRecentPrayerDateInSignIn: \(LocalFirebaseData.mostRecentPrayerDate)")
-            print("firstObjectInDateArray: \(date.sorted()[0])")
             
             self.loadTimeTracker()
         }
