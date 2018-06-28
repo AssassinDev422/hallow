@@ -8,10 +8,10 @@
 
 import UIKit
 import Firebase
-import AppCenter
-import AppCenterAnalytics
-import AppCenterCrashes
-import AppCenterDistribute
+//import AppCenter
+//import AppCenterAnalytics
+//import AppCenterCrashes
+//import AppCenterDistribute
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,11 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        MSAppCenter.start("2b2636c5-2937-4e98-b683-5baf83091aba", withServices:[
-            MSAnalytics.self,
-            MSCrashes.self,
-            MSDistribute.self
-            ])
+//        MSAppCenter.start("2b2636c5-2937-4e98-b683-5baf83091aba", withServices:[
+//            MSAnalytics.self,
+//            MSCrashes.self,
+//            MSDistribute.self
+//            ])
         FirebaseApp.configure()
         return true
     }

@@ -11,8 +11,8 @@ target 'Hallow' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'JGProgressHUD'
-  pod 'AppCenter'
-  pod 'AppCenter/Distribute'
+#  pod 'AppCenter'
+#  pod 'AppCenter/Distribute'
   pod 'ReachabilitySwift', :inhibit_warnings => true
   
 end
