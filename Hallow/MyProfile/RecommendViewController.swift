@@ -35,7 +35,7 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
         
         setUpDoneButton()
         
-        navigationItem.title = "Recommend a friend"
+        navigationItem.title = "Recommend a Friend"
 
     }
     

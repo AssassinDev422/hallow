@@ -15,11 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.11</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Used to set profile picture within application</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to set profile picture within application</string>
+	<string>1.0.12</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -30,9 +26,13 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>11</string>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to set profile picture within application</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to set profile picture within application</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-LightItalic.ttf</string>
