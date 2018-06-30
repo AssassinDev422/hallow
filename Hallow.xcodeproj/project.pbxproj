@@ -38,6 +38,7 @@
 		B473D68120AC89C200D57E78 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68020AC89C200D57E78 /* JournalEntry.swift */; };
 		B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68220AC8A1C00D57E78 /* PrayerItem.swift */; };
 		B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B479569120BDC7FD00745E92 /* UIViewExtension.swift */; };
+		B4837C9420E5B6F5003525FB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4837C9320E5B6F5003525FB /* StoreKit.framework */; };
 		B489E4D620E3167000AA3B18 /* RecommendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B489E4D520E3167000AA3B18 /* RecommendViewController.swift */; };
 		B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */; };
 		B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */; };
@@ -114,12 +115,14 @@
 		B473D68020AC89C200D57E78 /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		B473D68220AC8A1C00D57E78 /* PrayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerItem.swift; sourceTree = "<group>"; };
 		B479569120BDC7FD00745E92 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		B4837C9320E5B6F5003525FB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B489E4D520E3167000AA3B18 /* RecommendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendViewController.swift; sourceTree = "<group>"; };
 		B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGuideSelectorViewController.swift; sourceTree = "<group>"; };
 		B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		B4AD61AB20E455700038A3B7 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		B4DC10E820E73306006B2E11 /* Hallow.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hallow.entitlements; sourceTree = "<group>"; };
 		B4E486D320D327030054FFFB /* LeftToRightSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftToRightSegue.swift; sourceTree = "<group>"; };
 		B4E486D520D3274D0054FFFB /* RightToLeftSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightToLeftSegue.swift; sourceTree = "<group>"; };
 		B4E486D720D327580054FFFB /* FromTopSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromTopSegue.swift; sourceTree = "<group>"; };
@@ -162,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5087C9DF2973C039B0BB91C1 /* Pods_Hallow.framework in Frameworks */,
+				B4837C9420E5B6F5003525FB /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,6 +194,7 @@
 		030C40CD209E718B006D9690 /* Hallow */ = {
 			isa = PBXGroup;
 			children = (
+				B4DC10E820E73306006B2E11 /* Hallow.entitlements */,
 				030C40CE209E718B006D9690 /* AppDelegate.swift */,
 				B41F4E0920D060CE00C0D118 /* LogIn */,
 				B41F4E0B20D0619400C0D118 /* PrayNow */,
@@ -323,6 +328,7 @@
 		E57D0FE5E4437083FBFDEFB8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B4837C9320E5B6F5003525FB /* StoreKit.framework */,
 				944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */,
 			);
 			name = Frameworks;
@@ -364,6 +370,12 @@
 						CreatedOnToolsVersion = 9.3;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -677,6 +689,7 @@
 			baseConfigurationReference = D2D114C1D2E8CFE738D11A56 /* Pods-Hallow.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Hallow/Hallow.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DHUN2XW8D4;
 				INFOPLIST_FILE = Hallow/Info.plist;
@@ -685,7 +698,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.hallow.Hallow;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hallow.Hallow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -697,6 +710,7 @@
 			baseConfigurationReference = 0FE07FA1AF2D28CE36FB7186 /* Pods-Hallow.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Hallow/Hallow.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DHUN2XW8D4;
 				INFOPLIST_FILE = Hallow/Info.plist;
@@ -705,7 +719,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.hallow.Hallow;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hallow.Hallow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
