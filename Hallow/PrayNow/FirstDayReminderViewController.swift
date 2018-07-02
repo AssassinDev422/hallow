@@ -23,6 +23,11 @@ class FirstDayReminderViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
+        center.removeAllPendingNotificationRequests()
+        
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userEmail = user?.email
             if let user = user?.uid, let email = self.userEmail {
@@ -42,7 +47,11 @@ class FirstDayReminderViewController: UIViewController {
     // MARK: - Actions
 
     @IBAction func yesButton(_ sender: Any) {
-        Constants.reminderSet = true
+        
+        let defaults = UserDefaults.standard
+        defaults.set(true, forKey: "reminderSet")
+        defaults.synchronize()
+        
         let center = UNUserNotificationCenter.current()
         let options: UNAuthorizationOptions = [.alert, .sound]
         center.requestAuthorization(options: options) {

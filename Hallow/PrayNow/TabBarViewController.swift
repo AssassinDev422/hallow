@@ -17,12 +17,15 @@ class TabBarViewController: UITabBarController {
         UITabBar.appearance().layer.borderWidth = 0.0
         UITabBar.appearance().clipsToBounds = true
         
+        
+        let defaults = UserDefaults.standard
+
         if UIDevice().userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
             case 2436:
-                Constants.iPhoneX = true
+                defaults.set(true, forKey: "iPhoneX")
             default:
-                Constants.iPhoneX = false
+                defaults.set(false, forKey: "iPhoneX")
             }
         }
     }
@@ -33,7 +36,9 @@ class CustomTabBar: UITabBar {
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         var sizeThatFits = super.sizeThatFits(size)
-        if Constants.iPhoneX == true {
+        let defaults = UserDefaults.standard
+        let iPhoneX = defaults.bool(forKey: "iPhoneX")
+        if iPhoneX == true {
             sizeThatFits.height = 100
         } else {
             sizeThatFits.height = 65

@@ -84,9 +84,6 @@ class FirebaseUtilities {
         }
     }
     
-    
-    
-    
     static func loadSpecificDocumentByGuideAndLength(ofType type: String, withTitle title: String, byGuide guide: String, withLength length: String,
                                  _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
@@ -337,6 +334,19 @@ class FirebaseUtilities {
                 print("Downloaded image: \(path)")
                 let fileURL = Utilities.urlInDocumentsDirectory(forPath: path)
                 LocalFirebaseData.profilePicture = UIImage(contentsOfFile: fileURL.path)!
+            }
+        }
+    }
+    
+    // MARK: - Delete file
+    
+    static func deleteFile(ofType type: String, byUserEmail userEmail: String, withID document: String) {
+        let db = Firestore.firestore()
+        db.collection("user").document(userEmail).collection(type).document(document).delete() { error in
+            if let error = error {
+                print("Error removing document: \(error)")
+            } else {
+                print("Document successfully removed!")
             }
         }
     }

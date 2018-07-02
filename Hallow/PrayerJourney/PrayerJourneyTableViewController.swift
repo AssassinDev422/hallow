@@ -84,6 +84,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         
         if completed == true {
             cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
+            cell.statusImage.tintColor = UIColor(named: "fadedPink")
             cell.statusImage.contentMode = .scaleToFill
             cell.prayerTitleLabel.textColor = UIColor(named: "fadedPink")
             cell.prayerDescriptionLabel.textColor = UIColor(named: "fadedPink")

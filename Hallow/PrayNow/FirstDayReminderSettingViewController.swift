@@ -49,7 +49,6 @@ class FirstDayReminderSettingViewController: UIViewController {
         
         let content = UNMutableNotificationContent()
         content.title = "Quick reminder to pray"
-        content.body = "Click here to open up Hallow"
         content.sound = UNNotificationSound.default()
         
         let time = reminderTime.date
@@ -63,8 +62,11 @@ class FirstDayReminderSettingViewController: UIViewController {
                 print("Something went wrong on the last step!")
             }
         })
-
-        Constants.reminderTime = reminderTime.date
+        
+        let defaults = UserDefaults.standard
+        defaults.set(reminderTime.date, forKey: "reminderTime")
+        defaults.synchronize()
+        
         performSegue(withIdentifier: "finishFirstDaySegue", sender: self)
 
     }

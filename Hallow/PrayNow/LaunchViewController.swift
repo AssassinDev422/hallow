@@ -37,6 +37,19 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideOutlets(shouldHide: true)
+        
+        let defaults = UserDefaults.standard
+        if defaults.string(forKey: "firstOpenOnDevice") != nil {
+            print("Not first open on this device")
+        } else {
+            print("First open on this device")
+            defaults.set(Date(timeIntervalSince1970: 0),    forKey: "reminderTime")
+            defaults.set(false,                             forKey: "reminderSet")
+            defaults.set(false,                             forKey: "firstReminder")
+            defaults.set(false,                             forKey: "iPhoneX")
+            defaults.set("false",                           forKey: "firstOpenOnDevice")
+            defaults.synchronize()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -95,6 +95,32 @@ class JournalTableViewController: UITableViewController {
         return cell
     }
     
+    // Delete rows
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            
+            let entry = journalEntries[indexPath.row]
+            let docID = entry.docID
+            
+            // Delete file function
+            let db = Firestore.firestore()
+            db.collection("user").document(self.userEmail!).collection("journal").document(docID).delete() { error in
+                if let error = error {
+                    print("Error removing document: \(error)")
+                } else {
+                    print("Document successfully removed!")
+                    self.journalEntries.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }
+            }
+        }
+    }
+    
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -107,4 +133,5 @@ class JournalTableViewController: UITableViewController {
                 vc.journalEntry = journalEntry
         }
     }
+
 }

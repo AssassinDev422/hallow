@@ -923,7 +923,6 @@ Please feel free to revisit the intro sessions until then!</string>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Btd-74-LYH"/>
         <segue reference="adP-Kd-GoA"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>

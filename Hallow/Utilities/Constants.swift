@@ -18,13 +18,8 @@ class Constants {
     static var hasSeenCompletionScreen: Bool = false
     static var hasStartedListening: Bool = false
     static var hasLoggedOutOnce: Bool = false
-    
-    // Don't have to change with user log in / out
-    static var reminderTime: Date = Date(timeIntervalSince1970: 0)
-    static var reminderSet: Bool = false
-    static var firstReminder: Bool = false
-    static var iPhoneX: Bool = false
-    
+        
+    // Don't change with log in log out but not stored after device closes and re-opens
     static var pausedTime: Double = 0.00
 
 }

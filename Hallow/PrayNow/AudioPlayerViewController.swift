@@ -226,7 +226,7 @@ class AudioPlayerViewController: UIViewController {
     
     private func updateProgressControl(songCompleted: @escaping (Bool) -> Void) {
         if audioPlayer != nil {
-            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
+            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.0001, repeats: true) { [weak self] timer in
                 let percentComplete = self!.audioPlayer!.currentTime / self!.audioPlayer!.duration
                 self?.progressControlOutlet.setValue(Float(percentComplete), animated: true)
                 
@@ -240,7 +240,7 @@ class AudioPlayerViewController: UIViewController {
                 if self?.audioPlayer?.isPlaying == true {
                     self?.addedTimeTracker += 0.01
                 }
-                if percentComplete > 0.999 {
+                if percentComplete > 0.99999 {
                     songCompleted(true)
                 } else {
                     songCompleted(false)
@@ -410,7 +410,9 @@ class AudioPlayerViewController: UIViewController {
             Constants.pausedTime = 0.00
         } else if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let prayer = sender as? PrayerItem {
             prayNow.prayer = prayer
-            Constants.pausedTime = audioPlayer!.currentTime
+            if let audioPlayer = audioPlayer {
+                Constants.pausedTime = audioPlayer.currentTime
+            }
         }
     }
     
