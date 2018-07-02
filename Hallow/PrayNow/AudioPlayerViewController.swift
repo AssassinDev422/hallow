@@ -240,7 +240,7 @@ class AudioPlayerViewController: UIViewController {
                 if self?.audioPlayer?.isPlaying == true {
                     self?.addedTimeTracker += 0.01
                 }
-                if percentComplete > 0.99999 {
+                if percentComplete > 0.9999 {
                     songCompleted(true)
                 } else {
                     songCompleted(false)
