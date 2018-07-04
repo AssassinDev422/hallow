@@ -39,6 +39,8 @@ class AudioPlayerViewController: UIViewController {
     var alreadySaved = 0
     
     var addedTimeTracker = 0.00
+    var startTime = Date(timeIntervalSinceNow: 0)
+
     var streak: Int = 0
     var stats: StatsItem?
     
@@ -80,6 +82,10 @@ class AudioPlayerViewController: UIViewController {
         MPRemoteCommandCenter.shared().togglePlayPauseCommand.addTarget(self, action: #selector(playPause))
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        startTime = Date(timeIntervalSinceNow: 0)
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
@@ -115,7 +121,19 @@ class AudioPlayerViewController: UIViewController {
         }
         updateOnlyTimeStat()
         exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
-        performSegue(withIdentifier: "exitSegue", sender: prayer)
+        
+        if let audioPlayer = audioPlayer {
+            let timeLeft = audioPlayer.duration - audioPlayer.currentTime
+            if timeLeft < 10.0 {
+                self.controlTimer?.invalidate()
+                self.audioPlayer!.pause()
+                self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+                self.performSegue(withIdentifier: "reflectSegue", sender: self)
+                self.loadAndSaveCompletedPrayers()
+            } else {
+                performSegue(withIdentifier: "exitSegue", sender: prayer)
+            }
+        }
     }
     
     @IBAction func exitButtonPressed(_ sender: Any) {
@@ -215,6 +233,8 @@ class AudioPlayerViewController: UIViewController {
             
             audioPlayer?.currentTime = Constants.pausedTime
             
+            startTime = Date(timeIntervalSinceNow: 0)
+
         } catch let error {
             print(error.localizedDescription)
         }
@@ -237,9 +257,6 @@ class AudioPlayerViewController: UIViewController {
                 
                 self?.timeLabel.frame.origin.x = 5 + CGFloat(percentComplete) * (self?.progressControlOutlet.frame.width)!
                 
-                if self?.audioPlayer?.isPlaying == true {
-                    self?.addedTimeTracker += 0.01
-                }
                 if percentComplete > 0.9999 {
                     songCompleted(true)
                 } else {
@@ -266,9 +283,9 @@ class AudioPlayerViewController: UIViewController {
     }
     
     private func sliderUpdatedTime() {
-        if audioPlayer != nil {
+        if let audioPlayer = audioPlayer {
             let percentComplete = progressControlOutlet.value
-            audioPlayer?.currentTime = TimeInterval(percentComplete * Float(audioPlayer!.duration))
+            audioPlayer.currentTime = TimeInterval(percentComplete * Float(audioPlayer.duration))
         } else {
             setupAudioPlayer(file: prayer)
             print("Audio player is nil")
@@ -312,12 +329,21 @@ class AudioPlayerViewController: UIViewController {
             } else {
                 self.stats = results.map(StatsItem.init)[0]
                 if let stats = self.stats {
+                   
+                    print("Original time: \(stats.timeInPrayer)")
+                    
+                    self.addedTimeTracker = Date().timeIntervalSince(self.startTime)
+                    print("Start time: \(self.startTime) - Added time: \(self.addedTimeTracker)")
+                    
                     stats.timeInPrayer += self.addedTimeTracker
                     LocalFirebaseData.timeTracker = stats.timeInPrayer
                     
                     LocalFirebaseData.streak = stats.streak
                     
                     FirebaseUtilities.updateStats(withDocID: stats.docID!, byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
+                    print("Delta time: \(self.addedTimeTracker)")
+                    print("Updated Time: \(stats.timeInPrayer)")
+                    
                 } else {
                     print("Error: stats is nil")
                 }
@@ -340,6 +366,12 @@ class AudioPlayerViewController: UIViewController {
             } else {
                 self.stats = results.map(StatsItem.init)[0]
                 if let stats = self.stats {
+                    
+                    print("Original time: \(stats.timeInPrayer)")
+                    
+                    self.addedTimeTracker = Date().timeIntervalSince(self.startTime)
+                    print("Start time: \(self.startTime) - Added time: \(self.addedTimeTracker)")
+                    
                     stats.timeInPrayer += self.addedTimeTracker
                     LocalFirebaseData.timeTracker = stats.timeInPrayer
                     
@@ -357,6 +389,9 @@ class AudioPlayerViewController: UIViewController {
                     }
                     
                     LocalFirebaseData.streak = stats.streak
+                    
+                    print("Delta time: \(self.addedTimeTracker)")
+                    print("Updated Time: \(stats.timeInPrayer)")
                     
                     FirebaseUtilities.updateStats(withDocID: stats.docID!, byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
                 } else {

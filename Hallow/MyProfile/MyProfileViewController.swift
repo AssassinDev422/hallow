@@ -219,7 +219,7 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     private func resetLocalFirebaseData() {
         Constants.hasLoggedOutOnce = true
         Constants.guide = "Francis"
-        Constants.isFirstDay = true
+        Constants.isFirstDay = false
         Constants.hasCompleted = false
         Constants.hasSeenCompletionScreen = false
         Constants.hasStartedListening = false

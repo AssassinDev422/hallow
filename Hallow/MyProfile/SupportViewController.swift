@@ -16,8 +16,8 @@ class SupportViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Contact & Support"
         
-        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"]  as? String  {
-            versionBuildOutlet.text = "Version \(version)"
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"]  as? String, let bundle = Bundle.main.infoDictionary?["CFBundleVersion"] as? String  {
+            versionBuildOutlet.text = "Version \(version) (\(bundle))"
         }
         
     }
