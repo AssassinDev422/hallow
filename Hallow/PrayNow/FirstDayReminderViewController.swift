@@ -23,25 +23,35 @@ class FirstDayReminderViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
+        center.removeAllPendingNotificationRequests()
+        
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            print("User: \(String(describing: user))")
             self.userEmail = user?.email
             if let user = user?.uid, let email = self.userEmail {
                 self.userID = user
                 FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
             }
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
 
     @IBAction func yesButton(_ sender: Any) {
-        Constants.reminderSet = true
+        
+        let defaults = UserDefaults.standard
+        defaults.set(true, forKey: "reminderSet")
+        defaults.synchronize()
+        
         let center = UNUserNotificationCenter.current()
         let options: UNAuthorizationOptions = [.alert, .sound]
         center.requestAuthorization(options: options) {
@@ -52,7 +62,7 @@ class FirstDayReminderViewController: UIViewController {
         }
         center.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
-                print("Something #2 went wrong")
+                print("Something went wrong")
             }
         }
     }
@@ -66,7 +76,6 @@ class FirstDayReminderViewController: UIViewController {
         if segue.identifier == "noReminderSegue" {
             if let destination = segue.destination as? UITabBarController {
                 destination.selectedIndex = 1
-                print("prepare for segue happened")
             }
         }
     }

@@ -48,6 +48,8 @@ class PrayerJourneySuperViewController: UIViewController {
             self.setNextPrayer()
             self.pullUpPrayerData()
         }
+        Constants.pausedTime = 0.00
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,6 +60,7 @@ class PrayerJourneySuperViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
@@ -73,7 +76,6 @@ class PrayerJourneySuperViewController: UIViewController {
         self.completedPrayersTitles = LocalFirebaseData.completedPrayers
         if self.completedPrayersTitles.count > 0 {
             self.completedPrayersTitles.sort()
-            print("Completed prayers in array: \(self.completedPrayersTitles)")
             self.nextPrayerTitle = self.completedPrayersTitles[self.completedPrayersTitles.count-1]
             self.dayNumber = Int(String(self.nextPrayerTitle.last!))!
             self.dayNumber += 1
@@ -85,19 +87,14 @@ class PrayerJourneySuperViewController: UIViewController {
                 LocalFirebaseData.nextPrayerTitle = "Day 9"
             } else {
                 LocalFirebaseData.nextPrayerTitle = self.nextPrayerTitle
-                print("Loading prayer session: \(self.nextPrayerTitle)")
             }
         } else {
-            print("Kept next prayer set as Day 1 since there are no completed prayers")
             LocalFirebaseData.nextPrayerTitle = "Day 1"
         }
     }
     
     private func pullUpPrayerData() {
-        
-        print("NEXT PRAYER TITLE: \(LocalFirebaseData.nextPrayerTitle)")
-        print("LocalFirebaseData.prayers = \(LocalFirebaseData.prayers.count)")
-        
+                
         self.prayer = LocalFirebaseData.prayers.filter {$0.title == LocalFirebaseData.nextPrayerTitle}.filter {$0.guide == Constants.guide} [0]
         
         

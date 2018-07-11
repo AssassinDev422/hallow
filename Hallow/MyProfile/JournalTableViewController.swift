@@ -30,17 +30,18 @@ class JournalTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("Total journal entries in viewDidLoad: \(self.journalEntries.count)")
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.userID = user?.uid
             self.userEmail = user?.email
             self.loadJournalEntries()
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Functions
@@ -50,7 +51,6 @@ class JournalTableViewController: UITableViewController {
             self.set(isLoading: true)
             self.journalEntries = results.map(JournalEntry.init)
             self.journalEntries.sort{$0.dateStored > $1.dateStored}
-            print("Journal count in private function: \(self.journalEntries.count)")
             self.tableView!.reloadData()
             self.set(isLoading: false)
         }
@@ -95,6 +95,32 @@ class JournalTableViewController: UITableViewController {
         return cell
     }
     
+    // Delete rows
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            
+            let entry = journalEntries[indexPath.row]
+            let docID = entry.docID
+            
+            // Delete file function
+            let db = Firestore.firestore()
+            db.collection("user").document(self.userEmail!).collection("journal").document(docID).delete() { error in
+                if let error = error {
+                    print("Error removing document: \(error)")
+                } else {
+                    print("Document successfully removed!")
+                    self.journalEntries.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }
+            }
+        }
+    }
+    
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -107,4 +133,5 @@ class JournalTableViewController: UITableViewController {
                 vc.journalEntry = journalEntry
         }
     }
+
 }

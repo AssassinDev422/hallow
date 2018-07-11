@@ -10,13 +10,17 @@ import UIKit
 import FirebaseFirestore
 import Firebase
 
-class FeedbackViewController: UIViewController {
+class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var feedbackField: UITextView!
+    @IBOutlet weak var feedbackTitle: UILabel!
+    @IBOutlet weak var buttonOutlet: UIButton!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
-    var userEmail: String? 
+    var userEmail: String?
+    
+    var frame: CGRect?
     
     // MARK: - Life cycle
     
@@ -24,15 +28,11 @@ class FeedbackViewController: UIViewController {
         super.viewDidLoad()
         
         setUpDoneButton()
+        
+        feedbackField.delegate = self
                 
         feedbackField!.layer.borderWidth = 0
         feedbackField!.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
-        
-        feedbackField!.layer.masksToBounds = false
-        feedbackField!.layer.shadowColor = UIColor.lightGray.cgColor
-        feedbackField!.layer.shadowOpacity = 0.8
-        feedbackField!.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
-        feedbackField!.layer.shadowRadius = 2
         
         navigationItem.title = "Send Feedback"
     }
@@ -45,11 +45,13 @@ class FeedbackViewController: UIViewController {
             self.userID = user?.uid
             self.userEmail = user?.email
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Auth.auth().removeStateDidChangeListener(handle!)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
@@ -79,6 +81,19 @@ class FeedbackViewController: UIViewController {
     
     @objc private func doneClicked() {
         view.endEditing(true)
+    }
+    
+    // Change height of textview
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.frame = textView.frame
+        var newFrame = self.frame!
+        newFrame.size.height = self.frame!.height / 2.5
+        textView.frame = newFrame
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textView.frame = self.frame!
     }
 
 }

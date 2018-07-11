@@ -285,7 +285,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kea-gJ-RfM">
-                                        <rect key="frame" x="20" y="66.5" width="42" height="20"/>
+                                        <rect key="frame" x="20" y="66.5" width="50.5" height="21"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="17"/>
                                         <color key="textColor" name="beige"/>
                                         <nil key="highlightedColor"/>
@@ -341,7 +341,6 @@
                                 <connections>
                                     <action selector="exitButtonPressed:" destination="6Sh-5U-3MK" eventType="touchDown" id="cvz-D9-Y6L"/>
                                     <action selector="exitButtonReleased:" destination="6Sh-5U-3MK" eventType="touchUpInside" id="4pk-Te-du4"/>
-                                    <segue destination="BXq-9Y-utP" kind="presentation" customClass="FromTopSegue" customModule="Hallow" customModuleProvider="target" id="nek-eA-lDZ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -373,6 +372,7 @@
                         <outlet property="progressControlOutlet" destination="Xky-H4-Z68" id="oQP-d7-qTS"/>
                         <outlet property="timeLabel" destination="lTy-rn-MhQ" id="PKm-wF-EZY"/>
                         <segue destination="CuC-2t-K28" kind="show" identifier="reflectSegue" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="NSv-il-5pe"/>
+                        <segue destination="BXq-9Y-utP" kind="presentation" identifier="exitSegue" customClass="FromTopSegue" customModule="Hallow" customModuleProvider="target" id="adP-Kd-GoA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ciq-ku-DGf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -389,6 +389,33 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UGT-5u-g1O" customClass="GradientView" customModule="Hallow" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VEe-JX-bup">
+                                        <rect key="frame" x="172" y="627" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="GTI-rG-dFm"/>
+                                        </constraints>
+                                        <state key="normal">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Skip">
+                                                    <attributes>
+                                                        <color key="NSColor" name="beige"/>
+                                                        <font key="NSFont" metaFont="system" size="14"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        <integer key="NSUnderline" value="1"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                        </state>
+                                        <connections>
+                                            <action selector="noThanksButton:" destination="bfu-AT-sep" eventType="touchUpInside" id="GcV-z1-2AM"/>
+                                            <action selector="skipButtonPressed:" destination="CuC-2t-K28" eventType="touchUpInside" id="ihY-ge-sND"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="VEe-JX-bup" firstAttribute="centerX" secondItem="UGT-5u-g1O" secondAttribute="centerX" id="Qqv-QE-1Ft"/>
+                                </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="bottomColor">
                                         <color key="value" name="purplishBlue"/>
@@ -399,7 +426,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BYi-u1-ipc">
-                                <rect key="frame" x="48.5" y="579" width="278" height="48"/>
+                                <rect key="frame" x="48.5" y="569" width="278" height="48"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <state key="normal" title="AMEN" backgroundImage="pinkButton"/>
                                 <connections>
@@ -407,7 +434,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="B6A-57-Wcy">
-                                <rect key="frame" x="20" y="150" width="335" height="354"/>
+                                <rect key="frame" x="20" y="190" width="335" height="324"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
@@ -423,7 +450,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What did you take away from today's session?" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-rK-bLG">
-                                <rect key="frame" x="20" y="70" width="335" height="70"/>
+                                <rect key="frame" x="20" y="70" width="335" height="110"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -461,8 +488,8 @@
                         <constraints>
                             <constraint firstItem="B6A-57-Wcy" firstAttribute="leading" secondItem="ULa-xf-s1e" secondAttribute="leading" constant="20" id="3u6-tZ-jqV"/>
                             <constraint firstItem="VcP-bT-vJi" firstAttribute="top" secondItem="ULa-xf-s1e" secondAttribute="top" constant="20" id="6rc-yX-j6a"/>
-                            <constraint firstItem="BYi-u1-ipc" firstAttribute="top" secondItem="B6A-57-Wcy" secondAttribute="bottom" constant="75" id="7yY-t8-i5v"/>
-                            <constraint firstItem="ULa-xf-s1e" firstAttribute="bottom" secondItem="BYi-u1-ipc" secondAttribute="bottom" constant="40" id="AxH-BO-6Sn"/>
+                            <constraint firstItem="BYi-u1-ipc" firstAttribute="top" secondItem="B6A-57-Wcy" secondAttribute="bottom" constant="55" id="7yY-t8-i5v"/>
+                            <constraint firstItem="ULa-xf-s1e" firstAttribute="bottom" secondItem="BYi-u1-ipc" secondAttribute="bottom" constant="50" id="AxH-BO-6Sn"/>
                             <constraint firstItem="B6A-57-Wcy" firstAttribute="centerX" secondItem="OLG-fj-M2p" secondAttribute="centerX" id="EJf-34-7Hk"/>
                             <constraint firstItem="B6A-57-Wcy" firstAttribute="top" secondItem="JmN-rK-bLG" secondAttribute="bottom" constant="10" id="L8T-kt-oen"/>
                             <constraint firstItem="JmN-rK-bLG" firstAttribute="leading" secondItem="ULa-xf-s1e" secondAttribute="leading" constant="20" id="NKo-Gg-kRg"/>
@@ -470,6 +497,7 @@
                             <constraint firstItem="JmN-rK-bLG" firstAttribute="top" secondItem="ULa-xf-s1e" secondAttribute="top" constant="50" id="U8X-A7-lsZ"/>
                             <constraint firstItem="VcP-bT-vJi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ULa-xf-s1e" secondAttribute="leading" constant="100" id="UsY-UA-VVH"/>
                             <constraint firstItem="Br0-AR-h54" firstAttribute="top" secondItem="VcP-bT-vJi" secondAttribute="top" id="aKA-5H-kL0"/>
+                            <constraint firstItem="VEe-JX-bup" firstAttribute="top" secondItem="BYi-u1-ipc" secondAttribute="bottom" constant="10" id="bFN-zN-TKg"/>
                             <constraint firstItem="UGT-5u-g1O" firstAttribute="bottom" secondItem="OLG-fj-M2p" secondAttribute="bottom" id="cDY-yf-8eg"/>
                             <constraint firstItem="UGT-5u-g1O" firstAttribute="top" secondItem="OLG-fj-M2p" secondAttribute="top" id="cdl-kD-qYC"/>
                             <constraint firstItem="BYi-u1-ipc" firstAttribute="centerX" secondItem="OLG-fj-M2p" secondAttribute="centerX" id="eDi-Xx-XXi"/>
@@ -533,7 +561,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hva-bT-qKr">
-                                        <rect key="frame" x="20" y="215" width="335" height="43"/>
+                                        <rect key="frame" x="20" y="220" width="335" height="43"/>
                                         <string key="text">
 
 
@@ -543,7 +571,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We are currently building the full version with a lot more content.  In the meantime feel free to re-listen to the 9 sessions." lineBreakMode="wordWrap" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GoO-fN-186">
-                                        <rect key="frame" x="20" y="195" width="335" height="64.5"/>
+                                        <rect key="frame" x="20" y="200" width="335" height="64.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
@@ -576,7 +604,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXj-as-Oux">
-                                        <rect key="frame" x="20" y="279.5" width="335" height="86"/>
+                                        <rect key="frame" x="20" y="284.5" width="335" height="86"/>
                                         <string key="text">We hope you've enjoyed it so far!  Click below if you want to be added to the pre-order list for the full version at $4.99 / mo.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
@@ -602,7 +630,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations on completing your intro to Hallow!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qzt-MN-c6a">
-                                <rect key="frame" x="20" y="70" width="335" height="105"/>
+                                <rect key="frame" x="20" y="70" width="335" height="110"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -655,16 +683,16 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eAD-Np-fey">
-                                <rect key="frame" x="20" y="167" width="335" height="133"/>
+                                <rect key="frame" x="20" y="147" width="335" height="173"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to set up a reminder each day?" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w48-FA-BB1">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="70"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="110"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can update this at any point in your profile" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2UW-oI-lJH">
-                                        <rect key="frame" x="0.0" y="90" width="335" height="43"/>
+                                        <rect key="frame" x="0.0" y="130" width="335" height="43"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
@@ -672,7 +700,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="JgL-2j-yQO">
-                                <rect key="frame" x="37.5" y="400" width="300" height="48"/>
+                                <rect key="frame" x="37.5" y="420" width="300" height="48"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrn-fj-wuF">
                                         <rect key="frame" x="0.0" y="0.0" width="135" height="48"/>
@@ -755,7 +783,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                 </date>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great!  Just pick a time" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6fi-W8-qQx">
-                                <rect key="frame" x="20" y="70" width="335" height="35"/>
+                                <rect key="frame" x="20" y="70" width="335" height="73.5"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -891,11 +919,11 @@ Please feel free to revisit the intro sessions until then!</string>
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="white">
-            <color red="0.97600001096725464" green="0.97600001096725464" blue="0.97299998998641968" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MfL-On-nYD"/>
+        <segue reference="NrR-A9-qOp"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

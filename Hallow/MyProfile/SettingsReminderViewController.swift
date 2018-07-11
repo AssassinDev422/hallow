@@ -17,11 +17,6 @@ class SettingsReminderViewController: UIViewController {
     
     @IBOutlet weak var removeReminderOutlet: UIButton!
     
-    var trigger: UNCalendarNotificationTrigger?
-    var hour: Int?
-    var minute: Int?
-    var ampm: String = "AM"
-        
     // MARK: - Life cycle
     
     override func viewDidLoad() {
@@ -32,6 +27,12 @@ class SettingsReminderViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadDisplay()
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
@@ -41,12 +42,20 @@ class SettingsReminderViewController: UIViewController {
         center.removeAllDeliveredNotifications()
         center.removeAllPendingNotificationRequests()
         navigationController?.popViewController(animated: true)
-        Constants.reminderTime = Date(timeIntervalSince1970: 0)
+        
+        let defaults = UserDefaults.standard
+        defaults.set(Date(timeIntervalSince1970: 0), forKey: "reminderTime")
+        defaults.synchronize()
     }
     
     @IBAction func updateReminders(_ sender: Any) {
-        if Constants.reminderSet == true {
-            if Constants.firstReminder == false {
+        
+        let defaults = UserDefaults.standard
+        let reminderSet = defaults.bool(forKey: "reminderSet")
+        let firstReminder = defaults.bool(forKey: "firstReminder")
+        
+        if reminderSet == true {
+            if firstReminder == false {
                 let center = UNUserNotificationCenter.current()
                 center.removeAllDeliveredNotifications()
                 center.removeAllPendingNotificationRequests()
@@ -58,8 +67,12 @@ class SettingsReminderViewController: UIViewController {
             }
         } else {
             allowFirstReminder()
-            Constants.reminderSet = true
-            Constants.firstReminder = true
+            
+            let defaults = UserDefaults.standard
+            defaults.set(true, forKey: "reminderSet")
+            defaults.set(true, forKey: "firstReminder")
+            defaults.synchronize()
+                        
         }
     }
     
@@ -68,23 +81,16 @@ class SettingsReminderViewController: UIViewController {
     
     private func loadDisplay() {
         
-        if Constants.reminderSet == true {
+        let defaults = UserDefaults.standard
+        let reminderSet = defaults.bool(forKey: "reminderSet")
+        
+        if reminderSet == true {
             
             updateButtonOutlet.setTitle("UPDATE", for: .normal)
             reminderTime.isHidden = false
             removeReminderOutlet.isHidden = false
             
-            let center = UNUserNotificationCenter.current()
-            center.getPendingNotificationRequests { result in
-                print("RESULT COUNT: \(String(describing: result.count))")
-                self.trigger = result[0].trigger as? UNCalendarNotificationTrigger
-                
-                self.hour = self.trigger?.dateComponents.hour
-                self.minute = self.trigger?.dateComponents.minute
-                
-                self.setDisplay()
-                
-                }
+            self.setDisplay()
             
         } else {
             updateButtonOutlet.setTitle("ENABLE REMINDERS", for: .normal)
@@ -95,34 +101,20 @@ class SettingsReminderViewController: UIViewController {
     }
 
     private func setDisplay() {
-
-        if self.hour == nil {
             
-            self.currentReminderLabel.text = "No reminder currently set"
-            
-        } else {
-            
-            var hour = self.hour!
-            let minute = self.minute!
-            
-            if hour > 12 {
-                hour = hour - 12
-                self.ampm = "PM"
-            } else {
-                self.ampm = "AM"
-            }
-            
-            print("Current reminder set to: \(hour):\(minute) \(self.ampm)")
-                
-            let formatter = DateFormatter()
-            formatter.dateFormat = "h:mm a"
-            let currentTime = formatter.string(from: Constants.reminderTime)
-            currentReminderLabel.text = "Current reminder set to: \(currentTime)"
-            print("\(String(describing: currentReminderLabel.text))")
-            
-            self.reminderTime.date = Constants.reminderTime
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
         
-        }
+        
+        let defaults = UserDefaults.standard
+        let reminderTime = defaults.value(forKey: "reminderTime") as! Date
+        defaults.synchronize()
+        
+        let currentTime = formatter.string(from: reminderTime)
+        currentReminderLabel.text = "Current reminder set to: \(currentTime)"
+    
+        self.reminderTime.date = reminderTime
+        
     }
 
 
@@ -138,7 +130,7 @@ class SettingsReminderViewController: UIViewController {
         }
         center.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
-                print("Something #2 went wrong")
+                print("Something went wrong")
             }
         }
         updateButtonOutlet.setTitle("UPDATE", for: .normal)
@@ -153,7 +145,6 @@ class SettingsReminderViewController: UIViewController {
         
         let content = UNMutableNotificationContent()
         content.title = "Quick reminder to pray"
-        content.body = "Click here to open up Hallow"
         content.sound = UNNotificationSound.default()
         
         let time = reminderTime.date
@@ -169,8 +160,13 @@ class SettingsReminderViewController: UIViewController {
             }
         })
         
-        Constants.reminderTime = reminderTime.date
-        print("Set constants value to: \(Constants.reminderTime)")
+        
+        
+        let defaults = UserDefaults.standard
+        defaults.set(reminderTime.date, forKey: "reminderTime")
+        defaults.synchronize()
+        
+        print("Set constants value to: \(reminderTime.date)")
         
     }
     
@@ -181,13 +177,11 @@ class SettingsReminderViewController: UIViewController {
         
         let content = UNMutableNotificationContent()
         content.title = "Quick reminder to pray"
-        content.body = "Click here to open up Hallow"
         content.sound = UNNotificationSound.default()
         
         let time = reminderTime.date
         let triggerDaily = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
-        print("triggerDaily value: \(triggerDaily)")
         
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
@@ -197,7 +191,10 @@ class SettingsReminderViewController: UIViewController {
             }
         })
         
-        Constants.reminderTime = reminderTime.date
-        print("Set constants value to: \(Constants.reminderTime)")
+        
+        let defaults = UserDefaults.standard
+        defaults.set(reminderTime.date, forKey: "reminderTime")
+        defaults.synchronize()
+        
     }
 }

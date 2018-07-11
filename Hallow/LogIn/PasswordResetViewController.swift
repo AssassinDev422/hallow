@@ -25,6 +25,16 @@ class PasswordResetViewController: UIViewController, UITextFieldDelegate {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
+    }
+    
     // MARK: - Actions
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

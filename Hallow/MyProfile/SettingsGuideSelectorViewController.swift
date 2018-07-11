@@ -24,20 +24,28 @@ class SettingsGuideSelectorViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
+    }
+    
     // MARK: - Actions
     
     @IBAction func francisButton(_ sender: UIButton) {
         francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
         abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
         Constants.guide = "Francis"
-        print("guide selected: \(Constants.guide)")
     }
     
     @IBAction func abbyButton(_ sender: UIButton) {
         abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
         francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
         Constants.guide = "Abby"
-        print("guide selected: \(Constants.guide)")
     }
 
 }

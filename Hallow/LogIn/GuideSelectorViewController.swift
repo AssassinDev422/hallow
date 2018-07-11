@@ -54,20 +54,28 @@ class GuideSelectorViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
+    }
+    
     // MARK: - Actions
     
     @IBAction func francisButton(_ sender: UIButton) {
         francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
         abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
         Constants.guide = "Francis"
-        print("guide selected: \(Constants.guide)")
     }
     
     @IBAction func abbyButton(_ sender: UIButton) {
         abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
         francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
         Constants.guide = "Abby"
-        print("guide selected: \(Constants.guide)")
     }
     
     @IBAction func francisPlaySample(_ sender: UIButton) {
@@ -137,7 +145,6 @@ class GuideSelectorViewController: UIViewController {
             
             francisSampleAudioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
             
-            print("Francis audio player was set up")
             self.setFrancis(isLoading: false)
             checkFrancisProgress(francisSongCompleted: francisCompletionHandler)
             francisPlayToggle()
@@ -194,7 +201,6 @@ class GuideSelectorViewController: UIViewController {
             
             abbySampleAudioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
             
-            print("Abby audio player was set up")
             self.setAbby(isLoading: false)
             checkAbbyProgress(abbySongCompleted: abbyCompletionHandler)
             abbyPlayToggle()
@@ -246,7 +252,6 @@ class GuideSelectorViewController: UIViewController {
         francisTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
             let percentComplete = self!.francisSampleAudioPlayer.currentTime / self!.francisSampleAudioPlayer.duration
             if percentComplete > 0.999 {
-                print("if statement at the end of the song executed")
                 francisSongCompleted(true)
             } else {
                 francisSongCompleted(false)
@@ -256,7 +261,6 @@ class GuideSelectorViewController: UIViewController {
     
     lazy var francisCompletionHandler: (Bool) -> Void = {
         if $0 {
-            print("Ran completion handler")
             self.francisSampleAudioPlayer.pause()
             self.francisPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.francisSampleAudioPlayer.currentTime = 0.0
@@ -267,7 +271,6 @@ class GuideSelectorViewController: UIViewController {
         abbyTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
             let percentComplete = self!.abbySampleAudioPlayer.currentTime / self!.abbySampleAudioPlayer.duration
             if percentComplete > 0.999 {
-                print("if statement at the end of the song executed")
                 abbySongCompleted(true)
             } else {
                 abbySongCompleted(false)
@@ -277,7 +280,6 @@ class GuideSelectorViewController: UIViewController {
     
     lazy var abbyCompletionHandler: (Bool) -> Void = {
         if $0 {
-            print("Ran completion handler")
             self.abbySampleAudioPlayer.pause()
             self.abbyPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.abbySampleAudioPlayer.currentTime = 0.0

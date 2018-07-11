@@ -1,14 +1,4 @@
 PODS:
-  - AppCenter (1.6.0):
-    - AppCenter/Analytics (= 1.6.0)
-    - AppCenter/Crashes (= 1.6.0)
-  - AppCenter/Analytics (1.6.0):
-    - AppCenter/Core
-  - AppCenter/Core (1.6.0)
-  - AppCenter/Crashes (1.6.0):
-    - AppCenter/Core
-  - AppCenter/Distribute (1.6.0):
-    - AppCenter/Core
   - BoringSSL (10.0):
     - BoringSSL/Implementation (= 10.0)
     - BoringSSL/Interface (= 10.0)
@@ -88,19 +78,18 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - Protobuf (3.5.0)
+  - ReachabilitySwift (4.1.0)
 
 DEPENDENCIES:
-  - AppCenter
-  - AppCenter/Distribute
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Firestore
   - Firebase/Storage
   - JGProgressHUD
+  - ReachabilitySwift
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - AppCenter
     - BoringSSL
     - Firebase
     - FirebaseAnalytics
@@ -119,9 +108,9 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
+    - ReachabilitySwift
 
 SPEC CHECKSUMS:
-  AppCenter: 05e11ff99d3224131363abb61830172f5f28e53e
   BoringSSL: 32764dbaf5f5888cf51fbaa172a010126b41bcd4
   Firebase: cc13dfab1038c8b45d7903e01fc690451d6d0b24
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
@@ -140,7 +129,8 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
+  ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
 
-PODFILE CHECKSUM: 9c5038005d1c21642034b1259644580411ab1841
+PODFILE CHECKSUM: 40b45fd60148f7baeee4ecc9aff154ca6e6a985e
 
 COCOAPODS: 1.5.2

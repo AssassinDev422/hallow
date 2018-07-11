@@ -35,8 +35,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
@@ -75,7 +81,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 }
                 
                 self.saveDataForSignUp(withUserEmail: email, withName: name, withEmail: emailInit, withPassword: "Confidential")
-                print("\(email) created")
                 self.set(isLoading: false)
             }
         }

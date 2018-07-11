@@ -67,7 +67,6 @@ class PrayerJourneyTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Prayer sessions: \(LocalFirebaseData.prayers.count)")
         return LocalFirebaseData.prayers.filter {$0.guide == Constants.guide}.count
     }
 
@@ -81,16 +80,28 @@ class PrayerJourneyTableViewController: UITableViewController {
         
         let completed = LocalFirebaseData.completedPrayers.contains {$0 == prayer.title}
         
+        let locked = LocalFirebaseData.lockedPrayers.contains {$0 == prayer.title}
+        
         if completed == true {
             cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
+            cell.statusImage.tintColor = UIColor(named: "fadedPink")
             cell.statusImage.contentMode = .scaleToFill
             cell.prayerTitleLabel.textColor = UIColor(named: "fadedPink")
             cell.prayerDescriptionLabel.textColor = UIColor(named: "fadedPink")
+            cell.playCellButton.isHidden = false
+        } else if locked == true {
+            cell.statusImage.image = #imageLiteral(resourceName: "passwordIcon")
+            cell.playCellButton.isHidden = true
+            cell.statusImage.contentMode = .scaleAspectFit
+            cell.statusImage.tintColor = UIColor.lightGray
+            cell.prayerTitleLabel.textColor = UIColor.lightGray
+            cell.prayerDescriptionLabel.textColor = UIColor.lightGray
         } else {
             cell.statusImage.image = UIImage.circle(diameter: 15, color: UIColor(named: "purplishBlue")!)
             cell.statusImage.contentMode = .center
             cell.prayerTitleLabel.textColor = UIColor(named: "darkIndigo")
             cell.prayerDescriptionLabel.textColor = UIColor(named: "darkIndigo")
+            cell.playCellButton.isHidden = false
         }
         
         cell.layer.borderWidth = 0
@@ -124,8 +135,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         let prayer = LocalFirebaseData.prayers.filter {$0.guide == Constants.guide} [indexPath.item]
         let parent = self.parent as! PrayerJourneySuperViewController
         parent.prayer = prayer
-        parent.prayerTitleLabel.text = prayer.title
-        parent.prayerTitleLabel.text?.append(" of 9")
+        
         parent.prayerDescriptionLabel.text = prayer.description
         
         let description2 = NSMutableAttributedString(string: prayer.description2)
@@ -133,6 +143,15 @@ class PrayerJourneyTableViewController: UITableViewController {
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
         parent.prayerDescription2Label.attributedText = description2
+        
+        parent.playSelectedButtonOutlet.isHidden = false
+        parent.prayerTitleLabel.text = prayer.title
+        parent.prayerTitleLabel.text?.append(" of 9")
+        
+        if prayer.title == "Day 9+" {
+            parent.playSelectedButtonOutlet.isHidden = true //FIXME: When I scroll the other day play buttons disappear
+            parent.prayerTitleLabel.text = prayer.title
+        }
         
         self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 
