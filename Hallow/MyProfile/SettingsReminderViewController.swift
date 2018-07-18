@@ -11,11 +11,10 @@ import UserNotifications
 
 class SettingsReminderViewController: UIViewController {
 
-    @IBOutlet weak var reminderTime: UIDatePicker!
+    @IBOutlet weak var reminderTimePicker: UIDatePicker!
     @IBOutlet weak var currentReminderLabel: UILabel!
-    @IBOutlet weak var updateButtonOutlet: UIButton!
-    
-    @IBOutlet weak var removeReminderOutlet: UIButton!
+    @IBOutlet weak var updateButton: UIButton!
+    @IBOutlet weak var removeReminderButton: UIButton!
     
     // MARK: - Life cycle
     
@@ -86,16 +85,16 @@ class SettingsReminderViewController: UIViewController {
         
         if reminderSet == true {
             
-            updateButtonOutlet.setTitle("UPDATE", for: .normal)
-            reminderTime.isHidden = false
-            removeReminderOutlet.isHidden = false
+            updateButton.setTitle("UPDATE", for: .normal)
+            reminderTimePicker.isHidden = false
+            removeReminderButton.isHidden = false
             
             self.setDisplay()
             
         } else {
-            updateButtonOutlet.setTitle("ENABLE REMINDERS", for: .normal)
-            reminderTime.isHidden = true
-            removeReminderOutlet.isHidden = true
+            updateButton.setTitle("ENABLE REMINDERS", for: .normal)
+            reminderTimePicker.isHidden = true
+            removeReminderButton.isHidden = true
             currentReminderLabel.text = "No reminder currently set"
         }
     }
@@ -113,7 +112,7 @@ class SettingsReminderViewController: UIViewController {
         let currentTime = formatter.string(from: reminderTime)
         currentReminderLabel.text = "Current reminder set to: \(currentTime)"
     
-        self.reminderTime.date = reminderTime
+        self.reminderTimePicker.date = reminderTime
         
     }
 
@@ -133,9 +132,9 @@ class SettingsReminderViewController: UIViewController {
                 print("Something went wrong")
             }
         }
-        updateButtonOutlet.setTitle("UPDATE", for: .normal)
-        reminderTime.isHidden = false
-        removeReminderOutlet.isHidden = false
+        updateButton.setTitle("UPDATE", for: .normal)
+        reminderTimePicker.isHidden = false
+        removeReminderButton.isHidden = false
     }
     
     private func setUpFirstReminder() {
@@ -147,7 +146,7 @@ class SettingsReminderViewController: UIViewController {
         content.title = "Quick reminder to pray"
         content.sound = UNNotificationSound.default()
         
-        let time = reminderTime.date
+        let time = reminderTimePicker.date
         let triggerDaily = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
         print("triggerDaily value: \(triggerDaily)")
@@ -163,10 +162,10 @@ class SettingsReminderViewController: UIViewController {
         
         
         let defaults = UserDefaults.standard
-        defaults.set(reminderTime.date, forKey: "reminderTime")
+        defaults.set(reminderTimePicker.date, forKey: "reminderTime")
         defaults.synchronize()
         
-        print("Set constants value to: \(reminderTime.date)")
+        print("Set constants value to: \(reminderTimePicker.date)")
         
     }
     
@@ -179,7 +178,7 @@ class SettingsReminderViewController: UIViewController {
         content.title = "Quick reminder to pray"
         content.sound = UNNotificationSound.default()
         
-        let time = reminderTime.date
+        let time = reminderTimePicker.date
         let triggerDaily = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
         
@@ -193,7 +192,7 @@ class SettingsReminderViewController: UIViewController {
         
         
         let defaults = UserDefaults.standard
-        defaults.set(reminderTime.date, forKey: "reminderTime")
+        defaults.set(reminderTimePicker.date, forKey: "reminderTime")
         defaults.synchronize()
         
     }

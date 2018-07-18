@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-class SignInViewController: UIViewController, UITextFieldDelegate {
+class SignInViewController: LogInBaseViewController {
     
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -31,11 +31,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         emailField.delegate = self
-        emailField.tag = 1
         passwordField.delegate = self
-        passwordField.tag = 2
         
-        setUpDoneButton()
+        setUpDoneButton(textField: emailField)
+        setUpDoneButton(textField: passwordField)
 
     }
     
@@ -52,17 +51,13 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Actions
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
-            nextField.becomeFirstResponder()
-        } else {
+        if textField == emailField {
+            passwordField.becomeFirstResponder()
+        } else if textField == passwordField {
             signIn()
-            textField.resignFirstResponder()
+            passwordField.resignFirstResponder()
         }
         return false
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
     
     @IBAction func signInButton(_ sender: Any) {
@@ -70,23 +65,22 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func signIn() {
-        set(isLoading: true)
+        showLightHud()
         if let emailInit = self.emailField.text, let password = self.passwordField.text {
             var email = emailInit
             if email.last == " " {
                 email.removeLast()
             }
             Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-                if let error = error {
-                    self.errorAlert(message: "\(error.localizedDescription)")
-                    self.set(isLoading: false)
+                guard let userID = user?.uid, let userEmail = user?.email, error == nil else {
+                    Utilities.errorAlert(message: "\(error?.localizedDescription ?? "Error signing in")", viewController: self)
+                    self.dismissHud()
                     return
-                } else {
-                    self.userID = user?.uid
-                    self.userEmail = user?.email
-                    self.loadUserConstants(fromUserEmail: self.userEmail!)
-                    FirebaseUtilities.loadProfilePicture(byUserEmail: self.userEmail!)
                 }
+                self.userID = userID
+                self.userEmail = userEmail
+                self.loadUserConstants(fromUserEmail: userEmail)
+                FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail)
             }
         }
     }
@@ -94,31 +88,52 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Functions
     
     private func loadUserConstants(fromUserEmail userEmail: String) {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUserEmail: self.userEmail!) { results in
+        guard let email = self.userEmail else {
+            Utilities.errorAlert(message: "No user signed in", viewController: self)
+            return
+        }
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUserEmail: email) { results in
             self.userConstants = results.map(ConstantsItem.init)[0]
-            Constants.firebaseDocID = self.userConstants!.docID
-            Constants.guide = self.userConstants!.guide
-            Constants.isFirstDay = self.userConstants!.isFirstDay
-            Constants.hasCompleted = self.userConstants!.hasCompleted
-            Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
-            Constants.hasStartedListening = self.userConstants!.hasStartedListening
-            Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
+            guard let userConstants = self.userConstants else {
+                Utilities.errorAlert(message: "Error downloaded user data", viewController: self)
+                return
+            }
+            Constants.firebaseDocID = userConstants.docID
+            Constants.guide = userConstants.guide
+            Constants.isFirstDay = userConstants.isFirstDay
+            Constants.hasCompleted = userConstants.hasCompleted
+            Constants.hasSeenCompletionScreen = userConstants.hasSeenCompletionScreen
+            Constants.hasStartedListening = userConstants.hasStartedListening
+            Constants.hasLoggedOutOnce = userConstants.hasLoggedOutOnce
             
             self.loadName()
         }
     }
     
     private func loadName() {
-        FirebaseUtilities.loadUserData(byUserEmail: self.userEmail!) {results in
+        guard let userEmail = self.userEmail else {
+            Utilities.errorAlert(message: "Error loading data", viewController: self)
+            return
+        }
+        FirebaseUtilities.loadUserData(byUserEmail: userEmail) {results in
             self.userData = results.map(User.init)[0]
-            LocalFirebaseData.name = self.userData!.name
             
+            guard let userData = self.userData else {
+                Utilities.errorAlert(message: "Error loading data", viewController: self)
+                return
+            }
+            
+            LocalFirebaseData.name = userData.name
             self.loadStartedPrayers()
         }
     }
     
     private func loadStartedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: self.userEmail!) {results in
+        guard let userEmail = self.userEmail else {
+            Utilities.errorAlert(message: "Error loading data", viewController: self)
+            return
+        }
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: userEmail) {results in
             self.startedPrayers = results.map(PrayerTracking.init)
             LocalFirebaseData.started = self.startedPrayers.count
             
@@ -127,7 +142,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func loadCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
+        guard let userEmail = self.userEmail else {
+            Utilities.errorAlert(message: "Error loading data", viewController: self)
+            return
+        }
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: userEmail) {results in
             self.completedPrayers = results.map(PrayerTracking.init)
             LocalFirebaseData.completed = self.completedPrayers.count
             
@@ -142,71 +161,24 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func loadTimeTracker() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) {results in
+        guard let userEmail = self.userEmail else {
+            Utilities.errorAlert(message: "Error loading data", viewController: self)
+            return
+        }
+        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: userEmail) {results in
             self.stats = results.map(StatsItem.init)[0]
-            LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
-            LocalFirebaseData.streak = self.stats!.streak
             
-            self.set(isLoading: false)
+            guard let stats = self.stats else {
+                Utilities.errorAlert(message: "Error loading data", viewController: self)
+                return
+            }
+            
+            LocalFirebaseData.timeTracker = stats.timeInPrayer
+            LocalFirebaseData.streak = stats.streak
+            
+            self.dismissHud()
             self.performSegue(withIdentifier: "signInSegue", sender: self)
         }
-    }
-    
-    private func errorAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-        self.present(alert, animated: true)
-    }
-    
-    // Sets up is loading hud
-    
-    let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .light)
-        hud.interactionType = .blockAllTouches
-        return hud
-    }()
-    
-    private func set(isLoading: Bool) {
-        if isLoading {
-            self.hud.show(in: view, animated: false)
-        } else {
-            self.hud.dismiss(animated: false)
-        }
-    }
-    
-    // MARK: - Navigation
-    // Unwind
-    
-    @IBAction func returnFromSegueActions(sender: UIStoryboardSegue){
-    }
-    
-    // MARK: - Design
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderWidth = 1.0
-        textField.layer.borderColor = UIColor.white.cgColor
-        textField.layer.cornerRadius = 5.0
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.layer.borderWidth = 1.0
-        textField.layer.borderColor = UIColor.clear.cgColor
-    }
-    
-    // Add done button to keyboard
-    
-    private func setUpDoneButton() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        emailField.inputAccessoryView = toolBar
-        passwordField.inputAccessoryView = toolBar
-    }
-    
-    @objc private func doneClicked() {
-        view.endEditing(true)
     }
     
 }

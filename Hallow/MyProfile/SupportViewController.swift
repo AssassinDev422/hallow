@@ -10,14 +10,14 @@ import UIKit
 
 class SupportViewController: UIViewController {
 
-    @IBOutlet weak var versionBuildOutlet: UILabel!
+    @IBOutlet weak var versionBuildLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Contact & Support"
         
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"]  as? String, let bundle = Bundle.main.infoDictionary?["CFBundleVersion"] as? String  {
-            versionBuildOutlet.text = "Version \(version) (\(bundle))"
+            versionBuildLabel.text = "Version \(version) (\(bundle))"
         }
         
     }

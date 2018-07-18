@@ -10,17 +10,17 @@ import UIKit
 
 class SettingsGuideSelectorViewController: UIViewController {
     
-    @IBOutlet weak var abbyButtonOutlet: UIButton!
-    @IBOutlet weak var francisButtonOutlet: UIButton!
+    @IBOutlet weak var abbyButton: UIButton!
+    @IBOutlet weak var francisButton: UIButton!
     
     // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         if Constants.guide == "Francis" {
-            francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
+            francisButton.isSelected = !francisButton.isSelected
         } else {
-            abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
+            abbyButton.isSelected = !abbyButton.isSelected
         }
     }
     
@@ -37,14 +37,14 @@ class SettingsGuideSelectorViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func francisButton(_ sender: UIButton) {
-        francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
-        abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
+        francisButton.isSelected = !francisButton.isSelected
+        abbyButton.isSelected = !abbyButton.isSelected
         Constants.guide = "Francis"
     }
     
     @IBAction func abbyButton(_ sender: UIButton) {
-        abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
-        francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
+        abbyButton.isSelected = !abbyButton.isSelected
+        francisButton.isSelected = !francisButton.isSelected
         Constants.guide = "Abby"
     }
 

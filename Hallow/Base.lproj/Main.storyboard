@@ -107,8 +107,8 @@
                     </view>
                     <connections>
                         <outlet property="prayerChallengeLabel" destination="8Vj-WS-JpM" id="75H-7g-fre"/>
-                        <outlet property="signInOutlet" destination="NNx-fa-cEx" id="uCe-E0-EFx"/>
-                        <outlet property="signUpOutlet" destination="syZ-Z8-fsl" id="dgX-vK-hJe"/>
+                        <outlet property="signInButton" destination="NNx-fa-cEx" id="uCe-E0-EFx"/>
+                        <outlet property="signUpButton" destination="syZ-Z8-fsl" id="dgX-vK-hJe"/>
                         <segue destination="BXq-9Y-utP" kind="presentation" identifier="alreadySignedInSegue" id="EJK-VX-YDh"/>
                     </connections>
                 </viewController>
@@ -143,7 +143,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="21K-RI-c7e">
-                                <rect key="frame" x="63" y="544" width="250" height="29"/>
+                                <rect key="frame" x="62.5" y="544" width="250" height="29"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="31a-uT-57j"/>
@@ -165,7 +165,7 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Hd-K9-cbQ">
-                                <rect key="frame" x="63" y="572" width="83" height="5"/>
+                                <rect key="frame" x="62.5" y="572" width="83" height="5"/>
                                 <color key="backgroundColor" name="fadedPink"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="Gng-jz-GC7"/>
@@ -206,7 +206,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="6Sh-5U-3MK" kind="presentation" identifier="prayNow" id="Btd-74-LYH"/>
+                                    <segue destination="4Ae-5d-2rZ" kind="presentation" identifier="prayNowSegue" id="Btd-74-LYH"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cCP-OT-PoD">
@@ -246,7 +246,7 @@
                     <navigationItem key="navigationItem" id="v73-Fm-NGz"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="lengthSelectorOutlet" destination="21K-RI-c7e" id="ouK-Qg-cjE"/>
+                        <outlet property="lengthSelector" destination="21K-RI-c7e" id="ouK-Qg-cjE"/>
                         <outlet property="prayNowLabel" destination="nIG-NJ-1Xj" id="Me9-Qo-Vbg"/>
                         <outlet property="prayerSessionDescription" destination="tW4-qY-8BF" id="bcu-Af-pud"/>
                         <outlet property="prayerSessionDescription2" destination="M3s-Zi-lA6" id="xXv-RZ-dHO"/>
@@ -364,20 +364,21 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="H1J-07-UHj"/>
                     </view>
+                    <navigationItem key="navigationItem" id="qge-kw-a2t"/>
                     <connections>
-                        <outlet property="exitButtonOutlet" destination="EZ6-6H-8vb" id="SJH-pn-Yk0"/>
+                        <outlet property="exitButton" destination="EZ6-6H-8vb" id="SJH-pn-Yk0"/>
                         <outlet property="nowPrayingLabel" destination="AeU-Uh-YXN" id="ZMs-9O-Svl"/>
                         <outlet property="nowPrayingTitleLabel" destination="kea-gJ-RfM" id="oD3-fX-VEa"/>
                         <outlet property="playPauseButton" destination="avM-mx-sbt" id="ce5-OS-z7w"/>
-                        <outlet property="progressControlOutlet" destination="Xky-H4-Z68" id="oQP-d7-qTS"/>
+                        <outlet property="progressSlider" destination="Xky-H4-Z68" id="oQP-d7-qTS"/>
                         <outlet property="timeLabel" destination="lTy-rn-MhQ" id="PKm-wF-EZY"/>
-                        <segue destination="CuC-2t-K28" kind="show" identifier="reflectSegue" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="NSv-il-5pe"/>
+                        <segue destination="CuC-2t-K28" kind="show" identifier="reflectSegue" id="NSv-il-5pe"/>
                         <segue destination="BXq-9Y-utP" kind="presentation" identifier="exitSegue" customClass="FromTopSegue" customModule="Hallow" customModuleProvider="target" id="adP-Kd-GoA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ciq-ku-DGf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3199.1999999999998" y="-528.48575712143929"/>
+            <point key="canvasLocation" x="4138.3999999999996" y="-528.48575712143929"/>
         </scene>
         <!--Reflect View Controller-->
         <scene sceneID="pTD-F7-zlb">
@@ -467,7 +468,6 @@
                                 </state>
                                 <connections>
                                     <action selector="exitButton:" destination="CuC-2t-K28" eventType="touchUpInside" id="OOM-ZH-kCd"/>
-                                    <segue destination="BXq-9Y-utP" kind="presentation" identifier="exitReflectSegue" customClass="FromTopSegue" customModule="Hallow" customModuleProvider="target" id="NrR-A9-qOp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Br0-AR-h54">
@@ -517,15 +517,13 @@
                         <outlet property="textField" destination="B6A-57-Wcy" id="Txh-ZW-Qbd"/>
                         <segue destination="gfX-Ez-Q7C" kind="show" identifier="isFirstDaySegue" id="dvU-yh-ihA"/>
                         <segue destination="BXq-9Y-utP" kind="presentation" identifier="isNotFirstDaySegue" id="MfL-On-nYD"/>
-                        <segue destination="HO5-vF-4FN" kind="unwind" identifier="returnFromReflectToAudioSegue" customClass="LeftToRightUnwindSegue" customModule="Hallow" customModuleProvider="target" unwindAction="returnFromSegueActionsWithSender:" id="OWZ-uA-Qi1"/>
-                        <segue destination="bfu-AT-sep" kind="presentation" identifier="completedSegue" id="Mp1-ED-Q3G"/>
+                        <segue destination="bfu-AT-sep" kind="show" identifier="completedSegue" id="Mp1-ED-Q3G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1S-qS-cEL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="HO5-vF-4FN" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="3Wo-t1-7Jb"/>
             </objects>
-            <point key="canvasLocation" x="4018.4000000000001" y="-528.48575712143929"/>
+            <point key="canvasLocation" x="4897" y="-528"/>
         </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="0mc-Iq-zFI">
@@ -660,7 +658,7 @@ Please feel free to revisit the intro sessions until then!</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XCC-k9-mTN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4848.8000000000002" y="-1050.224887556222"/>
+            <point key="canvasLocation" x="5788" y="-1050.224887556222"/>
         </scene>
         <!--First Day Reminder View Controller-->
         <scene sceneID="NHE-q3-Zp8">
@@ -717,7 +715,7 @@ Please feel free to revisit the intro sessions until then!</string>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="yesButton:" destination="gfX-Ez-Q7C" eventType="touchUpInside" id="CWf-yx-nbX"/>
-                                            <segue destination="bAG-U5-1cx" kind="show" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="HKt-4c-gc6"/>
+                                            <segue destination="bAG-U5-1cx" kind="show" id="HKt-4c-gc6"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hP4-XG-zZ2">
@@ -838,7 +836,7 @@ Please feel free to revisit the intro sessions until then!</string>
                     </view>
                     <connections>
                         <outlet property="reminderTime" destination="bqG-wj-8uX" id="9Vc-ui-BrF"/>
-                        <segue destination="BXq-9Y-utP" kind="show" identifier="finishFirstDaySegue" id="UMh-D3-wlY"/>
+                        <segue destination="BXq-9Y-utP" kind="presentation" identifier="finishFirstDaySegue" id="UMh-D3-wlY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QZ5-WE-n8z" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -863,18 +861,18 @@ Please feel free to revisit the intro sessions until then!</string>
             </objects>
             <point key="canvasLocation" x="1938" y="19"/>
         </scene>
-        <!--UIViewController-Fbz-mJ-l80-->
+        <!--signInNavController-->
         <scene sceneID="egq-We-JEj">
             <objects>
-                <viewControllerPlaceholder storyboardName="LogIn" referencedIdentifier="UIViewController-Fbz-mJ-l80" id="RnA-O0-CKE" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="LogIn" referencedIdentifier="signInNavController" id="RnA-O0-CKE" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DL0-zZ-l0N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="949" y="-1129"/>
         </scene>
-        <!--UIViewController-8cw-gR-UXF-->
+        <!--signUpNavController-->
         <scene sceneID="Jno-Ez-JS6">
             <objects>
-                <viewControllerPlaceholder storyboardName="LogIn" referencedIdentifier="UIViewController-8cw-gR-UXF" id="LcQ-t8-cOs" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="LogIn" referencedIdentifier="signUpNavController" id="LcQ-t8-cOs" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ezp-fm-ygN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="954" y="-1246"/>
@@ -889,6 +887,24 @@ Please feel free to revisit the intro sessions until then!</string>
             </objects>
             <point key="canvasLocation" x="1234" y="-67"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Ue4-9w-cPe">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="4Ae-5d-2rZ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zH5-bq-UbL">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6Sh-5U-3MK" kind="relationship" relationship="rootViewController" id="Y0j-JJ-M0F"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6VJ-vJ-n4w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3343" y="-528"/>
+        </scene>
     </scenes>
     <resources>
         <image name="backIcon" width="14" height="28"/>
@@ -897,6 +913,9 @@ Please feel free to revisit the intro sessions until then!</string>
         <image name="playButtonImage" width="147" height="147"/>
         <image name="prayNowIcon" width="12" height="16"/>
         <image name="smallPinkButton" width="96" height="40"/>
+        <namedColor name="beige">
+            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -923,7 +942,8 @@ Please feel free to revisit the intro sessions until then!</string>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NrR-A9-qOp"/>
+        <segue reference="Btd-74-LYH"/>
+        <segue reference="UMh-D3-wlY"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

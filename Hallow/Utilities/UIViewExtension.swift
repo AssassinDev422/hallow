@@ -8,6 +8,12 @@
 
 import Foundation
 import UIKit
+import JGProgressHUD
+import Firebase
+import FirebaseStorage
+import FirebaseFirestore
+import MediaPlayer
+import AVFoundation
 
 // MARK: - Background gradient
 
@@ -29,6 +35,9 @@ import UIKit
 @IBDesignable
 class DesignableUITextField: UITextField {
     
+    @IBInspectable var leftPadding: CGFloat = 10
+    @IBInspectable var bottomPadding: CGFloat = 2
+    
     // Provides left padding for images
     override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         var textRect = super.leftViewRect(forBounds: bounds)
@@ -42,9 +51,6 @@ class DesignableUITextField: UITextField {
             updateView()
         }
     }
-    
-    @IBInspectable var leftPadding: CGFloat = 10
-    @IBInspectable var bottomPadding: CGFloat = 2
     
     @IBInspectable var color: UIColor = UIColor.lightGray {
         didSet {
@@ -70,42 +76,6 @@ class DesignableUITextField: UITextField {
     }
 }
 
-
-// MARK: - Shadow
-
-// Have to change class of each view / button / label to see it work
-
-@IBDesignable
-class DesignableView: UIView {
-}
-
-@IBDesignable
-class DesignableButton: UIButton {
-}
-
-@IBDesignable
-class DesignableLabel: UILabel {
-}
-
-// MARK: - Create rectangle as image from single color
-
-extension UIImage {
-    class func createImageOfSingleColor(color: UIColor, height: Double) -> UIImage {
-        let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: height)
-
-        UIGraphicsBeginImageContext(rect.size)
-        let context = UIGraphicsGetCurrentContext()
-        
-        context!.setFillColor(color.cgColor)
-        context!.fill(rect)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image!
-    }
-}
-
 // MARK: - Draw circle as image from single color
 
 extension UIImage {
@@ -126,93 +96,129 @@ extension UIImage {
     }
 }
 
+// MARK: - Base sub-classes
 
-// MARK: - Make it appear in IB
-// For now only has shadow elements
+class BaseViewController: UIViewController {
+    
+    // Set up huds
+    
+    var hud: JGProgressHUD?
+    
+    func showLightHud() {
+        let hud = JGProgressHUD(style: .light)
+        hud.interactionType = .blockAllTouches
+        hud.show(in: view, animated: false)
+        self.hud = hud
+    }
+    
+    func showDownloadingHud() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.indicatorView = JGProgressHUDRingIndicatorView()
+        hud.interactionType = .blockAllTouches
+        hud.detailTextLabel.text = "0% Complete"
+        hud.textLabel.text = "Downloading"
+        hud.show(in: view, animated: false)
+        self.hud = hud
+    }
+    
+    func dismissHud() {
+        self.hud?.dismiss()
+    }
+    
+}
 
-extension UIView {
-    
-    @IBInspectable
-    var cornerRadius: CGFloat {
-        get {
-            return layer.cornerRadius
-        }
-        set {
-            layer.cornerRadius = newValue
-        }
+// MARK: - Text subview edits
+
+class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.white.cgColor
+        textField.layer.cornerRadius = 5.0
     }
     
-    @IBInspectable
-    var borderWidth: CGFloat {
-        get {
-            return layer.borderWidth
-        }
-        set {
-            layer.borderWidth = newValue
-        }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.clear.cgColor
     }
     
-    @IBInspectable
-    var borderColor: UIColor? {
-        get {
-            if let color = layer.borderColor {
-                return UIColor(cgColor: color)
-            }
-            return nil
-        }
-        set {
-            if let color = newValue {
-                layer.borderColor = color.cgColor
-            } else {
-                layer.borderColor = nil
-            }
-        }
+    func setUpDoneButton(textField: UITextField) {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        textField.inputAccessoryView = toolBar
     }
     
-    @IBInspectable
-    var shadowRadius: CGFloat {
-        get {
-            return layer.shadowRadius
-        }
-        set {
-            layer.shadowRadius = newValue
-        }
+    @objc func doneClicked() {
+        view.endEditing(true)
     }
     
-    @IBInspectable
-    var shadowOpacity: Float {
-        get {
-            return layer.shadowOpacity
-        }
-        set {
-            layer.shadowOpacity = newValue
-        }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+}
+
+class JournalBaseViewController: BaseViewController, UITextViewDelegate {
+
+    var frame: CGRect?
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        print("Did begin editing")
+        self.frame = textView.frame
+        var newFrame = self.frame!
+        newFrame.size.height = self.frame!.height / 2.5
+        textView.frame = newFrame
     }
     
-    @IBInspectable
-    var shadowOffset: CGSize {
-        get {
-            return layer.shadowOffset
-        }
-        set {
-            layer.shadowOffset = newValue
-        }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textView.frame = self.frame!
     }
     
-    @IBInspectable
-    var shadowColor: UIColor? {
-        get {
-            if let color = layer.shadowColor {
-                return UIColor(cgColor: color)
-            }
-            return nil
-        }
-        set {
-            if let color = newValue {
-                layer.shadowColor = color.cgColor
-            } else {
-                layer.shadowColor = nil
-            }
-        }
+    func setUpDoneButton(textView: UITextView) {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        textView.inputAccessoryView = toolBar
     }
+    
+    @objc func doneClicked() {
+        view.endEditing(true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+}
+
+class BaseTableViewController: UITableViewController {
+    
+    // Set up huds
+    
+    var hud: JGProgressHUD?
+    
+    func showLightHud() {
+        let hud = JGProgressHUD(style: .light)
+        hud.interactionType = .blockAllTouches
+        hud.show(in: view, animated: false)
+        self.hud = hud
+    }
+    
+    func showDownloadingHud() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.indicatorView = JGProgressHUDRingIndicatorView()
+        hud.interactionType = .blockAllTouches
+        hud.detailTextLabel.text = "0% Complete"
+        hud.textLabel.text = "Downloading"
+        hud.show(in: view, animated: false)
+        self.hud = hud
+    }
+    
+    func dismissHud() {
+        self.hud?.dismiss()
+    }
+    
 }

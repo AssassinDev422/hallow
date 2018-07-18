@@ -11,12 +11,12 @@ import AVFoundation
 import FirebaseStorage
 import JGProgressHUD
 
-class GuideSelectorViewController: UIViewController {
+class GuideSelectorViewController: LogInBaseViewController {
     
-    @IBOutlet weak var francisButtonOutlet: UIButton!
-    @IBOutlet weak var abbyButtonOutlet: UIButton!
-    @IBOutlet weak var francisPlaySampleOutlet: UIButton!
-    @IBOutlet weak var abbyPlaySampleOutlet: UIButton! 
+    @IBOutlet weak var francisButton: UIButton!
+    @IBOutlet weak var abbyButton: UIButton!
+    @IBOutlet weak var francisPlaySampleButton: UIButton!
+    @IBOutlet weak var abbyPlaySampleButton: UIButton! 
     
     var francisIsPlaying: Bool = false
     var abbyIsPlaying: Bool = false
@@ -24,9 +24,9 @@ class GuideSelectorViewController: UIViewController {
     var abbyFirstPlay: Bool = true
     
     var francisSampleAudioPlayer: AVAudioPlayer = AVAudioPlayer()
-    var francisSampleAudioURLPath: String = "audio/Samples - F.mp3"
+    let francisSampleAudioURLPath: String = "audio/Samples - F.mp3"
     var abbySampleAudioPlayer: AVAudioPlayer = AVAudioPlayer()
-    var abbySampleAudioURLPath: String = "audio/Samples - A.mp3" 
+    let abbySampleAudioURLPath: String = "audio/Samples - A.mp3"
     
     var francisTimer: Timer?
     var abbyTimer: Timer?
@@ -36,7 +36,7 @@ class GuideSelectorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
+        francisButton.isSelected = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -67,14 +67,14 @@ class GuideSelectorViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func francisButton(_ sender: UIButton) {
-        francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
-        abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
+        francisButton.isSelected = !francisButton.isSelected
+        abbyButton.isSelected = !abbyButton.isSelected
         Constants.guide = "Francis"
     }
     
     @IBAction func abbyButton(_ sender: UIButton) {
-        abbyButtonOutlet.isSelected = !abbyButtonOutlet.isSelected
-        francisButtonOutlet.isSelected = !francisButtonOutlet.isSelected
+        abbyButton.isSelected = !abbyButton.isSelected
+        francisButton.isSelected = !francisButton.isSelected
         Constants.guide = "Abby"
     }
     
@@ -110,12 +110,13 @@ class GuideSelectorViewController: UIViewController {
         }
         
         print("attempting to download: \(audioURLPath)...")
-        self.setFrancis(isLoading: true)
+        showDownloadingHud()
         let pathReference = Storage.storage().reference(withPath: audioURLPath)
         
         let downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
             if let error = error {
                 print("error downloading file: \(error)")
+                Utilities.errorAlert(message: "Error downloading file - please try again", viewController: self)
             } else {
                 print("downloaded \(audioURLPath)")
                 self.setupFrancisAudioPlayer(audioURLPath: audioURLPath)
@@ -124,12 +125,16 @@ class GuideSelectorViewController: UIViewController {
         
         downloadTask.observe(.progress) { snapshot in
             // Download reported progress
-            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+            guard let progress = snapshot.progress else {
+                print("Error updating progress")
+                return
+            }
+            let percentComplete = 100.0 * Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
             // Update the progress indicator
-            self.francisHud.progress = Float(percentComplete)/100.0
+            self.hud?.progress = Float(percentComplete)/100.0
             if percentComplete > 1.0 {
                 let percentCompleteRound = String(format: "%.0f", percentComplete)
-                self.francisHud.detailTextLabel.text = "\(percentCompleteRound)% Complete"
+                self.hud?.detailTextLabel.text = "\(percentCompleteRound)% Complete"
             }
         }
     }
@@ -145,7 +150,7 @@ class GuideSelectorViewController: UIViewController {
             
             francisSampleAudioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
             
-            self.setFrancis(isLoading: false)
+            dismissHud()
             checkFrancisProgress(francisSongCompleted: francisCompletionHandler)
             francisPlayToggle()
             
@@ -166,12 +171,13 @@ class GuideSelectorViewController: UIViewController {
         }
         
         print("attempting to download: \(audioURLPath)...")
-        self.setAbby(isLoading: true)
+        showDownloadingHud()
         let pathReference = Storage.storage().reference(withPath: audioURLPath)
         
         let downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
             if let error = error {
                 print("error downloading file: \(error)")
+                Utilities.errorAlert(message: "Error downloading file - please try again", viewController: self)
             } else {
                 print("downloaded \(audioURLPath)")
                 self.setupAbbyAudioPlayer(audioURLPath: audioURLPath)
@@ -180,12 +186,16 @@ class GuideSelectorViewController: UIViewController {
         
         downloadTask.observe(.progress) { snapshot in
             // Download reported progress
-            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+            guard let progress = snapshot.progress else {
+                print("Error updating progress")
+                return
+            }
+            let percentComplete = 100.0 * Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
             // Update the progress indicator
-            self.abbyHud.progress = Float(percentComplete)/100.0
+            self.hud?.progress = Float(percentComplete)/100.0
             if percentComplete > 1.0 {
                 let percentCompleteRound = String(format: "%.0f", percentComplete)
-                self.abbyHud.detailTextLabel.text = "\(percentCompleteRound)% Complete"
+                self.hud?.detailTextLabel.text = "\(percentCompleteRound)% Complete"
             }
         }
     }
@@ -201,7 +211,7 @@ class GuideSelectorViewController: UIViewController {
             
             abbySampleAudioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
             
-            self.setAbby(isLoading: false)
+            dismissHud()
             checkAbbyProgress(abbySongCompleted: abbyCompletionHandler)
             abbyPlayToggle()
             
@@ -214,16 +224,16 @@ class GuideSelectorViewController: UIViewController {
     
     private func francisPlayToggle() {
         if francisIsPlaying == false {
-            francisPlaySampleOutlet.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
+            francisPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
             francisSampleAudioPlayer.play()
             francisIsPlaying = true
             if abbyIsPlaying == true {
-                abbyPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+                abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
                 abbySampleAudioPlayer.pause()
                 abbyIsPlaying = false
             }
         } else {
-            francisPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+            francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             francisSampleAudioPlayer.pause()
             francisIsPlaying = false
         }
@@ -231,16 +241,16 @@ class GuideSelectorViewController: UIViewController {
     
     private func abbyPlayToggle() {
         if abbyIsPlaying == false {
-            abbyPlaySampleOutlet.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
+            abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
             abbySampleAudioPlayer.play()
             abbyIsPlaying = true
             if francisIsPlaying == true {
-                francisPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+                francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
                 francisSampleAudioPlayer.pause()
                 francisIsPlaying = false
             }
         } else {
-            abbyPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+            abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             abbySampleAudioPlayer.pause()
             abbyIsPlaying = false
         }
@@ -249,8 +259,8 @@ class GuideSelectorViewController: UIViewController {
     // MARK: - Functions - Check progress
     
     private func checkFrancisProgress(francisSongCompleted: @escaping (Bool) -> Void) {
-        francisTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
-            let percentComplete = self!.francisSampleAudioPlayer.currentTime / self!.francisSampleAudioPlayer.duration
+        francisTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            let percentComplete = self.francisSampleAudioPlayer.currentTime / self.francisSampleAudioPlayer.duration
             if percentComplete > 0.999 {
                 francisSongCompleted(true)
             } else {
@@ -262,14 +272,14 @@ class GuideSelectorViewController: UIViewController {
     lazy var francisCompletionHandler: (Bool) -> Void = {
         if $0 {
             self.francisSampleAudioPlayer.pause()
-            self.francisPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+            self.francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.francisSampleAudioPlayer.currentTime = 0.0
         }
     }
     
     private func checkAbbyProgress(abbySongCompleted: @escaping (Bool) -> Void) {
-        abbyTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
-            let percentComplete = self!.abbySampleAudioPlayer.currentTime / self!.abbySampleAudioPlayer.duration
+        abbyTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            let percentComplete = self.abbySampleAudioPlayer.currentTime / self.abbySampleAudioPlayer.duration
             if percentComplete > 0.999 {
                 abbySongCompleted(true)
             } else {
@@ -281,46 +291,8 @@ class GuideSelectorViewController: UIViewController {
     lazy var abbyCompletionHandler: (Bool) -> Void = {
         if $0 {
             self.abbySampleAudioPlayer.pause()
-            self.abbyPlaySampleOutlet.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+            self.abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
             self.abbySampleAudioPlayer.currentTime = 0.0
         }
     }
-    
-    
-    // MARK: - Functions - Set up hud
-    
-    let francisHud: JGProgressHUD = {
-        let francisHud = JGProgressHUD(style: .dark)
-        francisHud.indicatorView = JGProgressHUDRingIndicatorView() //Can change to JGProgressHUDPieIndicatorView()
-        francisHud.interactionType = .blockAllTouches
-        francisHud.detailTextLabel.text = "0% Complete"
-        francisHud.textLabel.text = "Downloading"
-        return francisHud
-    }()
-    
-    private func setFrancis(isLoading: Bool) {
-        if isLoading {
-            self.francisHud.show(in: view, animated: false)
-        } else {
-            self.francisHud.dismiss(animated: true)
-        }
-    }
-    
-    let abbyHud: JGProgressHUD = {
-        let abbyHud = JGProgressHUD(style: .dark)
-        abbyHud.indicatorView = JGProgressHUDRingIndicatorView() //Can change to JGProgressHUDPieIndicatorView()
-        abbyHud.interactionType = .blockAllTouches
-        abbyHud.detailTextLabel.text = "0% Complete"
-        abbyHud.textLabel.text = "Downloading"
-        return abbyHud
-    }()
-    
-    private func setAbby(isLoading: Bool) {
-        if isLoading {
-            self.abbyHud.show(in: view, animated: false)
-        } else {
-            self.abbyHud.dismiss(animated: true)
-        }
-    }
-    
 }

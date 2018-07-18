@@ -37,11 +37,17 @@ class PrayerJourneyTableViewController: UITableViewController {
             self.userID = user?.uid
             self.userEmail = user?.email
         }
+        ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
+        ReachabilityManager.shared.removeListener(listener: self)
     }
     
     
@@ -144,12 +150,12 @@ class PrayerJourneyTableViewController: UITableViewController {
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
         parent.prayerDescription2Label.attributedText = description2
         
-        parent.playSelectedButtonOutlet.isHidden = false
+        parent.playSelectedButton.isHidden = false
         parent.prayerTitleLabel.text = prayer.title
         parent.prayerTitleLabel.text?.append(" of 9")
         
         if prayer.title == "Day 9+" {
-            parent.playSelectedButtonOutlet.isHidden = true //FIXME: When I scroll the other day play buttons disappear
+            parent.playSelectedButton.isHidden = true //FIXME: When I scroll the other day play buttons disappear
             parent.prayerTitleLabel.text = prayer.title
         }
         

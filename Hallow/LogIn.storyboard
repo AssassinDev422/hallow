@@ -101,7 +101,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <segue destination="Ubf-ho-mFU" kind="show" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="Q0c-lb-ngn"/>
+                                    <segue destination="Ubf-ho-mFU" kind="show" id="DBa-Rg-Yen"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eNW-Z1-bqp">
@@ -124,7 +124,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <segue destination="8cw-gR-UXF" kind="presentation" id="zTk-bz-7zc"/>
+                                    <segue destination="MqD-Pd-rCZ" kind="presentation" id="zTk-bz-7zc"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in to pick up where you left off" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKs-pN-MK8">
@@ -167,6 +167,7 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="DBW-4N-8Mz"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="emailField" destination="eHj-C9-bg1" id="pxo-mo-UrH"/>
                         <outlet property="passwordField" destination="H0Q-fC-67u" id="Wd3-fV-cJd"/>
@@ -176,7 +177,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYp-ar-Oq8" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="Eft-FI-IFu"/>
             </objects>
-            <point key="canvasLocation" x="262" y="-1305"/>
+            <point key="canvasLocation" x="1028" y="-1307"/>
         </scene>
         <!--Password Reset View Controller-->
         <scene sceneID="vC3-Wb-5Np">
@@ -278,14 +279,11 @@
                     </view>
                     <connections>
                         <outlet property="emailField" destination="B4y-8n-xOX" id="yjH-wD-gfC"/>
-                        <segue destination="HfP-at-hTS" kind="presentation" identifier="afterPasswordResetSegue" id="z1z-dC-aIz"/>
-                        <segue destination="xEM-fq-sCl" kind="unwind" identifier="returnFromPasswordResetToLogIn" customClass="LeftToRightUnwindSegue" customModule="Hallow" customModuleProvider="target" unwindAction="returnFromSegueActionsWithSender:" id="cqs-Nk-9sc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qwJ-Nu-bsn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="xEM-fq-sCl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1028" y="-1305"/>
+            <point key="canvasLocation" x="1770" y="-1306"/>
         </scene>
         <!--Guide Selector View Controller-->
         <scene sceneID="d5j-1J-SNE">
@@ -418,15 +416,15 @@
                         <viewLayoutGuide key="safeArea" id="d1N-nO-6ae"/>
                     </view>
                     <connections>
-                        <outlet property="abbyButtonOutlet" destination="vfq-o5-eW2" id="Fau-m1-CsD"/>
-                        <outlet property="abbyPlaySampleOutlet" destination="55k-vx-5Tg" id="lSi-Kt-rKF"/>
-                        <outlet property="francisButtonOutlet" destination="3Nv-PN-VA6" id="Ucb-1m-xcs"/>
-                        <outlet property="francisPlaySampleOutlet" destination="YIJ-6v-mzS" id="Fak-T6-Um9"/>
+                        <outlet property="abbyButton" destination="vfq-o5-eW2" id="Fau-m1-CsD"/>
+                        <outlet property="abbyPlaySampleButton" destination="55k-vx-5Tg" id="lSi-Kt-rKF"/>
+                        <outlet property="francisButton" destination="3Nv-PN-VA6" id="Ucb-1m-xcs"/>
+                        <outlet property="francisPlaySampleButton" destination="YIJ-6v-mzS" id="Fak-T6-Um9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DsC-qp-d3A" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1028" y="-1987"/>
+            <point key="canvasLocation" x="1769" y="-1987"/>
         </scene>
         <!--Sign Up View Controller-->
         <scene sceneID="I5V-yu-xSg">
@@ -554,7 +552,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <segue destination="Fbz-mJ-l80" kind="presentation" id="gPK-rW-TWn"/>
+                                    <segue destination="mXc-bb-CcB" kind="presentation" id="gPK-rW-TWn"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -590,17 +588,18 @@
                             <outletCollection property="gestureRecognizers" destination="6y7-Xl-Hsh" appends="YES" id="wdi-sL-Bnz"/>
                         </connections>
                     </view>
+                    <navigationItem key="navigationItem" id="xpB-SH-GzA"/>
                     <connections>
                         <outlet property="emailField" destination="fLi-0X-ete" id="rBR-of-odm"/>
                         <outlet property="nameField" destination="Phe-Ha-Jfb" id="xvt-Wl-kwy"/>
                         <outlet property="passwordField" destination="ZZF-c4-nQP" id="yy8-0c-ch7"/>
-                        <segue destination="Ie1-Hc-9yg" kind="presentation" identifier="signUpSegue" customClass="RightToLeftSegue" customModule="Hallow" customModuleProvider="target" id="Ha6-td-VMG"/>
+                        <segue destination="Ie1-Hc-9yg" kind="show" identifier="signUpSegue" id="Ha6-td-VMG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6g-lQ-6vt" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="6y7-Xl-Hsh"/>
             </objects>
-            <point key="canvasLocation" x="261.60000000000002" y="-1986.656671664168"/>
+            <point key="canvasLocation" x="1028" y="-1988"/>
         </scene>
         <!--UITabBarController-BXq-9Y-utP-->
         <scene sceneID="0Da-El-JHL">
@@ -608,7 +607,7 @@
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="UITabBarController-BXq-9Y-utP" id="FMK-kR-Pj7" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bl9-Sn-wwA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1870" y="-1654"/>
+            <point key="canvasLocation" x="2808" y="-1654.2728635682161"/>
         </scene>
         <!--UIViewController-3J2-Fd-p1L-->
         <scene sceneID="M2L-gs-8xV">
@@ -618,6 +617,42 @@
             </objects>
             <point key="canvasLocation" x="-508" y="-1654"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Bpb-uL-lI0">
+            <objects>
+                <navigationController storyboardIdentifier="signInNavController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="mXc-bb-CcB" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JAQ-2Q-5II">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Fbz-mJ-l80" kind="relationship" relationship="rootViewController" id="VQ1-hu-6PN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9bz-dO-2tU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="262" y="-1307"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="FaG-cR-7vR">
+            <objects>
+                <navigationController storyboardIdentifier="signUpNavController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="MqD-Pd-rCZ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KPB-rJ-ojv">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8cw-gR-UXF" kind="relationship" relationship="rootViewController" id="TqJ-gV-Cj7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XM9-C0-Tcd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="261.60000000000002" y="-1986.656671664168"/>
+        </scene>
     </scenes>
     <resources>
         <image name="backIcon" width="14" height="28"/>
@@ -626,9 +661,6 @@
         <image name="pinkButton" width="278" height="48"/>
         <image name="playButtonImage" width="147" height="147"/>
         <image name="userIcon" width="24" height="24"/>
-        <namedColor name="beige">
-            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -643,8 +675,8 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gPK-rW-TWn"/>
-        <segue reference="zaW-6k-Tb0"/>
+        <segue reference="TqJ-gV-Cj7"/>
+        <segue reference="Ova-Mg-bAe"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

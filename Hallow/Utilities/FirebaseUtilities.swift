@@ -9,6 +9,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseStorage
+import Firebase
 import UIKit
 
 class FirebaseUtilities {
@@ -103,12 +104,11 @@ class FirebaseUtilities {
     
     // MARK: - Save data
     
-    static func saveUser(ofType type: String, withID ID: String, withName name: String, withEmail email: String, withPassword password: String) {
+    static func saveUser(ofType type: String, withID ID: String, withName name: String, withEmail email: String) {
         let db = Firestore.firestore()
         db.collection(type).document(email).setData([
             "Name": name,
             "Email": email,
-            "Password": password,
             ]) { err in
                 if let err = err {
                     print("Error adding document: \(err)")

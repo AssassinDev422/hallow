@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-import JGProgressHUD
 
 class PrayerJourneySuperViewController: UIViewController {
 
@@ -16,7 +15,7 @@ class PrayerJourneySuperViewController: UIViewController {
     @IBOutlet weak var prayerDescriptionLabel: UILabel!
     @IBOutlet weak var prayerDescription2Label: UILabel!
     @IBOutlet weak var tableViewContainter: UIView!
-    @IBOutlet weak var playSelectedButtonOutlet: UIButton!
+    @IBOutlet weak var playSelectedButton: UIButton!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
@@ -43,7 +42,7 @@ class PrayerJourneySuperViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid  //TODO: Potential bug - with new phone - unexpectedly found nil
+            self.userID = user?.uid
             self.userEmail = user?.email
             self.setNextPrayer()
             self.pullUpPrayerData()
@@ -59,7 +58,11 @@ class PrayerJourneySuperViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     

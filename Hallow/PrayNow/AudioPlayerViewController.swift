@@ -18,14 +18,14 @@ import FirebaseFirestore
 import Firebase
 import MediaPlayer
 
-class AudioPlayerViewController: UIViewController {
+class AudioPlayerViewController: BaseViewController {
 
     @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet weak var progressControlOutlet: UISlider!
+    @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var nowPrayingLabel: UILabel!
     @IBOutlet weak var nowPrayingTitleLabel: UILabel!
-    @IBOutlet weak var exitButtonOutlet: UIButton!
+    @IBOutlet weak var exitButton: UIButton!
     
     var prayer: PrayerItem?
     var audioPlayer: AVAudioPlayer?
@@ -88,7 +88,11 @@ class AudioPlayerViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -98,7 +102,7 @@ class AudioPlayerViewController: UIViewController {
         audioPlayer?.currentTime = 0
         audioPlayer?.currentTime = 0
         audioPlayer?.stop()
-        progressControlOutlet.setValue(Float(0.0), animated: false)
+        progressSlider.setValue(Float(0.0), animated: false)
         if let email = self.userEmail {
             FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
         }
@@ -120,7 +124,7 @@ class AudioPlayerViewController: UIViewController {
             print("Canceled download")
         }
         updateOnlyTimeStat()
-        exitButtonOutlet.setTitleColor(UIColor(named: "beige"), for: .normal)
+        exitButton.setTitleColor(UIColor(named: "beige"), for: .normal)
         
         if let audioPlayer = audioPlayer {
             let timeLeft = audioPlayer.duration - audioPlayer.currentTime
@@ -131,13 +135,13 @@ class AudioPlayerViewController: UIViewController {
                 self.performSegue(withIdentifier: "reflectSegue", sender: self)
                 self.loadAndSaveCompletedPrayers()
             } else {
-                performSegue(withIdentifier: "exitSegue", sender: prayer)
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }
     
     @IBAction func exitButtonPressed(_ sender: Any) {
-        exitButtonOutlet.setTitleColor(UIColor(named: "fadedPink"), for: .normal)
+        exitButton.setTitleColor(UIColor(named: "fadedPink"), for: .normal)
     }
     
     // MARK: - Functions
@@ -197,15 +201,15 @@ class AudioPlayerViewController: UIViewController {
             // Download reported progress
             let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
             // Update the progress indicator
-            self.hud.progress = Float(percentComplete)/100.0
+            self.hud?.progress = Float(percentComplete)/100.0
             if percentComplete > 1.0 {
                 let percentCompleteRound = String(format: "%.0f", percentComplete)
-                self.hud.detailTextLabel.text = "\(percentCompleteRound)% Complete"
+                self.hud?.detailTextLabel.text = "\(percentCompleteRound)% Complete"
             }
         }
     }
     
-    func setupAudioPlayer(file: PrayerItem?) {
+    func setupAudioPlayer( file: PrayerItem?) {
         guard let file = file else {
             print("File was not set in audio player")
             return
@@ -248,14 +252,14 @@ class AudioPlayerViewController: UIViewController {
         if audioPlayer != nil {
             controlTimer = Timer.scheduledTimer(withTimeInterval: 0.0001, repeats: true) { [weak self] timer in
                 let percentComplete = self!.audioPlayer!.currentTime / self!.audioPlayer!.duration
-                self?.progressControlOutlet.setValue(Float(percentComplete), animated: true)
+                self?.progressSlider.setValue(Float(percentComplete), animated: true)
                 
                 let time = self!.audioPlayer!.currentTime
                 let minutes = Int(time) / 60 % 60
                 let seconds = Int(time) % 60
                 self?.timeLabel.text = String(format:"%01i:%02i", minutes, seconds)
                 
-                self?.timeLabel.frame.origin.x = 5 + CGFloat(percentComplete) * (self?.progressControlOutlet.frame.width)!
+                self?.timeLabel.frame.origin.x = 5 + CGFloat(percentComplete) * (self?.progressSlider.frame.width)!
                 
                 if percentComplete > 0.9999 {
                     songCompleted(true)
@@ -284,7 +288,7 @@ class AudioPlayerViewController: UIViewController {
     
     private func sliderUpdatedTime() {
         if let audioPlayer = audioPlayer {
-            let percentComplete = progressControlOutlet.value
+            let percentComplete = progressSlider.value
             audioPlayer.currentTime = TimeInterval(percentComplete * Float(audioPlayer.duration))
         } else {
             setupAudioPlayer(file: prayer)
@@ -403,27 +407,18 @@ class AudioPlayerViewController: UIViewController {
     
     // MARK: - Functions - Hud and outlets
     
-    let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .dark)
-        hud.indicatorView = JGProgressHUDRingIndicatorView() //Can change to JGProgressHUDPieIndicatorView()
-        hud.interactionType = .blockNoTouches
-        hud.detailTextLabel.text = "0% Complete"
-        hud.textLabel.text = "Downloading"
-        return hud
-    }()
-    
     private func set(isLoading: Bool) {
         hideOutlets(shouldHide: isLoading)
         if isLoading {
-            self.hud.show(in: view, animated: false)
+            self.showDownloadingHud()
         } else {
-            self.hud.dismiss(animated: true)
+            self.dismissHud()
         }
     }
     
     private func hideOutlets(shouldHide: Bool) {
         self.playPauseButton.isHidden = shouldHide
-        self.progressControlOutlet.isHidden = shouldHide
+        self.progressSlider.isHidden = shouldHide
         self.timeLabel.isHidden = shouldHide
         self.nowPrayingLabel.isHidden = shouldHide
         self.nowPrayingTitleLabel.isHidden = shouldHide
@@ -463,9 +458,9 @@ class AudioPlayerViewController: UIViewController {
         let thumbImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        progressControlOutlet.setThumbImage(thumbImage, for: .normal)
+        progressSlider.setThumbImage(thumbImage, for: .normal)
         
-        progressControlOutlet.transform = progressControlOutlet.transform.scaledBy(x: 1, y: 2)
-        progressControlOutlet.tintColor = UIColor(named: "fadedPink")
+        progressSlider.transform = progressSlider.transform.scaledBy(x: 1, y: 2)
+        progressSlider.tintColor = UIColor(named: "fadedPink")
     }
 }

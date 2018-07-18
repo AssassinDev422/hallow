@@ -9,22 +9,17 @@
 import Foundation
 import FirebaseFirestore
 
-//TODO: Update password if password reset happens
-
 class User {
     var name: String
     var email: String
-    var password: String
     
     init(firestoreDocument document: DocumentSnapshot) {
         guard let data = document.data(),
             let name = data["Name"] as? String,
-            let email = data["Email"] as? String,
-            let password = data["Password"] as? String else {
+            let email = data["Email"] as? String else {
                 fatalError("This user file could not be parsed. It's data was: \(document.data() ?? [:])")
         }
         self.name = name
         self.email = email
-        self.password = password
     }
 }

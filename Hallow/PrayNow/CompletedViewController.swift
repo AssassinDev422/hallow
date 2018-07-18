@@ -33,7 +33,11 @@ class CompletedViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     

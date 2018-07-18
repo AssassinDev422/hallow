@@ -11,7 +11,7 @@ import Firebase
 
 //TODO: Delay in updating the journal view after clicking update
 
-class JournalEntryViewController: UIViewController, UITextViewDelegate {
+class JournalEntryViewController: JournalBaseViewController {
     
     @IBOutlet weak var titleField: UILabel!
     @IBOutlet weak var textField: UITextView!
@@ -21,8 +21,6 @@ class JournalEntryViewController: UIViewController, UITextViewDelegate {
     var userID: String?
     var userEmail: String?
     
-    var frame: CGRect?
-
     var journalEntry: JournalEntry?
     
     // MARK: - Life cycle
@@ -41,7 +39,7 @@ class JournalEntryViewController: UIViewController, UITextViewDelegate {
         
         navigationItem.title = "Journal Entry"
         
-        setUpDoneButton()
+        setUpDoneButton(textView: textField)
         
     }
     
@@ -58,16 +56,15 @@ class JournalEntryViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
     // MARK: - Actions
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     
     @IBAction func updateButtonPressed(_ sender: Any) {
         update()
@@ -79,36 +76,6 @@ class JournalEntryViewController: UIViewController, UITextViewDelegate {
         let docID = journalEntry?.docID
         FirebaseUtilities.updateReflection(withDocID: docID!, byUserEmail: self.userEmail!, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    // MARK: - Design
-    
-    // Add done button to keyboard
-    
-    private func setUpDoneButton() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        textField.inputAccessoryView = toolBar
-    }
-    
-    @objc private func doneClicked() {
-        view.endEditing(true)
-    }
-    
-    // MARK: - Design
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.frame = textView.frame
-        var newFrame = self.frame!
-        newFrame.size.height = self.frame!.height / 2.5
-        textView.frame = newFrame
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        textView.frame = self.frame!
     }
     
 }

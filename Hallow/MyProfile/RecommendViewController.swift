@@ -14,10 +14,9 @@ import Firebase
 
 class RecommendViewController: UIViewController, UITextFieldDelegate {
     
-    @IBOutlet weak var nameOutlet: UITextField!
-    @IBOutlet weak var phoneNumberOutlet: UITextField!
-    @IBOutlet weak var emailOutlet: UITextField!
-    @IBOutlet weak var submitButtonOutlet: UIButton!
+    @IBOutlet weak var nameField: UITextField!
+    @IBOutlet weak var phoneNumberField: UITextField!
+    @IBOutlet weak var emailField: UITextField!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
@@ -26,12 +25,12 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nameOutlet.delegate = self
-        nameOutlet.tag = 0
-        phoneNumberOutlet.delegate = self
-        phoneNumberOutlet.tag = 1
-        emailOutlet.delegate = self
-        emailOutlet.tag = 2
+        nameField.delegate = self
+        nameField.tag = 0
+        phoneNumberField.delegate = self
+        phoneNumberField.tag = 1
+        emailField.delegate = self
+        emailField.tag = 2
         
         setUpDoneButton()
         
@@ -52,7 +51,11 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -80,9 +83,9 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Functions
     
     private func submit () {
-        let name = nameOutlet!.text
-        let number = phoneNumberOutlet!.text
-        let email = emailOutlet!.text
+        let name = nameField!.text
+        let number = phoneNumberField!.text
+        let email = emailField!.text
         let submission = "\(String(describing: name)) - \(String(describing: number)) - \(String(describing: email))"
         FirebaseUtilities.sendFeedback(ofType: "recommendation", byUserEmail: self.userEmail!, withEntry: submission)
         self.navigationController?.popViewController(animated: true)
@@ -109,9 +112,9 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
         toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        nameOutlet.inputAccessoryView = toolBar
-        phoneNumberOutlet.inputAccessoryView = toolBar
-        emailOutlet.inputAccessoryView = toolBar
+        nameField.inputAccessoryView = toolBar
+        phoneNumberField.inputAccessoryView = toolBar
+        emailField.inputAccessoryView = toolBar
 
     }
     

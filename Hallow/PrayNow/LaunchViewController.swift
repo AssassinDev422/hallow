@@ -12,8 +12,8 @@ import Reachability
 
 class LaunchViewController: UIViewController {
     
-    @IBOutlet weak var signUpOutlet: UIButton!
-    @IBOutlet weak var signInOutlet: UIButton!
+    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var prayerChallengeLabel: UILabel!
     
     var userData: User?
@@ -55,11 +55,11 @@ class LaunchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            if user != nil {
-                self.userID = user?.uid
-                self.userEmail = user?.email
-                self.loadUserConstantsAndPrayers(fromUserEmail: self.userEmail!)
-                FirebaseUtilities.loadProfilePicture(byUserEmail: self.userEmail!)
+            if let userID = user?.uid, let userEmail = user?.email {
+                self.userID = userID
+                self.userEmail = userEmail
+                self.loadUserConstantsAndPrayers(fromUserEmail: userEmail)
+                FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail)
             } else {
                 self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
@@ -70,7 +70,11 @@ class LaunchViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -176,12 +180,19 @@ class LaunchViewController: UIViewController {
     }
     
     // Created so when the segue skips past this screen (when user is already logged in) it doesn't show the buttons
-    
     private func hideOutlets(shouldHide: Bool) {
-        self.signInOutlet.isHidden = shouldHide
-        self.signUpOutlet.isHidden = shouldHide
+        self.signInButton.isHidden = shouldHide
+        self.signUpButton.isHidden = shouldHide
         self.prayerChallengeLabel.isHidden = shouldHide
     }
     
+    // For testing - if need to override log out - call function after log in in viewWillAppear and run twice
+    private func overrideLogOut() {
+        do {
+            try Auth.auth().signOut()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
 
 }

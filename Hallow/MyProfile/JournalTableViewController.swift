@@ -11,7 +11,7 @@ import FirebaseFirestore
 import Firebase
 import JGProgressHUD
 
-class JournalTableViewController: UITableViewController {
+class JournalTableViewController: BaseTableViewController {
 
     var journalEntries: [JournalEntry] = []
     
@@ -40,7 +40,11 @@ class JournalTableViewController: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -58,18 +62,12 @@ class JournalTableViewController: UITableViewController {
     
     // Sets up hud
     
-    let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .extraLight)
-        hud.interactionType = .blockAllTouches
-        return hud
-    }()
-    
     func set(isLoading: Bool) {
         self.tableView.isHidden = isLoading
         if isLoading {
-            self.hud.show(in: view, animated: false)
+            self.showLightHud()
         } else {
-            self.hud.dismiss(animated: false)
+            self.dismissHud()
         }
     }
     

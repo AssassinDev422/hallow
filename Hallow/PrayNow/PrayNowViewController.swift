@@ -12,13 +12,13 @@ import Firebase
 
 // TODO: Remove multiple downloaded files after playing
 
-class PrayNowViewController: UIViewController {
+class PrayNowViewController: BaseViewController {
     
     @IBOutlet weak var prayNowLabel: UIButton!
     @IBOutlet weak var prayerSessionTitle: UILabel!
     @IBOutlet weak var prayerSessionDescription: UILabel!
     @IBOutlet weak var prayerSessionDescription2: UILabel!
-    @IBOutlet weak var lengthSelectorOutlet: UISegmentedControl!
+    @IBOutlet weak var lengthSelector: UISegmentedControl!
     @IBOutlet weak var selectorBar: UIView!
     
     var handle: AuthStateDidChangeListenerHandle?
@@ -81,7 +81,11 @@ class PrayNowViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -94,7 +98,7 @@ class PrayNowViewController: UIViewController {
     
     @IBAction func lengthChanged(_ sender: Any) {
         Constants.pausedTime = 0.00
-        let length = self.lengthSelectorOutlet.titleForSegment(at: self.lengthSelectorOutlet.selectedSegmentIndex)!
+        let length = self.lengthSelector.titleForSegment(at: self.lengthSelector.selectedSegmentIndex)!
         if length == "5 mins" {
             self.prayer = self.prayer5mins
         } else if length == "15 mins" {
@@ -192,10 +196,10 @@ class PrayNowViewController: UIViewController {
             print("IN FIRST IF")
             if length == "5 mins" {
                 self.prayer = self.prayer5mins
-                self.lengthSelectorOutlet.selectedSegmentIndex = 0
+                self.lengthSelector.selectedSegmentIndex = 0
             } else if length == "15 mins" {
                 self.prayer = self.prayer15mins
-                self.lengthSelectorOutlet.selectedSegmentIndex = 2
+                self.lengthSelector.selectedSegmentIndex = 2
             } else {
                 self.prayer = self.prayer10mins
             }
@@ -215,9 +219,9 @@ class PrayNowViewController: UIViewController {
     }
     
     private func setSelectorBarPosition() {
-        let width = self.lengthSelectorOutlet.frame.width / 3
-        let origin = self.lengthSelectorOutlet.frame.origin.x
-        let index = self.lengthSelectorOutlet.selectedSegmentIndex
+        let width = self.lengthSelector.frame.width / 3
+        let origin = self.lengthSelector.frame.origin.x
+        let index = self.lengthSelector.selectedSegmentIndex
         if index == 0 {
             self.selectorBar.frame.origin.x = origin
         } else if index == 1 {
@@ -228,48 +232,41 @@ class PrayNowViewController: UIViewController {
     }
     
     // Sets up hud
-    
-    let hud: JGProgressHUD = {
-        let hud = JGProgressHUD(style: .extraLight)
-        hud.interactionType = .blockAllTouches
-        return hud
-    }()
+    // TODO: - do I need to ever hide anything or show a hud?
     
     private func set(isLoading: Bool) {
         self.prayerSessionTitle.isHidden = isLoading
         self.prayerSessionDescription.isHidden = isLoading
         self.prayNowLabel.isHidden = isLoading
-        self.lengthSelectorOutlet.isHidden = isLoading
+        self.lengthSelector.isHidden = isLoading
         self.selectorBar.isHidden = isLoading
         self.prayerSessionDescription2.isHidden = isLoading
         if isLoading {
-            self.hud.show(in: view, animated: false)
+            self.showLightHud()
         } else {
-            self.hud.dismiss(animated: false)
+            self.dismissHud()
         }
     }
     
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationViewController = segue.destination
-        if let AudioPlayerViewController = destinationViewController as? AudioPlayerViewController,
-            let _ = segue.identifier {
+        if let destination = segue.destination as? UINavigationController, let AudioPlayerViewController = destination.viewControllers.first as? AudioPlayerViewController {
                 let prayer = self.prayer
                 AudioPlayerViewController.prayer = prayer
-            }
+        }
     }
     
     // MARK: - Design
     
     private func setUpSelector() {
         
-        lengthSelectorOutlet.setTitleTextAttributes([
+        lengthSelector.setTitleTextAttributes([
             NSAttributedStringKey.font : UIFont(name: "Montserrat-Black", size: 18) as Any,
             NSAttributedStringKey.foregroundColor: UIColor(named: "darkIndigo") as Any
             ], for: .normal)
         
-        lengthSelectorOutlet.setTitleTextAttributes([
+        lengthSelector.setTitleTextAttributes([
             NSAttributedStringKey.font : UIFont(name: "Montserrat-Black", size: 18) as Any,
             NSAttributedStringKey.foregroundColor: UIColor(named: "fadedPink") as Any
             ], for: .selected)

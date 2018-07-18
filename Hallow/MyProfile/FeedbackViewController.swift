@@ -13,8 +13,6 @@ import Firebase
 class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var feedbackField: UITextView!
-    @IBOutlet weak var feedbackTitle: UILabel!
-    @IBOutlet weak var buttonOutlet: UIButton!
     
     var handle: AuthStateDidChangeListenerHandle?
     var userID: String?
@@ -50,7 +48,11 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     

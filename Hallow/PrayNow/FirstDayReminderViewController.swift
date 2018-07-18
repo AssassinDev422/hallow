@@ -9,7 +9,6 @@
 import UIKit
 import UserNotifications
 import Firebase
-import JGProgressHUD
 
 class FirstDayReminderViewController: UIViewController {
     
@@ -40,7 +39,11 @@ class FirstDayReminderViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
+        guard let handle = handle else {
+            print("Error with handle")
+            return
+        }
+        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
