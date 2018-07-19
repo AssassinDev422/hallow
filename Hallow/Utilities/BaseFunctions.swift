@@ -150,24 +150,24 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
     
     var startTime = Date(timeIntervalSinceNow: 0)
 
-    func downloadAudio(prayer: PrayerItem, setLoading: (Bool) -> Void, completionBlock: @escaping (PrayerItem) -> Void) {
-        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: prayer.audioURLPath)
+    func downloadAudio(guide: Constants.Guide, audioURL: String, setLoading: (Bool) -> Void, completionBlock: @escaping (Constants.Guide, String) -> Void) {
+        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
-            completionBlock(prayer)
+            completionBlock(guide, audioURL)
             return
         }
         
-        print("attempting to download: \(prayer.audioURLPath)...")
+        print("attempting to download: \(audioURL)...")
         setLoading(true)
-        pathReference = Storage.storage().reference(withPath: prayer.audioURLPath)
+        pathReference = Storage.storage().reference(withPath: audioURL)
         
         downloadTask = self.pathReference!.write(toFile: destinationFileURL) { (url, error) in
             if let error = error {
                 print("error downloading file: \(error)")
             } else {
-                print("downloaded \(prayer.audioURLPath)")
-                completionBlock(prayer)
+                print("downloaded \(audioURL)")
+                completionBlock(guide, audioURL)
             }
         }
         
@@ -181,14 +181,10 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         }
     }
     
-    func setupAudioPlayer(file: PrayerItem?, setLoading: (Bool) -> Void, updateProgress: () -> Void, playPause: () -> Void) {
+    func setupAudioPlayer(guide: Constants.Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: () -> Void, playPause: (Constants.Guide) -> Void) {
         setLoading(false)
-        guard let file = file else {
-            print("File was not set in audio player")
-            return
-        }
         
-        let audioURL = Utilities.urlInDocumentsDirectory(forPath: file.audioURLPath)
+        let audioURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
         
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -200,7 +196,7 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
             
             print("Audio player was set up")
             
-            playPause()
+            playPause(guide)
             
             updateProgress()
             

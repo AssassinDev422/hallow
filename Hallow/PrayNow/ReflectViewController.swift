@@ -6,6 +6,8 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
+//FIXME: Almost impossible to click the back button
+
 import UIKit
 import FirebaseFirestore
 import Firebase

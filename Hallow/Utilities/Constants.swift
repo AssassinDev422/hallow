@@ -13,6 +13,12 @@ class Constants {
     static var firstFirebaseDocID: String = ""
     
     static var guide: String = "Francis"
+    
+    enum Guide {
+        case Francis
+        case Abby
+    }
+    
     static var isFirstDay: Bool = false
     static var hasCompleted: Bool = false
     static var hasSeenCompletionScreen: Bool = false

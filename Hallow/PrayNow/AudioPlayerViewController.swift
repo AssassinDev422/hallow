@@ -6,9 +6,8 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
-//FIXME: Day 1 - 5 mins after loading it went straight to journal
-//FIXME: Can't drag and drop to the end
-//FIXME: Didn't keep say time place when I exited and rejoined
+//FIXME - maybe: Day 1 - 5 mins after loading it went straight to journal
+//TODO: Need to update constants.guide.francis eventually
 
 import UIKit
 import AVFoundation
@@ -54,14 +53,14 @@ class AudioPlayerViewController: AudioController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let prayer = prayer {
-            downloadAudio(prayer: prayer, setLoading: { isLoading in
+            downloadAudio(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                     self.set(isLoading: isLoading)
-                }, completionBlock: { prayer in
-                    self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+                }, completionBlock: { guide, audioURL in
+                    self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                         self.set(isLoading: isLoading)
                     }, updateProgress: {
                         self.updateProgressControl()
-                    }, playPause: {
+                    }, playPause: { guide in
                         self.playPause()
                     })
                 })
@@ -122,6 +121,7 @@ class AudioPlayerViewController: AudioController {
                 self.performSegue(withIdentifier: "reflectSegue", sender: self)
                 self.loadAndSaveCompletedPrayers()
             } else {
+                Constants.pausedTime = audioPlayer.currentTime
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -144,11 +144,15 @@ class AudioPlayerViewController: AudioController {
     @objc private func playPause() {
         Constants.hasStartedListening = true
         guard let audioPlayer = audioPlayer else {
-            self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+            guard let prayer = prayer else {
+                print("prayer not set")
+                return
+            }
+            self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
-            }, playPause: {
+            }, playPause: { guide in
                 self.playPause()
             })
             return
@@ -169,7 +173,7 @@ class AudioPlayerViewController: AudioController {
     
     // MARK: - Functions - Progress Control
     
-    // TODO: Doesn't update consistently at least on lock screen each second esp. when play / pausing
+    // FIXME: Doesn't update consistently at least on lock screen each second esp. when play / pausing
     
     private func updateProgressControl() {
         if audioPlayer != nil {
@@ -187,11 +191,15 @@ class AudioPlayerViewController: AudioController {
                 self?.setUpLockScreenInfo()
             }
         } else {
-            self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+            guard let prayer = prayer else {
+                print("Prayer not set")
+                return
+            }
+            self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
-            }, playPause: {
+            }, playPause: { guide in
                 self.playPause()
             })
             print("Audio player is nil")
@@ -212,11 +220,15 @@ class AudioPlayerViewController: AudioController {
             let percentComplete = progressSlider.value
             audioPlayer.currentTime = TimeInterval(percentComplete * Float(audioPlayer.duration))
         } else {
-            self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+            guard let prayer = prayer else {
+                print("Prayer not set")
+                return
+            }
+            self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
-            }, playPause: {
+            }, playPause: { guide in
                 self.playPause()
             })
             print("Audio player is nil")
@@ -331,7 +343,7 @@ class AudioPlayerViewController: AudioController {
         }
     }
     
-    // MARK: - Functions - Hud and outlets
+    // MARK: - Functions - Set loading
     
     private func set(isLoading: Bool) {
         hideOutlets(shouldHide: isLoading)
@@ -362,11 +374,6 @@ class AudioPlayerViewController: AudioController {
             let prayerTitle = "\(self.prayer!.title) - \(self.prayer!.description)"
             ReflectViewController.prayerTitle = prayerTitle
             Constants.pausedTime = 0.00
-        } else if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let prayer = sender as? PrayerItem {
-            prayNow.prayer = prayer
-            if let audioPlayer = audioPlayer {
-                Constants.pausedTime = audioPlayer.currentTime
-            }
         }
     }
     

@@ -20,17 +20,10 @@ class GuideSelectorViewController: AudioController {
     
     var firstPlay: Bool = true
     var isPlaying: Bool = false
+    var guidePlaying: Constants.Guide?
     
-//    var audioPlayer: AVAudioPlayer = AVAudioPlayer()
-//    var timer: Timer?
-        
-    enum Guide: String {
-        case Francis = "audio/Samples - F.mp3"
-        case Abby = "audio/Samples - A.mp3"
-    }
-    
-    var guidePlaying: GuideSelectorViewController.Guide?
-    
+    var francisSampleAudioURL = "audio/Samples - F.mp3"
+    var abbySampleAudioURL = "audio/Samples - A.mp3"
     
     // MARK: - Life cycle
     
@@ -73,7 +66,16 @@ class GuideSelectorViewController: AudioController {
         if firstPlay == false {
             audioPlayer?.stop()
         }
-        downloadAndSetUpAudio(guide: Guide.Francis)
+        downloadAudio(guide: Constants.Guide.Francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
+            self.set(isLoading: isLoading)
+        }, completionBlock: { guide, audioURL in
+            self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
+            }, updateProgress: {
+            }, playPause: { guide in
+                self.playToggle(guide: guide)
+            })
+        })
         firstPlay = false
     }
     
@@ -81,109 +83,83 @@ class GuideSelectorViewController: AudioController {
         if firstPlay == false {
             audioPlayer?.stop()
         }
-        downloadAndSetUpAudio(guide: Guide.Abby)
+        
+        downloadAudio(guide: Constants.Guide.Abby, audioURL: abbySampleAudioURL, setLoading: { isLoading in
+            self.set(isLoading: isLoading)
+        }, completionBlock: { guide, audioURL in
+            self.setupAudioPlayer(guide: Constants.Guide.Abby, audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
+            }, updateProgress: {
+            }, playPause: { guide in
+                self.playToggle(guide: guide)
+            })
+        })
         firstPlay = false
-    }
-    
-    // MARK: - Functions
-        
-    private func downloadAndSetUpAudio(guide: GuideSelectorViewController.Guide) {
-        let audioURLPath = guide.rawValue
-        
-        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURLPath)
-        guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
-            print("That file's audio has already been downloaded")
-            setupAudioPlayer(guide: guide)
-            return
-        }
-        
-        print("attempting to download: \(audioURLPath)...")
-        showDownloadingHud()
-        let pathReference = Storage.storage().reference(withPath: audioURLPath)
-        
-        let downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
-            if let error = error {
-                print("error downloading file: \(error)")
-                Utilities.errorAlert(message: "Error downloading file - please try again", viewController: self)
-            } else {
-                print("downloaded \(audioURLPath)")
-                self.setupAudioPlayer(guide: guide)
-            }
-        }
-        
-        downloadTask.observe(.progress) { snapshot in
-            guard let progress = snapshot.progress else {
-                print("Error updating progress")
-                return
-            }
-            let percentComplete = 100.0 * Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
-            self.hud?.progress = Float(percentComplete)/100.0
-            if percentComplete > 1.0 {
-                let percentCompleteRound = String(format: "%.0f", percentComplete)
-                self.hud?.detailTextLabel.text = "\(percentCompleteRound)% Complete"
-            }
-        }
-    }
-    
-    func setupAudioPlayer(guide: GuideSelectorViewController.Guide) {
-        let audioURLPath = guide.rawValue
-        
-        let audioURL = Utilities.urlInDocumentsDirectory(forPath: audioURLPath)
-        
-        // Setup AVPlayer
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-            
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
-            
-            audioPlayer.delegate = self
-            
-            dismissHud()
-            playToggle(guide: guide)
-            
-        } catch let error {
-            print(error.localizedDescription)
-        }
     }
     
     // MARK: - Functions - Play toggle
     
-    private func playToggle(guide: GuideSelectorViewController.Guide) { //TODO: Might be able to switch isPlaying
+    private func set(isLoading: Bool) {
+        if isLoading {
+            showDownloadingHud()
+        } else {
+            dismissHud()
+        }
+    }
+    
+    private func playToggle(guide: Constants.Guide) {
         switch guide {
         case .Francis:
-            if isPlaying == true, guidePlaying == Guide.Abby {
+            if isPlaying == true, guidePlaying == Constants.Guide.Abby {
                 abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-                audioPlayer.stop()
+                audioPlayer?.stop()
                 isPlaying = false
-                downloadAndSetUpAudio(guide: Guide.Francis)
+                downloadAudio(guide: Constants.Guide.Francis, audioURL: francisSampleAudioURL, setLoading: { isLoading in
+                    self.set(isLoading: isLoading)
+                }, completionBlock: { guide, audioURL in
+                    self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
+                        self.set(isLoading: isLoading)
+                    }, updateProgress: {
+                    }, playPause: { guide in
+                        self.playToggle(guide: guide)
+                    })
+                })
             } else {
                 if isPlaying == false {
                     francisPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
-                    audioPlayer.play()
+                    audioPlayer?.play()
                     isPlaying = true
-                    guidePlaying = Guide.Francis
+                    guidePlaying = Constants.Guide.Francis
                 } else {
                     francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-                    audioPlayer.pause()
+                    audioPlayer?.pause()
                     isPlaying = false
                 }
             }
         case .Abby:
-            if isPlaying == true, guidePlaying == Guide.Francis {
+            if isPlaying == true, guidePlaying == Constants.Guide.Francis {
                 francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-                audioPlayer.stop()
+                audioPlayer?.stop()
                 isPlaying = false
-                downloadAndSetUpAudio(guide: Guide.Abby)
+                downloadAudio(guide: Constants.Guide.Abby, audioURL: abbySampleAudioURL, setLoading: { isLoading in
+                    self.set(isLoading: isLoading)
+                }, completionBlock: { guide, audioURL in
+                    self.setupAudioPlayer(guide: Constants.Guide.Abby, audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
+                        self.set(isLoading: isLoading)
+                    }, updateProgress: {
+                    }, playPause: { guide in
+                        self.playToggle(guide: guide)
+                    })
+                })
             } else {
                 if isPlaying == false {
                     abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
-                    audioPlayer.play()
+                    audioPlayer?.play()
                     isPlaying = true
-                    guidePlaying = Guide.Abby
+                    guidePlaying = Constants.Guide.Abby
                 } else {
                     abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-                    audioPlayer.pause()
+                    audioPlayer?.pause()
                     isPlaying = false
                 }
             }
@@ -193,7 +169,7 @@ class GuideSelectorViewController: AudioController {
     // MARK: - Functions - Check progress
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        self.audioPlayer.stop()
+        self.audioPlayer?.stop()
         self.francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
         self.abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
         isPlaying = false
