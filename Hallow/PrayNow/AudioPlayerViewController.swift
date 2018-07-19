@@ -6,9 +6,9 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
-// This is now the master branch
-
-// Comment - test for merge
+//FIXME: Day 1 - 5 mins after loading it went straight to journal
+//FIXME: Can't drag and drop to the end
+//FIXME: Didn't keep say time place when I exited and rejoined
 
 import UIKit
 import AVFoundation
@@ -18,7 +18,7 @@ import FirebaseFirestore
 import Firebase
 import MediaPlayer
 
-class AudioPlayerViewController: BaseViewController {
+class AudioPlayerViewController: AudioController {
 
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var progressSlider: UISlider!
@@ -28,26 +28,17 @@ class AudioPlayerViewController: BaseViewController {
     @IBOutlet weak var exitButton: UIButton!
     
     var prayer: PrayerItem?
-    var audioPlayer: AVAudioPlayer?
     
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String? 
+    var userEmail: String?
     
     var controlTimer: Timer?
     
     var alreadySaved = 0
     
     var addedTimeTracker = 0.00
-    var startTime = Date(timeIntervalSinceNow: 0)
 
     var streak: Int = 0
     var stats: StatsItem?
-    
-    var readyToPlay = false
-    
-    var pathReference: StorageReference?
-    var downloadTask: StorageDownloadTask?
     
     var completedPrayers: [PrayerTracking] = []
     
@@ -57,25 +48,26 @@ class AudioPlayerViewController: BaseViewController {
    
     override func viewDidLoad() {
         hideOutlets(shouldHide: true)
-        setUpProgressControlUI()
+        setUpProgressControlUI(progressSlider: progressSlider)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        readyToPlay = false
         if let prayer = prayer {
-            downloadAndSetUpAudio(prayer: prayer)
+            downloadAudio(prayer: prayer, setLoading: { isLoading in
+                    self.set(isLoading: isLoading)
+                }, completionBlock: { prayer in
+                    self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+                        self.set(isLoading: isLoading)
+                    }, updateProgress: {
+                        self.updateProgressControl()
+                    }, playPause: {
+                        self.playPause()
+                    })
+                })
             nowPrayingTitleLabel.text = self.prayer?.description
         }
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
-            if self.readyToPlay == false {
-                self.readyToPlay = true
-            } else {
-                self.playPause()
-            }
-        }
+        self.userEmail = LocalFirebaseData.userEmail
         alreadySaved = 0
         addedTimeTracker = 0.0
         ReachabilityManager.shared.addListener(listener: self)
@@ -88,11 +80,6 @@ class AudioPlayerViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -151,14 +138,19 @@ class AudioPlayerViewController: BaseViewController {
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.audioPlayer?.currentTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] =  self.audioPlayer?.duration
         
-        // Set the metadata
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
     @objc private func playPause() {
         Constants.hasStartedListening = true
         guard let audioPlayer = audioPlayer else {
-            setupAudioPlayer(file: prayer)
+            self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
+            }, updateProgress: {
+                self.updateProgressControl()
+            }, playPause: {
+                self.playPause()
+            })
             return
         }
         if audioPlayer.isPlaying {
@@ -169,78 +161,9 @@ class AudioPlayerViewController: BaseViewController {
             playPauseButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
         }
         if self.alreadySaved == 0 {
-            FirebaseUtilities.saveStartedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
+            FirebaseUtilities.saveStartedPrayer(byUserEmail: LocalFirebaseData.userEmail, withPrayerTitle: self.prayer!.title)
             LocalFirebaseData.started += 1
             self.alreadySaved = 1
-        }
-    }
-    
-    func downloadAndSetUpAudio(prayer: PrayerItem) {
-        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: prayer.audioURLPath)
-        guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
-            print("That file's audio has already been downloaded")
-            self.set(isLoading: false)
-            setupAudioPlayer(file: prayer)
-            return
-        }
-        
-        print("attempting to download: \(prayer.audioURLPath)...")
-        self.set(isLoading: true)
-        self.pathReference = Storage.storage().reference(withPath: prayer.audioURLPath)
-        
-        self.downloadTask = self.pathReference!.write(toFile: destinationFileURL) { (url, error) in
-            if let error = error {
-                print("error downloading file: \(error)")
-            } else {
-                print("downloaded \(prayer.audioURLPath)")
-                self.setupAudioPlayer(file: prayer)
-            }
-        }
-        
-        self.downloadTask!.observe(.progress) { snapshot in
-            // Download reported progress
-            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
-            // Update the progress indicator
-            self.hud?.progress = Float(percentComplete)/100.0
-            if percentComplete > 1.0 {
-                let percentCompleteRound = String(format: "%.0f", percentComplete)
-                self.hud?.detailTextLabel.text = "\(percentCompleteRound)% Complete"
-            }
-        }
-    }
-    
-    func setupAudioPlayer( file: PrayerItem?) {
-        guard let file = file else {
-            print("File was not set in audio player")
-            return
-        }
-        
-        let audioURL = Utilities.urlInDocumentsDirectory(forPath: file.audioURLPath)
-        
-        // Setup AVPlayer
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-            
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
-            
-            print("Audio player was set up")
-            self.set(isLoading: false)
-            
-            if readyToPlay == false {
-                readyToPlay = true
-            } else {
-                self.playPause()
-            }
-            
-            updateProgressControl(songCompleted: completionHandler)
-            
-            audioPlayer?.currentTime = Constants.pausedTime
-            
-            startTime = Date(timeIntervalSinceNow: 0)
-
-        } catch let error {
-            print(error.localizedDescription)
         }
     }
     
@@ -248,9 +171,9 @@ class AudioPlayerViewController: BaseViewController {
     
     // TODO: Doesn't update consistently at least on lock screen each second esp. when play / pausing
     
-    private func updateProgressControl(songCompleted: @escaping (Bool) -> Void) {
+    private func updateProgressControl() {
         if audioPlayer != nil {
-            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.0001, repeats: true) { [weak self] timer in
+            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
                 let percentComplete = self!.audioPlayer!.currentTime / self!.audioPlayer!.duration
                 self?.progressSlider.setValue(Float(percentComplete), animated: true)
                 
@@ -261,29 +184,27 @@ class AudioPlayerViewController: BaseViewController {
                 
                 self?.timeLabel.frame.origin.x = 5 + CGFloat(percentComplete) * (self?.progressSlider.frame.width)!
                 
-                if percentComplete > 0.9999 {
-                    songCompleted(true)
-                } else {
-                    songCompleted(false)
-                }
-                
                 self?.setUpLockScreenInfo()
             }
         } else {
-            setupAudioPlayer(file: prayer)
+            self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
+            }, updateProgress: {
+                self.updateProgressControl()
+            }, playPause: {
+                self.playPause()
+            })
             print("Audio player is nil")
             return
         }
     }
     
-    lazy var completionHandler: (Bool) -> Void = {
-        if $0 {
-            self.controlTimer?.invalidate()
-            self.audioPlayer!.pause()
-            self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-            self.performSegue(withIdentifier: "reflectSegue", sender: self)
-            self.loadAndSaveCompletedPrayers()
-        }
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        self.controlTimer?.invalidate()
+        self.audioPlayer!.pause()
+        self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+        self.performSegue(withIdentifier: "reflectSegue", sender: self)
+        self.loadAndSaveCompletedPrayers()
     }
     
     private func sliderUpdatedTime() {
@@ -291,7 +212,13 @@ class AudioPlayerViewController: BaseViewController {
             let percentComplete = progressSlider.value
             audioPlayer.currentTime = TimeInterval(percentComplete * Float(audioPlayer.duration))
         } else {
-            setupAudioPlayer(file: prayer)
+            self.setupAudioPlayer(file: prayer, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
+            }, updateProgress: {
+                self.updateProgressControl()
+            }, playPause: {
+                self.playPause()
+            })
             print("Audio player is nil")
             return
         }
@@ -379,7 +306,6 @@ class AudioPlayerViewController: BaseViewController {
                     stats.timeInPrayer += self.addedTimeTracker
                     LocalFirebaseData.timeTracker = stats.timeInPrayer
                     
-                    // Update streak
                     let calendar = Calendar.current
                     let isNextDay = calendar.isDateInYesterday(LocalFirebaseData.mostRecentPrayerDate)
                     let isToday = calendar.isDateInToday(LocalFirebaseData.mostRecentPrayerDate)
@@ -426,12 +352,10 @@ class AudioPlayerViewController: BaseViewController {
     
     // MARK: - Navigation
     // Unwind
-    
     @IBAction func returnFromSegueActions(sender: UIStoryboardSegue){
     }
     
-    // MARK: - Navigation
-    
+    // Prepare for segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination
         if let ReflectViewController = destinationViewController as? ReflectViewController {
@@ -446,21 +370,4 @@ class AudioPlayerViewController: BaseViewController {
         }
     }
     
-    // MARK: - Design
-    
-    private func setUpProgressControlUI() {
-        let image = #imageLiteral(resourceName: "thumbIcon")
-        let newWidth = 3
-        let newHeight = 6
-        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
-        image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
-        
-        let thumbImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        progressSlider.setThumbImage(thumbImage, for: .normal)
-        
-        progressSlider.transform = progressSlider.transform.scaledBy(x: 1, y: 2)
-        progressSlider.tintColor = UIColor(named: "fadedPink")
-    }
 }

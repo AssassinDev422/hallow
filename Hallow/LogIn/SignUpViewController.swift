@@ -74,6 +74,7 @@ class SignUpViewController: LogInBaseViewController {
                 }
                 
                 self.saveDataForSignUp(withUserEmail: email, withName: name, withEmail: emailInit)
+                LocalFirebaseData.userEmail = email
                 self.dismissHud()
             }
         }

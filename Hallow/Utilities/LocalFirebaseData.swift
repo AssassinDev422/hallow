@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 class LocalFirebaseData {
+    static var userEmail: String = ""
+    
     static var completedPrayers: [String] = []
     static var lockedPrayers: [String] = ["Day 9+"]
     

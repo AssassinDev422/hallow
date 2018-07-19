@@ -79,6 +79,7 @@ class SignInViewController: LogInBaseViewController {
                 }
                 self.userID = userID
                 self.userEmail = userEmail
+                LocalFirebaseData.userEmail = userEmail
                 self.loadUserConstants(fromUserEmail: userEmail)
                 FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail)
             }

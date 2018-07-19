@@ -58,6 +58,7 @@ class LaunchViewController: UIViewController {
             if let userID = user?.uid, let userEmail = user?.email {
                 self.userID = userID
                 self.userEmail = userEmail
+                LocalFirebaseData.userEmail = userEmail
                 self.loadUserConstantsAndPrayers(fromUserEmail: userEmail)
                 FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail)
             } else {

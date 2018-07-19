@@ -11,26 +11,26 @@ import AVFoundation
 import FirebaseStorage
 import JGProgressHUD
 
-class GuideSelectorViewController: LogInBaseViewController {
+class GuideSelectorViewController: AudioController {
     
     @IBOutlet weak var francisButton: UIButton!
     @IBOutlet weak var abbyButton: UIButton!
     @IBOutlet weak var francisPlaySampleButton: UIButton!
     @IBOutlet weak var abbyPlaySampleButton: UIButton! 
     
-    var francisIsPlaying: Bool = false
-    var abbyIsPlaying: Bool = false
-    var francisFirstPlay: Bool = true
-    var abbyFirstPlay: Bool = true
+    var firstPlay: Bool = true
+    var isPlaying: Bool = false
     
-    var francisSampleAudioPlayer: AVAudioPlayer = AVAudioPlayer()
-    let francisSampleAudioURLPath: String = "audio/Samples - F.mp3"
-    var abbySampleAudioPlayer: AVAudioPlayer = AVAudioPlayer()
-    let abbySampleAudioURLPath: String = "audio/Samples - A.mp3"
+//    var audioPlayer: AVAudioPlayer = AVAudioPlayer()
+//    var timer: Timer?
+        
+    enum Guide: String {
+        case Francis = "audio/Samples - F.mp3"
+        case Abby = "audio/Samples - A.mp3"
+    }
     
-    var francisTimer: Timer?
-    var abbyTimer: Timer?
-
+    var guidePlaying: GuideSelectorViewController.Guide?
+    
     
     // MARK: - Life cycle
     
@@ -41,17 +41,8 @@ class GuideSelectorViewController: LogInBaseViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
-        if francisFirstPlay == false {
-            francisTimer?.invalidate()
-            self.francisSampleAudioPlayer.currentTime = 0
-            self.francisSampleAudioPlayer.stop()
-        }
-        if abbyFirstPlay == false {
-            abbyTimer?.invalidate()
-            self.abbySampleAudioPlayer.currentTime = 0
-            self.abbySampleAudioPlayer.stop()
-        }
+        self.audioPlayer?.currentTime = 0
+        self.audioPlayer?.stop()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,33 +70,30 @@ class GuideSelectorViewController: LogInBaseViewController {
     }
     
     @IBAction func francisPlaySample(_ sender: UIButton) {
-        if francisFirstPlay == true {
-            downloadAndSetUpFrancisAudio(audioURLPath: francisSampleAudioURLPath)
-            francisFirstPlay = false
-        } else {
-            francisPlayToggle()
+        if firstPlay == false {
+            audioPlayer?.stop()
         }
+        downloadAndSetUpAudio(guide: Guide.Francis)
+        firstPlay = false
     }
     
     @IBAction func abbyPlaySample(_ sender: UIButton) {
-        if abbyFirstPlay == true {
-            downloadAndSetUpAbbyAudio(audioURLPath: abbySampleAudioURLPath)
-            abbyFirstPlay = false
-        } else {
-            abbyPlayToggle()
+        if firstPlay == false {
+            audioPlayer?.stop()
         }
+        downloadAndSetUpAudio(guide: Guide.Abby)
+        firstPlay = false
     }
     
     // MARK: - Functions
-    
-    // MARK: - Functions - Set up Francis
-    
-    private func downloadAndSetUpFrancisAudio(audioURLPath: String) {
+        
+    private func downloadAndSetUpAudio(guide: GuideSelectorViewController.Guide) {
+        let audioURLPath = guide.rawValue
         
         let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURLPath)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
-            setupFrancisAudioPlayer(audioURLPath: audioURLPath)
+            setupAudioPlayer(guide: guide)
             return
         }
         
@@ -119,18 +107,16 @@ class GuideSelectorViewController: LogInBaseViewController {
                 Utilities.errorAlert(message: "Error downloading file - please try again", viewController: self)
             } else {
                 print("downloaded \(audioURLPath)")
-                self.setupFrancisAudioPlayer(audioURLPath: audioURLPath)
+                self.setupAudioPlayer(guide: guide)
             }
         }
         
         downloadTask.observe(.progress) { snapshot in
-            // Download reported progress
             guard let progress = snapshot.progress else {
                 print("Error updating progress")
                 return
             }
             let percentComplete = 100.0 * Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
-            // Update the progress indicator
             self.hud?.progress = Float(percentComplete)/100.0
             if percentComplete > 1.0 {
                 let percentCompleteRound = String(format: "%.0f", percentComplete)
@@ -139,7 +125,8 @@ class GuideSelectorViewController: LogInBaseViewController {
         }
     }
     
-    func setupFrancisAudioPlayer(audioURLPath: String) {
+    func setupAudioPlayer(guide: GuideSelectorViewController.Guide) {
+        let audioURLPath = guide.rawValue
         
         let audioURL = Utilities.urlInDocumentsDirectory(forPath: audioURLPath)
         
@@ -148,151 +135,67 @@ class GuideSelectorViewController: LogInBaseViewController {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
             
-            francisSampleAudioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
+            audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
+            
+            audioPlayer.delegate = self
             
             dismissHud()
-            checkFrancisProgress(francisSongCompleted: francisCompletionHandler)
-            francisPlayToggle()
+            playToggle(guide: guide)
             
         } catch let error {
             print(error.localizedDescription)
         }
     }
     
-    // MARK: - Functions - Set up Abby
+    // MARK: - Functions - Play toggle
     
-    private func downloadAndSetUpAbbyAudio(audioURLPath: String) {
-        
-        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURLPath)
-        guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
-            print("That file's audio has already been downloaded")
-            setupAbbyAudioPlayer(audioURLPath: audioURLPath)
-            return
-        }
-        
-        print("attempting to download: \(audioURLPath)...")
-        showDownloadingHud()
-        let pathReference = Storage.storage().reference(withPath: audioURLPath)
-        
-        let downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
-            if let error = error {
-                print("error downloading file: \(error)")
-                Utilities.errorAlert(message: "Error downloading file - please try again", viewController: self)
-            } else {
-                print("downloaded \(audioURLPath)")
-                self.setupAbbyAudioPlayer(audioURLPath: audioURLPath)
-            }
-        }
-        
-        downloadTask.observe(.progress) { snapshot in
-            // Download reported progress
-            guard let progress = snapshot.progress else {
-                print("Error updating progress")
-                return
-            }
-            let percentComplete = 100.0 * Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
-            // Update the progress indicator
-            self.hud?.progress = Float(percentComplete)/100.0
-            if percentComplete > 1.0 {
-                let percentCompleteRound = String(format: "%.0f", percentComplete)
-                self.hud?.detailTextLabel.text = "\(percentCompleteRound)% Complete"
-            }
-        }
-    }
-    
-    func setupAbbyAudioPlayer(audioURLPath: String) {
-        
-        let audioURL = Utilities.urlInDocumentsDirectory(forPath: audioURLPath)
-        
-        // Setup AVPlayer
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-            
-            abbySampleAudioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
-            
-            dismissHud()
-            checkAbbyProgress(abbySongCompleted: abbyCompletionHandler)
-            abbyPlayToggle()
-            
-        } catch let error {
-            print(error.localizedDescription)
-        }
-    }
-    
-    // MARK: - Functions - Play toggles
-    
-    private func francisPlayToggle() {
-        if francisIsPlaying == false {
-            francisPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
-            francisSampleAudioPlayer.play()
-            francisIsPlaying = true
-            if abbyIsPlaying == true {
+    private func playToggle(guide: GuideSelectorViewController.Guide) { //TODO: Might be able to switch isPlaying
+        switch guide {
+        case .Francis:
+            if isPlaying == true, guidePlaying == Guide.Abby {
                 abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-                abbySampleAudioPlayer.pause()
-                abbyIsPlaying = false
+                audioPlayer.stop()
+                isPlaying = false
+                downloadAndSetUpAudio(guide: Guide.Francis)
+            } else {
+                if isPlaying == false {
+                    francisPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
+                    audioPlayer.play()
+                    isPlaying = true
+                    guidePlaying = Guide.Francis
+                } else {
+                    francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+                    audioPlayer.pause()
+                    isPlaying = false
+                }
             }
-        } else {
-            francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-            francisSampleAudioPlayer.pause()
-            francisIsPlaying = false
-        }
-    }
-    
-    private func abbyPlayToggle() {
-        if abbyIsPlaying == false {
-            abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
-            abbySampleAudioPlayer.play()
-            abbyIsPlaying = true
-            if francisIsPlaying == true {
+        case .Abby:
+            if isPlaying == true, guidePlaying == Guide.Francis {
                 francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-                francisSampleAudioPlayer.pause()
-                francisIsPlaying = false
+                audioPlayer.stop()
+                isPlaying = false
+                downloadAndSetUpAudio(guide: Guide.Abby)
+            } else {
+                if isPlaying == false {
+                    abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
+                    audioPlayer.play()
+                    isPlaying = true
+                    guidePlaying = Guide.Abby
+                } else {
+                    abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+                    audioPlayer.pause()
+                    isPlaying = false
+                }
             }
-        } else {
-            abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-            abbySampleAudioPlayer.pause()
-            abbyIsPlaying = false
         }
     }
     
     // MARK: - Functions - Check progress
     
-    private func checkFrancisProgress(francisSongCompleted: @escaping (Bool) -> Void) {
-        francisTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-            let percentComplete = self.francisSampleAudioPlayer.currentTime / self.francisSampleAudioPlayer.duration
-            if percentComplete > 0.999 {
-                francisSongCompleted(true)
-            } else {
-                francisSongCompleted(false)
-            }
-        }
-    }
-    
-    lazy var francisCompletionHandler: (Bool) -> Void = {
-        if $0 {
-            self.francisSampleAudioPlayer.pause()
-            self.francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-            self.francisSampleAudioPlayer.currentTime = 0.0
-        }
-    }
-    
-    private func checkAbbyProgress(abbySongCompleted: @escaping (Bool) -> Void) {
-        abbyTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-            let percentComplete = self.abbySampleAudioPlayer.currentTime / self.abbySampleAudioPlayer.duration
-            if percentComplete > 0.999 {
-                abbySongCompleted(true)
-            } else {
-                abbySongCompleted(false)
-            }
-        }
-    }
-    
-    lazy var abbyCompletionHandler: (Bool) -> Void = {
-        if $0 {
-            self.abbySampleAudioPlayer.pause()
-            self.abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-            self.abbySampleAudioPlayer.currentTime = 0.0
-        }
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        self.audioPlayer.stop()
+        self.francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+        self.abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+        isPlaying = false
     }
 }
