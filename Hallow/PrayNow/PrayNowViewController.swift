@@ -9,6 +9,7 @@
 import UIKit
 import JGProgressHUD
 import Firebase
+import RealmSwift
 
 // TODO: Remove multiple downloaded files after playing
 
@@ -165,18 +166,19 @@ class PrayNowViewController: BaseViewController {
     
     private func setPrayerSession(withTitle title: String) {
         
-        self.prayer5mins = LocalFirebaseData.prayers5mins.filter {$0.title == title}.filter {$0.guide == Constants.guide} [0]
-        
-        self.prayer10mins = LocalFirebaseData.prayers10mins.filter {$0.title == title}.filter {$0.guide == Constants.guide} [0]
-        self.prayer15mins = LocalFirebaseData.prayers15mins.filter {$0.title == title}.filter {$0.guide == Constants.guide} [0]
-        
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        let prayers = realm.objects(PrayerItem.self)
+        self.prayer5mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, Constants.guide, "5 mins") [0]
+        self.prayer10mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, Constants.guide, "10 mins") [0]
+        self.prayer15mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, Constants.guide, "15 mins") [0]
+
         self.prayer = self.prayer10mins
         
         self.prayerSessionTitle.text = self.prayer!.title
         self.prayerSessionTitle.text?.append(" of 9")
-        self.prayerSessionDescription.text = self.prayer!.description
+        self.prayerSessionDescription.text = self.prayer!.desc
         
-        let description2 = NSMutableAttributedString(string: self.prayer!.description2)
+        let description2 = NSMutableAttributedString(string: self.prayer!.desc2)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
@@ -187,11 +189,17 @@ class PrayNowViewController: BaseViewController {
     
     private func setPrayerSessionWithoutLoading() {
         
-        self.prayer5mins = LocalFirebaseData.prayers5mins.filter {$0.title == prayer!.title}.filter {$0.guide == Constants.guide} [0]
+        guard let prayer = self.prayer else {
+            print("Error") //Should update
+            return
+        }
         
-        self.prayer10mins = LocalFirebaseData.prayers10mins.filter {$0.title == prayer!.title}.filter {$0.guide == Constants.guide} [0]
-        self.prayer15mins = LocalFirebaseData.prayers15mins.filter {$0.title == prayer!.title}.filter {$0.guide == Constants.guide} [0]
-        
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        let prayers = realm.objects(PrayerItem.self)
+        self.prayer5mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", prayer.title, Constants.guide, "5 mins") [0]
+        self.prayer10mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", prayer.title, Constants.guide, "10 mins") [0]
+        self.prayer15mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", prayer.title, Constants.guide, "15 mins") [0]
+
         if let length = self.prayer?.length {
             print("IN FIRST IF")
             if length == "5 mins" {
@@ -209,9 +217,9 @@ class PrayNowViewController: BaseViewController {
         
         self.prayerSessionTitle.text = self.prayer!.title
         self.prayerSessionTitle.text?.append(" of 9")
-        self.prayerSessionDescription.text = self.prayer!.description
+        self.prayerSessionDescription.text = self.prayer!.desc
         
-        let description2 = NSMutableAttributedString(string: self.prayer!.description2)
+        let description2 = NSMutableAttributedString(string: self.prayer!.desc2)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))

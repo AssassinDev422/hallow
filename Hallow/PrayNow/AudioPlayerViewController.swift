@@ -64,7 +64,7 @@ class AudioPlayerViewController: AudioController {
                         self.playPause()
                     })
                 })
-            nowPrayingTitleLabel.text = self.prayer?.description
+            nowPrayingTitleLabel.text = self.prayer?.desc
         }
         self.userEmail = LocalFirebaseData.userEmail
         alreadySaved = 0
@@ -134,7 +134,7 @@ class AudioPlayerViewController: AudioController {
     // MARK: - Functions
     
     private func setUpLockScreenInfo() {
-        nowPlayingInfo[MPMediaItemPropertyTitle] = "\(prayer?.title ?? "") - \(prayer?.description ?? "")"
+        nowPlayingInfo[MPMediaItemPropertyTitle] = "\(prayer?.title ?? "") - \(prayer?.desc ?? "")"
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.audioPlayer?.currentTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] =  self.audioPlayer?.duration
         
@@ -371,7 +371,7 @@ class AudioPlayerViewController: AudioController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination
         if let ReflectViewController = destinationViewController as? ReflectViewController {
-            let prayerTitle = "\(self.prayer!.title) - \(self.prayer!.description)"
+            let prayerTitle = "\(self.prayer!.title) - \(self.prayer!.desc)"
             ReflectViewController.prayerTitle = prayerTitle
             Constants.pausedTime = 0.00
         }

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import Reachability
+import RealmSwift
 
 class LaunchViewController: UIViewController {
     
@@ -145,32 +146,39 @@ class LaunchViewController: UIViewController {
     }
     
     private func load10minPrayers(skippingSignIn: Bool) {
-        LocalFirebaseData.prayers = []
-        LocalFirebaseData.prayers10mins = []
         FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "10 mins") { results in
-            LocalFirebaseData.prayers = results.map(PrayerItem.init)
-            LocalFirebaseData.prayers.sort{$0.title < $1.title}
-            LocalFirebaseData.prayers10mins = LocalFirebaseData.prayers
-            
+            let realm = try! Realm() //TODO: change to do, catch try
+            var prayers = results.map(PrayerItem.init)
+            prayers.sort{$0.title < $1.title}
+            let prayers10mins = prayers
+            try! realm.write { //TODO: change to do, catch try
+                realm.add(prayers)
+                realm.add(prayers10mins)
+            }
             self.load15minPrayers(skippingSignIn: skippingSignIn)
         }
     }
     
     private func load15minPrayers(skippingSignIn: Bool) {
-        LocalFirebaseData.prayers15mins = []
         FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "15 mins") { results in
-            LocalFirebaseData.prayers15mins = results.map(PrayerItem.init)
-            LocalFirebaseData.prayers15mins.sort{$0.title < $1.title}
-            
+            let realm = try! Realm() //TODO: change to do, catch try
+            var prayers15mins = results.map(PrayerItem.init)
+            prayers15mins.sort{$0.title < $1.title}
+            try! realm.write { //TODO: change to do, catch try
+                realm.add(prayers15mins)
+            }
             self.load5minPrayers(skippingSignIn: skippingSignIn)
         }
     }
     
     private func load5minPrayers(skippingSignIn: Bool) {
-        LocalFirebaseData.prayers5mins = []
         FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "5 mins") { results in
-            LocalFirebaseData.prayers5mins = results.map(PrayerItem.init)
-            LocalFirebaseData.prayers5mins.sort{$0.title < $1.title}
+            let realm = try! Realm() //TODO: change to do, catch try
+            var prayers5mins = results.map(PrayerItem.init)
+            prayers5mins.sort{$0.title < $1.title}
+            try! realm.write { //TODO: change to do, catch try
+                realm.add(prayers5mins)
+            }
             
             if skippingSignIn == false {
                 self.hideOutlets(shouldHide: false)

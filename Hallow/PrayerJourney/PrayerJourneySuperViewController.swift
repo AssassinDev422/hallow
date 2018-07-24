@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import RealmSwift
 
 class PrayerJourneySuperViewController: UIViewController {
 
@@ -97,15 +98,17 @@ class PrayerJourneySuperViewController: UIViewController {
     }
     
     private func pullUpPrayerData() {
-                
-        self.prayer = LocalFirebaseData.prayers.filter {$0.title == LocalFirebaseData.nextPrayerTitle}.filter {$0.guide == Constants.guide} [0]
         
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        let prayers = realm.objects(PrayerItem.self)
+
+        self.prayer = prayers.filter("title = %@ AND guide = %@ AND length = %@", LocalFirebaseData.nextPrayerTitle, Constants.guide, "10 mins") [0]
         
         self.prayerTitleLabel.text = self.prayer!.title
         self.prayerTitleLabel.text?.append(" of 9")
-        self.prayerDescriptionLabel.text = self.prayer!.description
+        self.prayerDescriptionLabel.text = self.prayer!.desc
 
-        let description2 = NSMutableAttributedString(string: self.prayer!.description2)
+        let description2 = NSMutableAttributedString(string: self.prayer!.desc2)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))

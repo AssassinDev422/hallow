@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import RealmSwift
 
 class PrayerJourneyTableViewController: UITableViewController {
     
@@ -73,16 +74,19 @@ class PrayerJourneyTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return LocalFirebaseData.prayers.filter {$0.guide == Constants.guide}.count
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        return realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins").count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PrayerJourneyTableViewCell
         
-        let prayer = LocalFirebaseData.prayers.filter {$0.guide == Constants.guide} [indexPath.row]
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins") [indexPath.row]
+        
         cell.prayerTitleLabel.text = prayer.title
-        cell.prayerDescriptionLabel.text = prayer.description
+        cell.prayerDescriptionLabel.text = prayer.desc
         
         let completed = LocalFirebaseData.completedPrayers.contains {$0 == prayer.title}
         
@@ -138,13 +142,15 @@ class PrayerJourneyTableViewController: UITableViewController {
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let prayer = LocalFirebaseData.prayers.filter {$0.guide == Constants.guide} [indexPath.item]
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins") [indexPath.item]
+
         let parent = self.parent as! PrayerJourneySuperViewController
         parent.prayer = prayer
         
-        parent.prayerDescriptionLabel.text = prayer.description
+        parent.prayerDescriptionLabel.text = prayer.desc
         
-        let description2 = NSMutableAttributedString(string: prayer.description2)
+        let description2 = NSMutableAttributedString(string: prayer.desc2)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
@@ -166,7 +172,8 @@ class PrayerJourneyTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let button:UIButton = sender as! UIButton? {
             let indexPath = button.tag
-            let prayer = LocalFirebaseData.prayers.filter {$0.guide == Constants.guide} [indexPath]
+            let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+            let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins") [indexPath]
             prayNow.prayer = prayer
         }
     }

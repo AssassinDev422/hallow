@@ -14,12 +14,7 @@ class LocalFirebaseData {
     
     static var completedPrayers: [String] = []
     static var lockedPrayers: [String] = ["Day 9+"]
-    
-    static var prayers: [PrayerItem] = []
-    static var prayers10mins: [PrayerItem] = []
-    static var prayers15mins: [PrayerItem] = []
-    static var prayers5mins: [PrayerItem] = []
-    
+        
     static var nextPrayerTitle: String = "Day 1"
     
     static var name: String = ""
