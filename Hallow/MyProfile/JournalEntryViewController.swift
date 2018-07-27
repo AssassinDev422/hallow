@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import RealmSwift
 
 //TODO: Delay in updating the journal view after clicking update
 
@@ -17,11 +18,9 @@ class JournalEntryViewController: JournalBaseViewController {
     @IBOutlet weak var textField: UITextView!
     @IBOutlet weak var dateField: UILabel!
     
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String?
-    
     var journalEntry: JournalEntry?
+    
+    var user = User()
     
     // MARK: - Life cycle
     
@@ -47,20 +46,17 @@ class JournalEntryViewController: JournalBaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
+        let realm = try! Realm()
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
+        user = realmUser
         ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -74,8 +70,11 @@ class JournalEntryViewController: JournalBaseViewController {
     private func update() {
         let entry = textField!.text
         let docID = journalEntry?.docID
-        FirebaseUtilities.updateReflection(withDocID: docID!, byUserEmail: self.userEmail!, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
-        self.navigationController?.popViewController(animated: true)
+        FirebaseUtilities.updateReflection(withDocID: docID!, byUserEmail: user.email, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
+        RealmUtilities.updateJournalEntry(withID: docID!, withEntry: entry!) {
+            self.navigationController?.popViewController(animated: true)
+            print("ENTRY after popping vc: \(entry!)")
+        }
     }
     
 }

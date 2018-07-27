@@ -9,23 +9,20 @@
 import UIKit
 import FirebaseFirestore
 import Firebase
+import RealmSwift
 
-class FeedbackViewController: UIViewController, UITextViewDelegate {
+class FeedbackViewController: JournalBaseViewController {
     
     @IBOutlet weak var feedbackField: UITextView!
     
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String?
-    
-    var frame: CGRect?
-    
+    var user = User()
+        
     // MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUpDoneButton()
+        setUpDoneButton(textView: feedbackField)
         
         feedbackField.delegate = self
                 
@@ -39,20 +36,17 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
+        let realm = try! Realm() //TODO: Change to do catch
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
+        user = realmUser
         ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -60,42 +54,8 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func sendButtonPressed(_ sender: Any) {
         let entry = feedbackField!.text
-        FirebaseUtilities.sendFeedback(ofType: "feedback", byUserEmail: self.userEmail!, withEntry: entry!)
+        FirebaseUtilities.sendFeedback(ofType: "feedback", byUserEmail: user.email, withEntry: entry!)
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    // MARK: - Design
-    
-    // Add done button to keyboard
-    
-    private func setUpDoneButton() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        feedbackField.inputAccessoryView = toolBar
-    }
-    
-    @objc private func doneClicked() {
-        view.endEditing(true)
-    }
-    
-    // Change height of textview
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.frame = textView.frame
-        var newFrame = self.frame!
-        newFrame.size.height = self.frame!.height / 2.5
-        textView.frame = newFrame
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        textView.frame = self.frame!
     }
 
 }

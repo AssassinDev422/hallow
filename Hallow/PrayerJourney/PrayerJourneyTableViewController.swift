@@ -12,15 +12,8 @@ import RealmSwift
 
 class PrayerJourneyTableViewController: UITableViewController {
     
-    var completedPrayers: [PrayerTracking] = []
-    
     private let reuseIdentifier = "cell"
-    
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String?
-
-    
+    var user = User()
     var tableViewLoaded: Bool = false
     var row: Int = 0
     
@@ -34,20 +27,17 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
+        user = realmUser
         ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -61,6 +51,7 @@ class PrayerJourneyTableViewController: UITableViewController {
             let indexPath = IndexPath(row: 8, section: 0)
             self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
+            print("DAY NUMBER: \(parent.dayNumber)")
             self.row = parent.dayNumber - 1
             let indexPath = IndexPath(row: self.row, section: 0)
             self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
@@ -75,7 +66,7 @@ class PrayerJourneyTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        return realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins").count
+        return realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user.guide, "10 mins").count
     }
 
     
@@ -83,29 +74,20 @@ class PrayerJourneyTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PrayerJourneyTableViewCell
         
         let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins") [indexPath.row]
+        let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user.guide, "10 mins") [indexPath.row]
         
         cell.prayerTitleLabel.text = prayer.title
         cell.prayerDescriptionLabel.text = prayer.desc
         
-        let completed = LocalFirebaseData.completedPrayers.contains {$0 == prayer.title}
+        let completed = user.completedPrayers.contains {$0 == prayer.title}
         
-        let locked = LocalFirebaseData.lockedPrayers.contains {$0 == prayer.title}
-        
-        if completed == true {
+        if completed {
             cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
             cell.statusImage.tintColor = UIColor(named: "fadedPink")
             cell.statusImage.contentMode = .scaleToFill
             cell.prayerTitleLabel.textColor = UIColor(named: "fadedPink")
             cell.prayerDescriptionLabel.textColor = UIColor(named: "fadedPink")
             cell.playCellButton.isHidden = false
-        } else if locked == true {
-            cell.statusImage.image = #imageLiteral(resourceName: "passwordIcon")
-            cell.playCellButton.isHidden = true
-            cell.statusImage.contentMode = .scaleAspectFit
-            cell.statusImage.tintColor = UIColor.lightGray
-            cell.prayerTitleLabel.textColor = UIColor.lightGray
-            cell.prayerDescriptionLabel.textColor = UIColor.lightGray
         } else {
             cell.statusImage.image = UIImage.circle(diameter: 15, color: UIColor(named: "purplishBlue")!)
             cell.statusImage.contentMode = .center
@@ -113,6 +95,8 @@ class PrayerJourneyTableViewController: UITableViewController {
             cell.prayerDescriptionLabel.textColor = UIColor(named: "darkIndigo")
             cell.playCellButton.isHidden = false
         }
+        
+        // TODO: - have to delete prayer 9+
         
         cell.layer.borderWidth = 0
         
@@ -143,7 +127,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins") [indexPath.item]
+        let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user.guide, "10 mins") [indexPath.item]
 
         let parent = self.parent as! PrayerJourneySuperViewController
         parent.prayer = prayer
@@ -173,7 +157,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let button:UIButton = sender as! UIButton? {
             let indexPath = button.tag
             let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-            let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", Constants.guide, "10 mins") [indexPath]
+            let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user.guide, "10 mins") [indexPath]
             prayNow.prayer = prayer
         }
     }

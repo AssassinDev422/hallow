@@ -60,11 +60,11 @@ class PasswordResetViewController: LogInBaseViewController {
             Auth.auth().sendPasswordReset(withEmail: email) { (error) in
                 if let error = error {
                     self.dismissHud()
-                    Utilities.errorAlert(message: "\(error.localizedDescription)", viewController: self)
+                    self.errorAlert(message: "\(error.localizedDescription)", viewController: self)
                 } else {
                     self.dismissHud()
                     
-                    Utilities.alertWithDismiss(viewController: self, title: "Thanks!", message: "Check your email for next steps")
+                    self.alertWithDismiss(viewController: self, title: "Thanks!", message: "Check your email for next steps")
                     
                 }
             }

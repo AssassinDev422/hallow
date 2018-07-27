@@ -323,7 +323,7 @@
                                     <color key="titleColor" name="realWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="FMK-kR-Pj7" kind="presentation" identifier="guideSelectedSegue" id="Ova-Mg-bAe"/>
+                                    <action selector="nextButton:" destination="Ie1-Hc-9yg" eventType="touchUpInside" id="BE2-NR-dQ9"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="IJf-Ib-sIO">
@@ -420,11 +420,12 @@
                         <outlet property="abbyPlaySampleButton" destination="55k-vx-5Tg" id="lSi-Kt-rKF"/>
                         <outlet property="francisButton" destination="3Nv-PN-VA6" id="Ucb-1m-xcs"/>
                         <outlet property="francisPlaySampleButton" destination="YIJ-6v-mzS" id="Fak-T6-Um9"/>
+                        <segue destination="FMK-kR-Pj7" kind="presentation" identifier="guideSelectedSegue" id="DX7-xq-VrB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DsC-qp-d3A" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1769" y="-1987"/>
+            <point key="canvasLocation" x="1769" y="-1988"/>
         </scene>
         <!--Sign Up View Controller-->
         <scene sceneID="I5V-yu-xSg">
@@ -676,7 +677,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="TqJ-gV-Cj7"/>
-        <segue reference="Ova-Mg-bAe"/>
+        <segue reference="DX7-xq-VrB"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

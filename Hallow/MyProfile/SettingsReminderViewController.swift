@@ -6,6 +6,8 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
+// TODO: Will have to update - should user realm maybe v user defaults
+
 import UIKit
 import UserNotifications
 

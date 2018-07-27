@@ -408,7 +408,6 @@
                                             </attributedString>
                                         </state>
                                         <connections>
-                                            <action selector="noThanksButton:" destination="bfu-AT-sep" eventType="touchUpInside" id="GcV-z1-2AM"/>
                                             <action selector="skipButtonPressed:" destination="CuC-2t-K28" eventType="touchUpInside" id="ihY-ge-sND"/>
                                         </connections>
                                     </button>
@@ -516,7 +515,6 @@
                         <outlet property="textField" destination="B6A-57-Wcy" id="Txh-ZW-Qbd"/>
                         <segue destination="gfX-Ez-Q7C" kind="show" identifier="isFirstDaySegue" id="dvU-yh-ihA"/>
                         <segue destination="BXq-9Y-utP" kind="presentation" identifier="isNotFirstDaySegue" id="MfL-On-nYD"/>
-                        <segue destination="bfu-AT-sep" kind="show" identifier="completedSegue" id="Mp1-ED-Q3G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1S-qS-cEL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -545,119 +543,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q6l-Sh-uv5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1626" y="-528"/>
-        </scene>
-        <!--Completed View Controller-->
-        <scene sceneID="aW0-9q-NDi">
-            <objects>
-                <viewController id="bfu-AT-sep" customClass="CompletedViewController" customModule="Hallow" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fyw-kJ-EA2">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ng-rR-Obp" customClass="GradientView" customModule="Hallow" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hva-bT-qKr">
-                                        <rect key="frame" x="20" y="220" width="335" height="43"/>
-                                        <string key="text">
-
-
-Please feel free to revisit the intro sessions until then!</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" name="realWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We are currently building the full version with a lot more content.  In the meantime feel free to re-listen to the 9 sessions." lineBreakMode="wordWrap" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GoO-fN-186">
-                                        <rect key="frame" x="20" y="200" width="335" height="64.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" name="realWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cjM-s8-cX3">
-                                        <rect key="frame" x="48.5" y="560" width="278" height="48"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                        <state key="normal" title="ADD ME TO THE LIST!" backgroundImage="pinkButton">
-                                            <color key="titleColor" name="realWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="addToListButton:" destination="bfu-AT-sep" eventType="touchUpInside" id="dLL-w7-y0Z"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zSN-Jk-Bba">
-                                        <rect key="frame" x="93.5" y="628" width="188" height="29"/>
-                                        <state key="normal">
-                                            <attributedString key="attributedTitle">
-                                                <fragment content="No thanks - return to prayers">
-                                                    <attributes>
-                                                        <color key="NSColor" name="beige"/>
-                                                        <font key="NSFont" metaFont="system" size="14"/>
-                                                        <integer key="NSUnderline" value="1"/>
-                                                    </attributes>
-                                                </fragment>
-                                            </attributedString>
-                                        </state>
-                                        <connections>
-                                            <action selector="noThanksButton:" destination="bfu-AT-sep" eventType="touchUpInside" id="wKl-ZH-E4W"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXj-as-Oux">
-                                        <rect key="frame" x="20" y="284.5" width="335" height="86"/>
-                                        <string key="text">We hope you've enjoyed it so far!  Click below if you want to be added to the pre-order list for the full version at $4.99 / mo.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" name="realWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="WXj-as-Oux" firstAttribute="top" secondItem="GoO-fN-186" secondAttribute="bottom" constant="20" id="1ox-l4-WSq"/>
-                                    <constraint firstAttribute="bottom" secondItem="zSN-Jk-Bba" secondAttribute="bottom" constant="10" id="DJb-mx-DAM"/>
-                                    <constraint firstItem="WXj-as-Oux" firstAttribute="leading" secondItem="GoO-fN-186" secondAttribute="leading" id="csh-xH-S2H"/>
-                                    <constraint firstItem="cjM-s8-cX3" firstAttribute="centerX" secondItem="0Ng-rR-Obp" secondAttribute="centerX" id="hkq-Q7-UQq"/>
-                                    <constraint firstItem="WXj-as-Oux" firstAttribute="trailing" secondItem="GoO-fN-186" secondAttribute="trailing" id="tQE-jE-Eaa"/>
-                                    <constraint firstItem="zSN-Jk-Bba" firstAttribute="centerX" secondItem="0Ng-rR-Obp" secondAttribute="centerX" id="yVa-FK-LGk"/>
-                                    <constraint firstItem="zSN-Jk-Bba" firstAttribute="top" secondItem="cjM-s8-cX3" secondAttribute="bottom" constant="20" id="yoJ-W4-DmL"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="bottomColor">
-                                        <color key="value" name="purplishBlue"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="topColor">
-                                        <color key="value" name="deepLilac"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations on completing your intro to Hallow!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qzt-MN-c6a">
-                                <rect key="frame" x="20" y="70" width="335" height="110"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
-                                <color key="textColor" name="realWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="0Ng-rR-Obp" firstAttribute="bottom" secondItem="fyw-kJ-EA2" secondAttribute="bottom" id="38C-SY-VAQ"/>
-                            <constraint firstItem="GoO-fN-186" firstAttribute="top" secondItem="qzt-MN-c6a" secondAttribute="bottom" constant="20" id="Fwg-5W-r2a"/>
-                            <constraint firstItem="GoO-fN-186" firstAttribute="leading" secondItem="qzt-MN-c6a" secondAttribute="leading" id="J6F-u1-eUG"/>
-                            <constraint firstItem="hva-bT-qKr" firstAttribute="top" secondItem="qzt-MN-c6a" secondAttribute="bottom" priority="750" constant="40" id="NXT-Fh-Cvh"/>
-                            <constraint firstItem="6dT-07-0Y7" firstAttribute="leading" secondItem="qzt-MN-c6a" secondAttribute="leading" constant="-20" id="VIl-af-hbo"/>
-                            <constraint firstItem="0Ng-rR-Obp" firstAttribute="leading" secondItem="fyw-kJ-EA2" secondAttribute="leading" id="Vat-Nw-Qhg"/>
-                            <constraint firstItem="qzt-MN-c6a" firstAttribute="trailing" secondItem="6dT-07-0Y7" secondAttribute="trailing" constant="-20" id="WVd-na-Yk1"/>
-                            <constraint firstItem="GoO-fN-186" firstAttribute="trailing" secondItem="qzt-MN-c6a" secondAttribute="trailing" id="YxF-Eq-Sbp"/>
-                            <constraint firstItem="hva-bT-qKr" firstAttribute="trailing" secondItem="qzt-MN-c6a" secondAttribute="trailing" id="ahK-4i-ILD"/>
-                            <constraint firstItem="hva-bT-qKr" firstAttribute="leading" secondItem="qzt-MN-c6a" secondAttribute="leading" id="bPk-PJ-jVW"/>
-                            <constraint firstItem="qzt-MN-c6a" firstAttribute="top" secondItem="6dT-07-0Y7" secondAttribute="top" constant="50" id="bbD-5N-gww"/>
-                            <constraint firstItem="0Ng-rR-Obp" firstAttribute="top" secondItem="fyw-kJ-EA2" secondAttribute="top" id="hbD-0M-2YM"/>
-                            <constraint firstAttribute="trailing" secondItem="0Ng-rR-Obp" secondAttribute="trailing" id="ktt-Hq-sHc"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="6dT-07-0Y7"/>
-                    </view>
-                    <connections>
-                        <segue destination="BXq-9Y-utP" kind="presentation" identifier="repeatPrayerSegue" id="91H-OP-Yk1"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="XCC-k9-mTN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5788" y="-1050.224887556222"/>
         </scene>
         <!--First Day Reminder View Controller-->
         <scene sceneID="NHE-q3-Zp8">
@@ -915,6 +800,9 @@ Please feel free to revisit the intro sessions until then!</string>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="beige">
+            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="darkIndigo">
             <color red="0.097999997437000275" green="0.027000000700354576" blue="0.24300000071525574" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -938,8 +826,7 @@ Please feel free to revisit the intro sessions until then!</string>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Mp1-ED-Q3G"/>
-        <segue reference="91H-OP-Yk1"/>
+        <segue reference="UMh-D3-wlY"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

@@ -12,14 +12,12 @@
 		030C40D6209E718C006D9690 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 030C40D5209E718C006D9690 /* Assets.xcassets */; };
 		030C40D9209E718C006D9690 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 030C40D7209E718C006D9690 /* LaunchScreen.storyboard */; };
 		030C40E3209E7875006D9690 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 030C40E2209E7875006D9690 /* GoogleService-Info.plist */; };
-		033704F6209E96990032703B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033704F5209E96990032703B /* Utilities.swift */; };
 		033704F8209E980A0032703B /* FirebaseUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033704F7209E980A0032703B /* FirebaseUtilities.swift */; };
 		5087C9DF2973C039B0BB91C1 /* Pods_Hallow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */; };
 		B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */; };
-		B407175820B72A920091B524 /* PrayerTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B407175720B72A910091B524 /* PrayerTracking.swift */; };
-		B412E56E20D4BEAD00AA54B9 /* LocalFirebaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B412E56D20D4BEAD00AA54B9 /* LocalFirebaseData.swift */; };
 		B41F4E0620D05F9000C0D118 /* MyProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */; };
 		B41F4E0820D05FBB00C0D118 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */; };
+		B42215E22109F73F006E8E8D /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42215E12109F73F006E8E8D /* JournalEntry.swift */; };
 		B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */; };
 		B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */; };
 		B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */; };
@@ -28,14 +26,10 @@
 		B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057320D2EEA7000EB246 /* FeedbackViewController.swift */; };
 		B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057520D2EEB3000EB246 /* SupportViewController.swift */; };
 		B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */; };
-		B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */; };
 		B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */; };
-		B45C11DD20BC737800CEEAA9 /* StatsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DC20BC737800CEEAA9 /* StatsItem.swift */; };
 		B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */; };
 		B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */; };
 		B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */; };
-		B472AB3F20D4369900447042 /* ConstantsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B472AB3E20D4369900447042 /* ConstantsItem.swift */; };
-		B473D68120AC89C200D57E78 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68020AC89C200D57E78 /* JournalEntry.swift */; };
 		B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68220AC8A1C00D57E78 /* PrayerItem.swift */; };
 		B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B479569120BDC7FD00745E92 /* UIViewExtension.swift */; };
 		B4837C9420E5B6F5003525FB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4837C9320E5B6F5003525FB /* StoreKit.framework */; };
@@ -44,9 +38,9 @@
 		B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */; };
 		B4AD61AC20E455700038A3B7 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AD61AB20E455700038A3B7 /* ReachabilityManager.swift */; };
 		B4BB64882100D90F008FD331 /* BaseFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BB64872100D90F008FD331 /* BaseFunctions.swift */; };
+		B4CC6ECF210929A200A16166 /* RealmUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CC6ECE210929A200A16166 /* RealmUtilities.swift */; };
 		B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */; };
 		B4D3A0FB20A5F195009D69A5 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */; };
-		B4EB8E9220B3450F000330EB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EB8E9120B3450F000330EB /* Constants.swift */; };
 		B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EB8E9320B38174000330EB /* MyProfileViewController.swift */; };
 		B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */; };
 		B4EEEA7920B4AD3A00B091F7 /* JournalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EEEA7820B4AD3A00B091F7 /* JournalTableViewCell.swift */; };
@@ -85,15 +79,13 @@
 		030C40D8209E718C006D9690 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		030C40DA209E718C006D9690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		030C40E2209E7875006D9690 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		033704F5209E96990032703B /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		033704F7209E980A0032703B /* FirebaseUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtilities.swift; sourceTree = "<group>"; };
 		0FE07FA1AF2D28CE36FB7186 /* Pods-Hallow.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hallow.release.xcconfig"; path = "Pods/Target Support Files/Pods-Hallow/Pods-Hallow.release.xcconfig"; sourceTree = "<group>"; };
 		944663EBD6A68A6B3C8C47D6 /* Pods_Hallow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hallow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4024AAB20AA3D5D00F0690A /* JournalEntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryViewController.swift; sourceTree = "<group>"; };
-		B407175720B72A910091B524 /* PrayerTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTracking.swift; sourceTree = "<group>"; };
-		B412E56D20D4BEAD00AA54B9 /* LocalFirebaseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFirebaseData.swift; sourceTree = "<group>"; };
 		B41F4E0520D05F9000C0D118 /* MyProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyProfile.storyboard; sourceTree = "<group>"; };
 		B41F4E0720D05FBB00C0D118 /* LogIn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
+		B42215E12109F73F006E8E8D /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayNowViewController.swift; sourceTree = "<group>"; };
 		B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
@@ -102,14 +94,10 @@
 		B432057320D2EEA7000EB246 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		B432057520D2EEB3000EB246 /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideSelectorViewController.swift; sourceTree = "<group>"; };
-		B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedViewController.swift; sourceTree = "<group>"; };
 		B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		B45C11DC20BC737800CEEAA9 /* StatsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsItem.swift; sourceTree = "<group>"; };
 		B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderViewController.swift; sourceTree = "<group>"; };
 		B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderSettingViewController.swift; sourceTree = "<group>"; };
 		B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsReminderViewController.swift; sourceTree = "<group>"; };
-		B472AB3E20D4369900447042 /* ConstantsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsItem.swift; sourceTree = "<group>"; };
-		B473D68020AC89C200D57E78 /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		B473D68220AC8A1C00D57E78 /* PrayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerItem.swift; sourceTree = "<group>"; };
 		B479569120BDC7FD00745E92 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		B4837C9320E5B6F5003525FB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -118,10 +106,10 @@
 		B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		B4AD61AB20E455700038A3B7 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		B4BB64872100D90F008FD331 /* BaseFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFunctions.swift; sourceTree = "<group>"; };
+		B4CC6ECE210929A200A16166 /* RealmUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUtilities.swift; sourceTree = "<group>"; };
 		B4D3A0F820A5F188009D69A5 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		B4D3A0FA20A5F195009D69A5 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		B4DC10E820E73306006B2E11 /* Hallow.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hallow.entitlements; sourceTree = "<group>"; };
-		B4EB8E9120B3450F000330EB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B4EB8E9320B38174000330EB /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		B4EEEA7620B4AC0900B091F7 /* JournalTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTableViewController.swift; sourceTree = "<group>"; };
 		B4EEEA7820B4AD3A00B091F7 /* JournalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTableViewCell.swift; sourceTree = "<group>"; };
@@ -246,7 +234,6 @@
 				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
 				B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */,
 				B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */,
-				B4445D3F20D1834A0047B9B8 /* CompletedViewController.swift */,
 			);
 			path = PrayNow;
 			sourceTree = "<group>";
@@ -265,14 +252,9 @@
 			isa = PBXGroup;
 			children = (
 				B473D68220AC8A1C00D57E78 /* PrayerItem.swift */,
-				B407175720B72A910091B524 /* PrayerTracking.swift */,
-				B473D68020AC89C200D57E78 /* JournalEntry.swift */,
 				B4EEEA7A20B4E90700B091F7 /* User.swift */,
-				B472AB3E20D4369900447042 /* ConstantsItem.swift */,
-				B45C11DC20BC737800CEEAA9 /* StatsItem.swift */,
-				B4EB8E9120B3450F000330EB /* Constants.swift */,
-				B412E56D20D4BEAD00AA54B9 /* LocalFirebaseData.swift */,
-				033704F5209E96990032703B /* Utilities.swift */,
+				B42215E12109F73F006E8E8D /* JournalEntry.swift */,
+				B4CC6ECE210929A200A16166 /* RealmUtilities.swift */,
 				033704F7209E980A0032703B /* FirebaseUtilities.swift */,
 				B479569120BDC7FD00745E92 /* UIViewExtension.swift */,
 				B4BB64872100D90F008FD331 /* BaseFunctions.swift */,
@@ -501,35 +483,29 @@
 				B432057220D2E0C8000EB246 /* ProfileNavigationViewController.swift in Sources */,
 				B4EEEA7B20B4E90700B091F7 /* User.swift in Sources */,
 				B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */,
-				B407175820B72A920091B524 /* PrayerTracking.swift in Sources */,
 				B4D3A0FB20A5F195009D69A5 /* SignInViewController.swift in Sources */,
 				B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */,
 				B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */,
 				B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */,
-				B472AB3F20D4369900447042 /* ConstantsItem.swift in Sources */,
 				B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */,
 				B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */,
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,
 				B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */,
+				B42215E22109F73F006E8E8D /* JournalEntry.swift in Sources */,
 				B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */,
 				B4AD61AC20E455700038A3B7 /* ReachabilityManager.swift in Sources */,
-				B412E56E20D4BEAD00AA54B9 /* LocalFirebaseData.swift in Sources */,
 				B489E4D620E3167000AA3B18 /* RecommendViewController.swift in Sources */,
 				033704F8209E980A0032703B /* FirebaseUtilities.swift in Sources */,
 				B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */,
 				B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */,
 				B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */,
-				B4445D4020D1834A0047B9B8 /* CompletedViewController.swift in Sources */,
-				B473D68120AC89C200D57E78 /* JournalEntry.swift in Sources */,
 				B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */,
 				B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */,
-				B45C11DD20BC737800CEEAA9 /* StatsItem.swift in Sources */,
-				B4EB8E9220B3450F000330EB /* Constants.swift in Sources */,
 				B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */,
+				B4CC6ECF210929A200A16166 /* RealmUtilities.swift in Sources */,
 				030C40CF209E718B006D9690 /* AppDelegate.swift in Sources */,
 				B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */,
 				B4EEEA7920B4AD3A00B091F7 /* JournalTableViewCell.swift in Sources */,
-				033704F6209E96990032703B /* Utilities.swift in Sources */,
 				B4FB771220D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift in Sources */,
 				B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */,
 				B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */,

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import JGProgressHUD
+import RealmSwift
 
 //TODO: Add privacy, terms and conditions
 //FIXME: Error if I say no to camera allow
@@ -21,9 +22,7 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
     @IBOutlet weak var completedNumber: UILabel!
     @IBOutlet weak var streakNumber: UILabel!
     
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String? 
+    var user = User()
     
     var storedUserID: String?
     var storedUserEmail: String?
@@ -43,7 +42,8 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "fadedPink")
         imagePicker.delegate = self
         
-        profilePicture = LocalFirebaseData.profilePicture
+        profilePicture = loadImage()
+        
         profileImage.image = profilePicture
         formatProfilePicture()
         
@@ -53,32 +53,28 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userEmail = user?.email
-            if let user = user?.uid {
-                self.userID = user
-                self.nameLabel.text = LocalFirebaseData.name
-                self.completedNumber.text = String(LocalFirebaseData.completed)
-                let minutes = LocalFirebaseData.timeTracker / 60.0
-                let minutesString = String(format: "%.0f", minutes)
-                self.minsNumber.text = minutesString
-                self.streakNumber.text = String(LocalFirebaseData.streak)
-            }
+        
+        let realm = try! Realm() //TODO: Change to do catch
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
+        user = realmUser
+        
+        self.nameLabel.text = user.name
+        self.completedNumber.text = String(user.completedPrayers.count - 1)
+        let minutes = user.timeInPrayer / 60.0
+        self.minsNumber.text = String(format: "%.0f", minutes)
+        self.streakNumber.text = String(user.streak)
         ReachabilityManager.shared.addListener(listener: self)
         
-        profilePicture = LocalFirebaseData.profilePicture
+        profilePicture = loadImage()
         profileImage.image = profilePicture
         formatProfilePicture()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -86,10 +82,14 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
 
     @IBAction func logOut(_ sender: Any) {
         showLightHud()
-        self.storedUserID = self.userID
-        self.storedUserEmail = self.userEmail
-        Constants.hasLoggedOutOnce = true
-        updateConstants(withID: Constants.firebaseDocID, ofType: "constants", byUserEmail: self.storedUserEmail!, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
+        FirebaseUtilities.syncUserData() { //TODO: Not sure if this can have an input as 2 functions
+            RealmUtilities.deleteUser()
+            self.deleteImage()
+            FirebaseUtilities.logOut(viewController: self) {
+                self.dismissHud()
+                self.performSegue(withIdentifier: "signOutSegue", sender: self)
+            }
+        }
     }
     
     @IBAction func uploadImage(_ sender: Any) {
@@ -102,7 +102,7 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
                 self.imagePicker.sourceType = .camera
                 self.present()
             } else {
-                Utilities.errorAlert(message: "Camera is not available on this Device or accesibility has been revoked", viewController: self)
+                self.errorAlert(message: "Camera is not available on this Device or accesibility has been revoked", viewController: self)
             }
         })
         
@@ -112,7 +112,7 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
                 self.imagePicker.sourceType = .photoLibrary
                 self.present()
             } else {
-                Utilities.errorAlert(message: "Camera is not available on this Device or accesibility has been revoked", viewController: self)
+                self.errorAlert(message: "Camera is not available on this Device or accesibility has been revoked", viewController: self)
             }
         })
         
@@ -140,10 +140,11 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         self.profilePicture = info[UIImagePickerControllerOriginalImage] as? UIImage
         
         profileImage.image = self.profilePicture
-        LocalFirebaseData.profilePicture = self.profilePicture!
+        
         formatProfilePicture()
         
-        FirebaseUtilities.uploadProfilePicture(withImage: self.profilePicture!, byUserEmail: self.userEmail!)
+        FirebaseUtilities.uploadProfilePicture(withImage: self.profilePicture!, byUserEmail: user.email)
+        updateImage(image: self.profilePicture!)
         
         self.imagePicker.dismiss(animated: true, completion: nil)
         
@@ -155,64 +156,5 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         profileImage.layer.borderColor = UIColor.clear.cgColor
         profileImage.layer.cornerRadius = profileImage.frame.height/2
         profileImage.clipsToBounds = true
-    }
-    
-    private func updateConstants(withID docID: String, ofType type: String, byUserEmail userEmail: String, guide: String, isFirstDay: Bool, hasCompleted: Bool, hasSeenCompletionScreen: Bool, hasStartedListening: Bool, hasLoggedOutOnce: Bool) {
-        let db = Firestore.firestore()
-        let formatterStored = DateFormatter()
-        formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
-        let dateStored = formatterStored.string(from: NSDate() as Date)
-        
-        db.collection("user").document(userEmail).collection(type).document(docID).updateData([
-            "Date Stored": dateStored,
-            "guide": guide,
-            "isFirstDay": isFirstDay,
-            "hasCompleted": hasCompleted,
-            "hasSeenCompletionScreen": hasSeenCompletionScreen,
-            "hasStartedListening": hasStartedListening,
-            "hasLoggedOutOnce": hasLoggedOutOnce,
-            ]) { err in
-                if let err = err {
-                    print("Error adding document: \(err)")
-                } else {
-                    print("Document updated with user: \(userEmail)")
-                }
-        }
-        self.firebaseLogOut()
-    }
-
-    // MARK: - Functions - other functions
-    
-    private func firebaseLogOut() {
-        do {
-            try Auth.auth().signOut()
-            self.resetLocalFirebaseData()
-        } catch let error {
-            print(error.localizedDescription)
-            Utilities.errorAlert(message: "\(error.localizedDescription)", viewController: self)
-        }
-    }
-    
-    private func resetLocalFirebaseData() {
-        Constants.hasLoggedOutOnce = true
-        Constants.guide = "Francis"
-        Constants.isFirstDay = false
-        Constants.hasCompleted = false
-        Constants.hasSeenCompletionScreen = false
-        Constants.hasStartedListening = false
-        Constants.hasLoggedOutOnce = false
-        
-        LocalFirebaseData.completedPrayers = []
-        LocalFirebaseData.nextPrayerTitle = "Day 1"
-        LocalFirebaseData.name = ""
-        LocalFirebaseData.timeTracker = 0.0
-        LocalFirebaseData.started = 0
-        LocalFirebaseData.completed = 0
-        LocalFirebaseData.streak = 0
-        LocalFirebaseData.profilePicture = #imageLiteral(resourceName: "profileWithCircle")
-        
-        self.dismissHud()
-        self.performSegue(withIdentifier: "signOutSegue", sender: self)
-    }
-    
+    }    
 }

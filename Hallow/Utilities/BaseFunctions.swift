@@ -14,6 +14,7 @@ import FirebaseStorage
 import FirebaseFirestore
 import MediaPlayer
 import AVFoundation
+import RealmSwift
 
 // MARK: - Hud
 
@@ -31,6 +32,16 @@ class BaseViewController: UIViewController {
     func showDownloadingHud() {
         let hud = JGProgressHUD(style: .dark)
         hud.indicatorView = JGProgressHUDRingIndicatorView()
+        hud.interactionType = .blockNoTouches
+        hud.detailTextLabel.text = "0% Complete"
+        hud.textLabel.text = "Downloading"
+        hud.show(in: view, animated: false)
+        self.hud = hud
+    }
+    
+    func showDownloadingHudBlockTouches() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.indicatorView = JGProgressHUDRingIndicatorView()
         hud.interactionType = .blockAllTouches
         hud.detailTextLabel.text = "0% Complete"
         hud.textLabel.text = "Downloading"
@@ -40,6 +51,76 @@ class BaseViewController: UIViewController {
     
     func dismissHud() {
         self.hud?.dismiss()
+    }
+    
+    func urlInDocumentsDirectory(forPath path: String) -> URL {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsDirectory.appendingPathComponent(path)
+    }
+    
+    func updateImage(image: UIImage) -> Void {
+        do {
+            let path = "profilePicture.jpg"
+            if FileManager.default.fileExists(atPath: path) {
+                try FileManager.default.removeItem(atPath: path)
+                saveImage(image: image)
+            } else {
+                print("File does not exist")
+                saveImage(image: image)
+            }
+            
+        }
+        catch let error as NSError {
+            print("An error took place: \(error)")
+        }
+        
+    }
+    
+    func saveImage(image: UIImage) -> Void {
+        let imageURL = urlInDocumentsDirectory(forPath: "profilePicture.jpg")
+        if let imageData = UIImageJPEGRepresentation(image, 1.0) {
+            try? imageData.write(to: imageURL, options: .atomic) //TODO: Why atomic?
+        }
+    }
+    
+    func loadImage() -> UIImage? {
+        let imageURL = urlInDocumentsDirectory(forPath: "profilePicture.jpg")
+        do {
+            let imageData = try Data(contentsOf: imageURL)
+            return UIImage(data: imageData)
+        } catch {
+            print("Error loading image : \(error)")
+        }
+        return nil
+    }
+    
+    func deleteImage() {
+        do {
+            let path = "profilePicture.jpg"
+            if FileManager.default.fileExists(atPath: path) {
+                try FileManager.default.removeItem(atPath: path)
+            } else {
+                print("File does not exist")
+            }
+            
+        }
+        catch let error as NSError {
+            print("An error took place: \(error)")
+        }
+    }
+    
+    func errorAlert(message: String, viewController: UIViewController) {
+        let alert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        viewController.present(alert, animated: true)
+    }
+    
+    func alertWithDismiss(viewController: UIViewController, title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {_ in
+            viewController.dismiss(animated: true, completion: nil)
+        }))
+        viewController.present(alert, animated: true)
     }
     
 }
@@ -148,10 +229,15 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
     var downloadTask: StorageDownloadTask?
     var audioPlayer: AVAudioPlayer?
     
+    enum Guide {
+        case Francis
+        case Abby
+    }
+    
     var startTime = Date(timeIntervalSinceNow: 0)
 
-    func downloadAudio(guide: Constants.Guide, audioURL: String, setLoading: (Bool) -> Void, completionBlock: @escaping (Constants.Guide, String) -> Void) {
-        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
+    func downloadAudio(guide: Guide, audioURL: String, setLoading: (Bool) -> Void, completionBlock: @escaping (Guide, String) -> Void) {
+        let destinationFileURL = urlInDocumentsDirectory(forPath: audioURL)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
             completionBlock(guide, audioURL)
@@ -181,10 +267,16 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         }
     }
     
-    func setupAudioPlayer(guide: Constants.Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: () -> Void, playPause: (Constants.Guide) -> Void) {
+    func setupAudioPlayer(guide: Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: () -> Void, playPause: (Guide) -> Void) {
         setLoading(false)
         
-        let audioURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
+        let realm = try! Realm() //TODO: Change to do catch
+        guard let user = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
+        }
+        
+        let audioURL = urlInDocumentsDirectory(forPath: audioURL)
         
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -200,7 +292,7 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
             
             updateProgress()
             
-            audioPlayer?.currentTime = Constants.pausedTime
+            audioPlayer?.currentTime = user.pausedTime
             
             startTime = Date(timeIntervalSinceNow: 0)
             

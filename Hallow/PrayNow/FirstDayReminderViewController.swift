@@ -11,10 +11,6 @@ import UserNotifications
 import Firebase
 
 class FirstDayReminderViewController: UIViewController {
-    
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String?
         
     // MARK: - Life cycle
     
@@ -27,23 +23,11 @@ class FirstDayReminderViewController: UIViewController {
         center.removeAllDeliveredNotifications()
         center.removeAllPendingNotificationRequests()
         
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userEmail = user?.email
-            if let user = user?.uid, let email = self.userEmail {
-                self.userID = user
-                FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
-            }
-        }
         ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     

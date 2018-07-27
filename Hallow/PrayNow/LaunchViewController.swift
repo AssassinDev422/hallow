@@ -11,28 +11,17 @@ import Firebase
 import Reachability
 import RealmSwift
 
-class LaunchViewController: UIViewController {
+class LaunchViewController: BaseViewController {
     
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var prayerChallengeLabel: UILabel!
     
-    var userData: User?
-    var startedPrayers: [PrayerTracking] = []
-    var completedPrayers: [PrayerTracking] = []
-    var stats: StatsItem?
+    var user = User()
     
     var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
     var userEmail: String?
         
-    var storedUserID: String?
-    var storedUserEmail: String?
-    
-    var newFirebaseDocID: String?
-
-    var userConstants: ConstantsItem?
-    
     // MARK: - Life cycle
     
     override func viewDidLoad() {
@@ -55,13 +44,13 @@ class LaunchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        FirebaseUtilities.syncUserData() { }
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            if let userID = user?.uid, let userEmail = user?.email {
-                self.userID = userID
-                self.userEmail = userEmail
-                LocalFirebaseData.userEmail = userEmail
-                self.loadUserConstantsAndPrayers(fromUserEmail: userEmail)
-                FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail)
+            if let _ = user?.uid, let userEmail = user?.email {
+                self.loadUser(fromUserEmail: userEmail)
+                FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail) { image in
+                    self.saveImage(image: image)
+                }
             } else {
                 self.load10minPrayers(skippingSignIn: false)
                 print("no one is logged in")
@@ -82,69 +71,18 @@ class LaunchViewController: UIViewController {
     
     // MARK: - Functions
     
-    private func loadUserConstantsAndPrayers(fromUserEmail userEmail: String) {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "constants", byUserEmail: userEmail) { results in
-            self.userConstants = results.map(ConstantsItem.init)[0]
-            Constants.firebaseDocID = self.userConstants!.docID
-            Constants.guide = self.userConstants!.guide
-            Constants.isFirstDay = self.userConstants!.isFirstDay
-            Constants.hasCompleted = self.userConstants!.hasCompleted
-            Constants.hasSeenCompletionScreen = self.userConstants!.hasSeenCompletionScreen
-            Constants.hasStartedListening = self.userConstants!.hasStartedListening
-            Constants.hasLoggedOutOnce = self.userConstants!.hasLoggedOutOnce
+    private func loadUser(fromUserEmail userEmail: String) {
+        FirebaseUtilities.loadUserData(byUserEmail: userEmail) { results in
+            self.user = results.map(User.init)[0]
             
-            self.loadName()
-        }
-    }
-    
-    private func loadName() {
-        FirebaseUtilities.loadUserData(byUserEmail: self.userEmail!) {results in
-            self.userData = results.map(User.init)[0]
-            LocalFirebaseData.name = self.userData!.name
-            
-            self.loadStartedPrayers()
-        }
-    }
-    
-    private func loadStartedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "startedPrayers", byUserEmail: self.userEmail!) {results in
-            self.startedPrayers = results.map(PrayerTracking.init)
-            LocalFirebaseData.started = self.startedPrayers.count
-            
-            self.loadCompletedPrayers()
-        }
-    }
-    
-    private func loadCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
-            self.completedPrayers = results.map(PrayerTracking.init)
-            print("COMPLETED PRAYERS IN LAUNCH: \(self.completedPrayers.count)")
-            LocalFirebaseData.completed = self.completedPrayers.count
-            
-            if self.completedPrayers.count > 0 {
-                var date: [Date] = []
-                for completedPrayer in self.completedPrayers {
-                    date.append(completedPrayer.dateStored)
-                }
-                LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
+            RealmUtilities.signInUser(withUser: self.user) {
+                self.load10minPrayers(skippingSignIn: true)
             }
-            
-
-            self.loadTimeTracker()
         }
     }
     
-    private func loadTimeTracker() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) {results in
-            self.stats = results.map(StatsItem.init)[0]
-            LocalFirebaseData.timeTracker = self.stats!.timeInPrayer
-            LocalFirebaseData.streak = self.stats!.streak
-            
-            self.load10minPrayers(skippingSignIn: true)
-
-        }
-    }
     
+    //TODO: Clean up these funcs
     private func load10minPrayers(skippingSignIn: Bool) {
         FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "10 mins") { results in
             let realm = try! Realm() //TODO: change to do, catch try
@@ -202,6 +140,7 @@ class LaunchViewController: UIViewController {
         } catch let error {
             print(error.localizedDescription)
         }
+        RealmUtilities.deleteUser()
     }
 
 }

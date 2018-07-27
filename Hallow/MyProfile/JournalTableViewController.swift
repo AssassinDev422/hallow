@@ -10,15 +10,12 @@ import UIKit
 import FirebaseFirestore
 import Firebase
 import JGProgressHUD
+import RealmSwift
 
 class JournalTableViewController: BaseTableViewController {
 
     var journalEntries: [JournalEntry] = []
-    
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String? 
-
+    var user = User()
     
     // MARK: - Life cycle
     
@@ -30,34 +27,23 @@ class JournalTableViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
-            self.loadJournalEntries()
+        let realm = try! Realm() //TODO: Change !
+        
+        journalEntries = Array(realm.objects(JournalEntry.self).sorted(byKeyPath: "dateStored", ascending: false))
+        
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
+        user = realmUser
+        
+        self.tableView.reloadData()
         ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
-    }
-    
-    // MARK: - Functions
-    
-    private func loadJournalEntries() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "journal", byUserEmail: self.userEmail!) { results in
-            self.set(isLoading: true)
-            self.journalEntries = results.map(JournalEntry.init)
-            self.journalEntries.sort{$0.dateStored > $1.dateStored}
-            self.tableView!.reloadData()
-            self.set(isLoading: false)
-        }
     }
     
     // Sets up hud
@@ -105,17 +91,12 @@ class JournalTableViewController: BaseTableViewController {
             let entry = journalEntries[indexPath.row]
             let docID = entry.docID
             
-            // Delete file function
-            let db = Firestore.firestore()
-            db.collection("user").document(self.userEmail!).collection("journal").document(docID).delete() { error in
-                if let error = error {
-                    print("Error removing document: \(error)")
-                } else {
-                    print("Document successfully removed!")
-                    self.journalEntries.remove(at: indexPath.row)
-                    self.tableView.deleteRows(at: [indexPath], with: .left)
-                }
+            RealmUtilities.deleteJournalEntry(withID: docID) {
+                self.journalEntries.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .left)
             }
+            
+            FirebaseUtilities.deleteFile(ofType: "journal", byUserEmail: user.email, withID: docID)
         }
     }
     

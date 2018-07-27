@@ -11,17 +11,14 @@
 import UIKit
 import FirebaseFirestore
 import Firebase
+import RealmSwift
 
 class ReflectViewController: JournalBaseViewController {
 
     @IBOutlet weak var textField: UITextView!
     
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String?
-    
+    var user = User()
     var prayerTitle: String?
-
 
     // MARK: - Life cycle
 
@@ -40,20 +37,19 @@ class ReflectViewController: JournalBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
+        
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
+        user = realmUser
+        
         ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
 
@@ -73,28 +69,16 @@ class ReflectViewController: JournalBaseViewController {
     
     private func save() {
         let entry = textField!.text
-    
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: self.userEmail!, withEntry: entry!, withTitle: prayerTitle!)
-        
+        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: user.email, withEntry: entry!, withTitle: prayerTitle!)
         reflectSegue()
-
     }
-    
+        
     private func reflectSegue() {
-        if Constants.isFirstDay == true {
+        if user.isFirstDay == true {
             performSegue(withIdentifier: "isFirstDaySegue", sender: self)
-            Constants.isFirstDay = false
+            RealmUtilities.updateIsFirstDay(withIsFirstDay: false)
         } else {
-            if Constants.hasCompleted == false {
-                performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
-            } else {
-                if Constants.hasSeenCompletionScreen == false {
-                    performSegue(withIdentifier: "completedSegue", sender: self)
-                    Constants.hasSeenCompletionScreen = true
-                } else {
-                    performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
-                }
-            }
+            performSegue(withIdentifier: "isNotFirstDaySegue", sender: self)
         }
     }
    

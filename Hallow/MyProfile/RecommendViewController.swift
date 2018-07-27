@@ -9,30 +9,28 @@
 import UIKit
 import FirebaseFirestore
 import Firebase
+import RealmSwift
 
 // TODO - Done button bar on top and next
 
-class RecommendViewController: UIViewController, UITextFieldDelegate {
+class RecommendViewController: LogInBaseViewController {
     
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var phoneNumberField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String?
+    var user = User()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         nameField.delegate = self
-        nameField.tag = 0
         phoneNumberField.delegate = self
-        phoneNumberField.tag = 1
         emailField.delegate = self
-        emailField.tag = 2
         
-        setUpDoneButton()
+        setUpDoneButton(textField: nameField)
+        setUpDoneButton(textField: phoneNumberField)
+        setUpDoneButton(textField: emailField)
         
         navigationItem.title = "Recommend a Friend"
 
@@ -42,20 +40,17 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
+        let realm = try! Realm() //TODO: Change to do catch
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
+        user = realmUser
         ReachabilityManager.shared.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -63,21 +58,19 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Actions
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
-            nextField.becomeFirstResponder()
-        } else {
+        if textField == nameField {
+            phoneNumberField.becomeFirstResponder()
+        } else if textField == phoneNumberField {
+            emailField.becomeFirstResponder()
+        } else if textField == emailField {
             submit()
-            textField.resignFirstResponder()
+            emailField.resignFirstResponder()
         }
         return false
     }
     
     @IBAction func submitButtonPressed(_ sender: Any) {
         submit()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
     
     // MARK: - Functions
@@ -87,40 +80,15 @@ class RecommendViewController: UIViewController, UITextFieldDelegate {
         let number = phoneNumberField!.text
         let email = emailField!.text
         let submission = "\(String(describing: name)) - \(String(describing: number)) - \(String(describing: email))"
-        FirebaseUtilities.sendFeedback(ofType: "recommendation", byUserEmail: self.userEmail!, withEntry: submission)
+        FirebaseUtilities.sendFeedback(ofType: "recommendation", byUserEmail: user.email, withEntry: submission)
         self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Design
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderWidth = 1.0
+    override func textFieldDidBeginEditing(_ textField: UITextField) {
+        super.textFieldDidBeginEditing(textField)
         textField.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
-        textField.layer.cornerRadius = 5.0
     }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.layer.borderWidth = 1.0
-        textField.layer.borderColor = UIColor.clear.cgColor
-    }
-    
-    // Add done button to keyboard
-    
-    private func setUpDoneButton() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        nameField.inputAccessoryView = toolBar
-        phoneNumberField.inputAccessoryView = toolBar
-        emailField.inputAccessoryView = toolBar
-
-    }
-    
-    @objc private func doneClicked() {
-        view.endEditing(true)
-    }
-    
 
 }

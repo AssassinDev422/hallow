@@ -16,6 +16,7 @@ import JGProgressHUD
 import FirebaseFirestore
 import Firebase
 import MediaPlayer
+import RealmSwift
 
 class AudioPlayerViewController: AudioController {
 
@@ -27,21 +28,12 @@ class AudioPlayerViewController: AudioController {
     @IBOutlet weak var exitButton: UIButton!
     
     var prayer: PrayerItem?
-    
-    var userEmail: String?
-    
     var controlTimer: Timer?
-    
-    var alreadySaved = 0
-    
     var addedTimeTracker = 0.00
-
-    var streak: Int = 0
-    var stats: StatsItem?
-    
-    var completedPrayers: [PrayerTracking] = []
-    
     var nowPlayingInfo = [String : Any]()
+    var user = User()
+    
+    var guide: Guide = Guide.Francis
     
     // MARK: - Life cycle
    
@@ -52,11 +44,19 @@ class AudioPlayerViewController: AudioController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
+        }
+        user = realmUser
+        setGuide()
         if let prayer = prayer {
-            downloadAudio(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+            downloadAudio(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                     self.set(isLoading: isLoading)
                 }, completionBlock: { guide, audioURL in
-                    self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                    self.setGuide()
+                    self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                         self.set(isLoading: isLoading)
                     }, updateProgress: {
                         self.updateProgressControl()
@@ -66,8 +66,6 @@ class AudioPlayerViewController: AudioController {
                 })
             nowPrayingTitleLabel.text = self.prayer?.desc
         }
-        self.userEmail = LocalFirebaseData.userEmail
-        alreadySaved = 0
         addedTimeTracker = 0.0
         ReachabilityManager.shared.addListener(listener: self)
         MPRemoteCommandCenter.shared().togglePlayPauseCommand.addTarget(self, action: #selector(playPause))
@@ -86,12 +84,8 @@ class AudioPlayerViewController: AudioController {
         super.viewDidDisappear(animated)
         controlTimer?.invalidate()
         audioPlayer?.currentTime = 0
-        audioPlayer?.currentTime = 0
         audioPlayer?.stop()
         progressSlider.setValue(Float(0.0), animated: false)
-        if let email = self.userEmail {
-            FirebaseUtilities.updateConstantsFile(withDocID: Constants.firebaseDocID, byUserEmail: email, guide: Constants.guide, isFirstDay: Constants.isFirstDay, hasCompleted: Constants.hasCompleted, hasSeenCompletionScreen: Constants.hasSeenCompletionScreen, hasStartedListening: Constants.hasStartedListening, hasLoggedOutOnce: Constants.hasLoggedOutOnce)
-        }
     }
     
     // MARK: - Actions
@@ -109,19 +103,15 @@ class AudioPlayerViewController: AudioController {
             self.downloadTask?.cancel()
             print("Canceled download")
         }
-        updateOnlyTimeStat()
         exitButton.setTitleColor(UIColor(named: "beige"), for: .normal)
-        
         if let audioPlayer = audioPlayer {
             let timeLeft = audioPlayer.duration - audioPlayer.currentTime
             if timeLeft < 10.0 {
-                self.controlTimer?.invalidate()
-                self.audioPlayer!.pause()
-                self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+                audioCompleted()
                 self.performSegue(withIdentifier: "reflectSegue", sender: self)
-                self.loadAndSaveCompletedPrayers()
             } else {
-                Constants.pausedTime = audioPlayer.currentTime
+                RealmUtilities.prayerExited(withStartTime: startTime)
+                RealmUtilities.setCurrentAudioTime(withCurrentTime: audioPlayer.currentTime)
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -142,13 +132,12 @@ class AudioPlayerViewController: AudioController {
     }
     
     @objc private func playPause() {
-        Constants.hasStartedListening = true
         guard let audioPlayer = audioPlayer else {
             guard let prayer = prayer else {
                 print("prayer not set")
                 return
             }
-            self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+            self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
@@ -163,11 +152,6 @@ class AudioPlayerViewController: AudioController {
         } else {
             audioPlayer.play()
             playPauseButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
-        }
-        if self.alreadySaved == 0 {
-            FirebaseUtilities.saveStartedPrayer(byUserEmail: LocalFirebaseData.userEmail, withPrayerTitle: self.prayer!.title)
-            LocalFirebaseData.started += 1
-            self.alreadySaved = 1
         }
     }
     
@@ -195,7 +179,7 @@ class AudioPlayerViewController: AudioController {
                 print("Prayer not set")
                 return
             }
-            self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+            self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
@@ -208,11 +192,15 @@ class AudioPlayerViewController: AudioController {
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        audioCompleted()
+        self.performSegue(withIdentifier: "reflectSegue", sender: self)
+    }
+    
+    private func audioCompleted() {
         self.controlTimer?.invalidate()
         self.audioPlayer!.pause()
         self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-        self.performSegue(withIdentifier: "reflectSegue", sender: self)
-        self.loadAndSaveCompletedPrayers()
+        RealmUtilities.prayerCompleted(completedPrayerTitle: prayer!.title, withStartTime: startTime)
     }
     
     private func sliderUpdatedTime() {
@@ -224,7 +212,7 @@ class AudioPlayerViewController: AudioController {
                 print("Prayer not set")
                 return
             }
-            self.setupAudioPlayer(guide: Constants.Guide.Francis, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+            self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
@@ -236,110 +224,11 @@ class AudioPlayerViewController: AudioController {
         }
     }
     
-    // MARK: - Functions - Stats
-    
-    private func loadAndSaveCompletedPrayers() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "completedPrayers", byUserEmail: self.userEmail!) {results in
-            self.completedPrayers = results.map(PrayerTracking.init)
-            LocalFirebaseData.completed = self.completedPrayers.count
-            
-            if self.completedPrayers.count > 0 {
-                var date: [Date] = []
-                for completedPrayer in self.completedPrayers {
-                    date.append(completedPrayer.dateStored)
-                }
-                LocalFirebaseData.mostRecentPrayerDate = date.sorted()[date.count - 1]
-            }
-            
-            LocalFirebaseData.completed += 1
-            LocalFirebaseData.completedPrayers.append(self.prayer!.title) 
-            
-            self.updateMyStats()
-            FirebaseUtilities.saveCompletedPrayer(byUserEmail: self.userEmail!, withPrayerTitle: self.prayer!.title)
-        }
-    }
-    
-    private func updateOnlyTimeStat() {
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) { results in
-            print("Results: \(results)")
-            if results == [] {
-                LocalFirebaseData.timeTracker = self.addedTimeTracker
-                self.streak = 1
-                LocalFirebaseData.streak = self.streak
-                FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: self.addedTimeTracker, withStreak: self.streak)
-                
-                
-            } else {
-                self.stats = results.map(StatsItem.init)[0]
-                if let stats = self.stats {
-                   
-                    print("Original time: \(stats.timeInPrayer)")
-                    
-                    self.addedTimeTracker = Date().timeIntervalSince(self.startTime)
-                    print("Start time: \(self.startTime) - Added time: \(self.addedTimeTracker)")
-                    
-                    stats.timeInPrayer += self.addedTimeTracker
-                    LocalFirebaseData.timeTracker = stats.timeInPrayer
-                    
-                    LocalFirebaseData.streak = stats.streak
-                    
-                    FirebaseUtilities.updateStats(withDocID: stats.docID!, byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
-                    print("Delta time: \(self.addedTimeTracker)")
-                    print("Updated Time: \(stats.timeInPrayer)")
-                    
-                } else {
-                    print("Error: stats is nil")
-                }
-            }
-        }
-    }
-    
-    
-    private func updateMyStats() {
-        
-        FirebaseUtilities.loadAllDocumentsFromUser(ofType: "stats", byUserEmail: self.userEmail!) { results in
-            print("Results: \(results)")
-            if results == [] {
-                LocalFirebaseData.timeTracker = self.addedTimeTracker
-                self.streak = 1
-                LocalFirebaseData.streak = self.streak
-                FirebaseUtilities.saveStats(byUserEmail: self.userEmail!, withTimeInPrayer: self.addedTimeTracker, withStreak: self.streak)
-                
-                
-            } else {
-                self.stats = results.map(StatsItem.init)[0]
-                if let stats = self.stats {
-                    
-                    print("Original time: \(stats.timeInPrayer)")
-                    
-                    self.addedTimeTracker = Date().timeIntervalSince(self.startTime)
-                    print("Start time: \(self.startTime) - Added time: \(self.addedTimeTracker)")
-                    
-                    stats.timeInPrayer += self.addedTimeTracker
-                    LocalFirebaseData.timeTracker = stats.timeInPrayer
-                    
-                    let calendar = Calendar.current
-                    let isNextDay = calendar.isDateInYesterday(LocalFirebaseData.mostRecentPrayerDate)
-                    let isToday = calendar.isDateInToday(LocalFirebaseData.mostRecentPrayerDate)
-                    
-                    if isNextDay == true {
-                        stats.streak += 1
-                    } else {
-                        if isToday == false {
-                            stats.streak = 1
-                        }
-                    }
-                    
-                    LocalFirebaseData.streak = stats.streak
-                    
-                    print("Delta time: \(self.addedTimeTracker)")
-                    print("Updated Time: \(stats.timeInPrayer)")
-                    
-                    FirebaseUtilities.updateStats(withDocID: stats.docID!, byUserEmail: self.userEmail!, withTimeInPrayer: stats.timeInPrayer, withStreak: stats.streak)
-                } else {
-                    print("Error: stats is nil")
-                }
-            }
+    private func setGuide() { //TODO: Likely not needed
+        if user.guide == "Francis" {
+            guide = Guide.Francis
+        } else {
+            guide = Guide.Abby
         }
     }
     
@@ -373,7 +262,7 @@ class AudioPlayerViewController: AudioController {
         if let ReflectViewController = destinationViewController as? ReflectViewController {
             let prayerTitle = "\(self.prayer!.title) - \(self.prayer!.desc)"
             ReflectViewController.prayerTitle = prayerTitle
-            Constants.pausedTime = 0.00
+            RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
         }
     }
     

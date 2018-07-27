@@ -18,14 +18,9 @@ class PrayerJourneySuperViewController: UIViewController {
     @IBOutlet weak var tableViewContainter: UIView!
     @IBOutlet weak var playSelectedButton: UIButton!
     
-    var handle: AuthStateDidChangeListenerHandle?
-    var userID: String?
-    var userEmail: String? 
-    
     var prayer: PrayerItem?
-    var completedPrayers: [PrayerTracking] = []
-    var completedPrayersTitles: [String] = []
-    var nextPrayerTitle: String = "Day 1"
+    
+    var user = User()
     
     var everythingIsLoaded: Bool = false
     
@@ -42,13 +37,15 @@ class PrayerJourneySuperViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.userID = user?.uid
-            self.userEmail = user?.email
-            self.setNextPrayer()
-            self.pullUpPrayerData()
+        
+        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
+        guard let realmUser = realm.objects(User.self).first else {
+            print("Error in realm prayer completed")
+            return
         }
-        Constants.pausedTime = 0.00
+        user = realmUser
+        self.pullUpPrayerData()
+
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -59,11 +56,6 @@ class PrayerJourneySuperViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let handle = handle else {
-            print("Error with handle")
-            return
-        }
-        Auth.auth().removeStateDidChangeListener(handle)
         ReachabilityManager.shared.removeListener(listener: self)
     }
     
@@ -75,34 +67,12 @@ class PrayerJourneySuperViewController: UIViewController {
     
     // MARK: - Functions
     
-    private func setNextPrayer() {
-        
-        self.completedPrayersTitles = LocalFirebaseData.completedPrayers
-        if self.completedPrayersTitles.count > 0 {
-            self.completedPrayersTitles.sort()
-            self.nextPrayerTitle = self.completedPrayersTitles[self.completedPrayersTitles.count-1]
-            self.dayNumber = Int(String(self.nextPrayerTitle.last!))!
-            self.dayNumber += 1
-            let newDayNumber: String = String(self.dayNumber)
-            self.nextPrayerTitle.removeLast()
-            self.nextPrayerTitle.append(newDayNumber)
-            print(self.nextPrayerTitle)
-            if self.dayNumber == 10 {
-                LocalFirebaseData.nextPrayerTitle = "Day 9"
-            } else {
-                LocalFirebaseData.nextPrayerTitle = self.nextPrayerTitle
-            }
-        } else {
-            LocalFirebaseData.nextPrayerTitle = "Day 1"
-        }
-    }
-    
     private func pullUpPrayerData() {
         
         let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
         let prayers = realm.objects(PrayerItem.self)
 
-        self.prayer = prayers.filter("title = %@ AND guide = %@ AND length = %@", LocalFirebaseData.nextPrayerTitle, Constants.guide, "10 mins") [0]
+        self.prayer = prayers.filter("title = %@ AND guide = %@ AND length = %@", user.nextPrayerTitle, user.guide, "10 mins") [0]
         
         self.prayerTitleLabel.text = self.prayer!.title
         self.prayerTitleLabel.text?.append(" of 9")
@@ -118,6 +88,11 @@ class PrayerJourneySuperViewController: UIViewController {
     
     private func updateTableViewPosition() {
         let child = self.childViewControllers.first as! PrayerJourneyTableViewController
+        
+        
+        let completes = user.completedPrayers.sorted()
+        let nextPrayerTitle = completes[user.completedPrayers.count - 1]
+        self.dayNumber = Int(String(nextPrayerTitle.last!))! + 1
 
         if self.dayNumber == 10 {
             let indexPath = IndexPath(row: 8, section: 0)
