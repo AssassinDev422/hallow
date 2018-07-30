@@ -32,8 +32,7 @@ class AudioPlayerViewController: AudioController {
     var addedTimeTracker = 0.00
     var nowPlayingInfo = [String : Any]()
     var user = User()
-    
-    var guide: Guide = Guide.Francis
+    var guide: User.Guide = User.Guide.Francis
     
     // MARK: - Life cycle
    
@@ -44,12 +43,16 @@ class AudioPlayerViewController: AudioController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm() 
+            guard let realmUser = realm.objects(User.self).first else {
+                print("REALM: Error in will appear of audioplayer")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of audioplayer")
         }
-        user = realmUser
         setGuide()
         if let prayer = prayer {
             downloadAudio(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
@@ -102,6 +105,7 @@ class AudioPlayerViewController: AudioController {
         if self.downloadTask != nil {
             self.downloadTask?.cancel()
             print("Canceled download")
+            self.dismiss(animated: true, completion: nil)
         }
         exitButton.setTitleColor(UIColor(named: "beige"), for: .normal)
         if let audioPlayer = audioPlayer {
@@ -127,7 +131,6 @@ class AudioPlayerViewController: AudioController {
         nowPlayingInfo[MPMediaItemPropertyTitle] = "\(prayer?.title ?? "") - \(prayer?.desc ?? "")"
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.audioPlayer?.currentTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] =  self.audioPlayer?.duration
-        
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
@@ -156,22 +159,22 @@ class AudioPlayerViewController: AudioController {
     }
     
     // MARK: - Functions - Progress Control
-    
     // FIXME: Doesn't update consistently at least on lock screen each second esp. when play / pausing
     
     private func updateProgressControl() {
         if audioPlayer != nil {
             controlTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
-                let percentComplete = self!.audioPlayer!.currentTime / self!.audioPlayer!.duration
+                guard let audioPlayer = self?.audioPlayer else {
+                    print("Error in updateProgressControl")
+                    return
+                }
+                let percentComplete = audioPlayer.currentTime / audioPlayer.duration
                 self?.progressSlider.setValue(Float(percentComplete), animated: true)
-                
-                let time = self!.audioPlayer!.currentTime
+                let time = audioPlayer.currentTime
                 let minutes = Int(time) / 60 % 60
                 let seconds = Int(time) % 60
                 self?.timeLabel.text = String(format:"%01i:%02i", minutes, seconds)
-                
                 self?.timeLabel.frame.origin.x = 5 + CGFloat(percentComplete) * (self?.progressSlider.frame.width)!
-                
                 self?.setUpLockScreenInfo()
             }
         } else {
@@ -198,9 +201,13 @@ class AudioPlayerViewController: AudioController {
     
     private func audioCompleted() {
         self.controlTimer?.invalidate()
-        self.audioPlayer!.pause()
+        guard let audioPlayer = audioPlayer, let prayer = prayer else {
+            print("Error in audioCompleted")
+            return
+        }
+        audioPlayer.pause()
         self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-        RealmUtilities.prayerCompleted(completedPrayerTitle: prayer!.title, withStartTime: startTime)
+        RealmUtilities.prayerCompleted(completedPrayerTitle: prayer.title, withStartTime: startTime)
     }
     
     private func sliderUpdatedTime() {
@@ -225,10 +232,10 @@ class AudioPlayerViewController: AudioController {
     }
     
     private func setGuide() { //TODO: Likely not needed
-        if user.guide == "Francis" {
-            guide = Guide.Francis
+        if user.guide == User.Guide.Francis {
+            guide = User.Guide.Francis
         } else {
-            guide = Guide.Abby
+            guide = User.Guide.Abby
         }
     }
     
@@ -252,18 +259,12 @@ class AudioPlayerViewController: AudioController {
     }
     
     // MARK: - Navigation
-    // Unwind
-    @IBAction func returnFromSegueActions(sender: UIStoryboardSegue){
-    }
-    
-    // Prepare for segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination
-        if let ReflectViewController = destinationViewController as? ReflectViewController {
-            let prayerTitle = "\(self.prayer!.title) - \(self.prayer!.desc)"
+        if let ReflectViewController = destinationViewController as? ReflectViewController, let prayer = self.prayer {
+            let prayerTitle = "\(prayer.title) - \(prayer.desc)"
             ReflectViewController.prayerTitle = prayerTitle
             RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
         }
     }
-    
 }

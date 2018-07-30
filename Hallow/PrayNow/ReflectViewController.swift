@@ -26,25 +26,22 @@ class ReflectViewController: JournalBaseViewController {
         super.viewDidLoad()
         textField!.layer.borderWidth = 0.5
         textField!.layer.borderColor = UIColor.white.cgColor
-        
         textField.delegate = self
-                
         setUpDoneButton(textView: textField)
-
     }
-    
-    // Firebase listener
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            guard let realmUser = realm.objects(User.self).first else {
+                print("REALM: Error in will appear of reflect")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of reflect")
         }
-        user = realmUser
-        
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -68,13 +65,16 @@ class ReflectViewController: JournalBaseViewController {
     }
     
     private func save() {
-        let entry = textField!.text
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: user.email, withEntry: entry!, withTitle: prayerTitle!)
+        guard let entry = textField.text, let prayerTitle = prayerTitle else {
+            print("Error in save")
+            return
+        }
+        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: user.email, withEntry: entry, withTitle: prayerTitle)
         reflectSegue()
     }
         
     private func reflectSegue() {
-        if user.isFirstDay == true {
+        if user.isFirstDay {
             performSegue(withIdentifier: "isFirstDaySegue", sender: self)
             RealmUtilities.updateIsFirstDay(withIsFirstDay: false)
         } else {
@@ -97,5 +97,4 @@ class ReflectViewController: JournalBaseViewController {
                 destination.selectedIndex = 1
         }
     }
-        
 }

@@ -19,39 +19,36 @@ class JournalEntryViewController: JournalBaseViewController {
     @IBOutlet weak var dateField: UILabel!
     
     var journalEntry: JournalEntry?
-    
     var user = User()
     
     // MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         textField.delegate = self
-        
         titleField.text = journalEntry?.prayerTitle
         textField.text = journalEntry?.entry
         dateField.text = journalEntry?.date
-        
         textField!.layer.borderWidth = 0
         textField!.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
-        
         navigationItem.title = "Journal Entry"
-        
         setUpDoneButton(textView: textField)
-        
     }
     
     // Firebase listener
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let realm = try! Realm()
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            guard let realmUser = realm.objects(User.self).first else {
+                print("REALM: Error in will appear of journal entry")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of journal entry")
         }
-        user = realmUser
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -68,12 +65,14 @@ class JournalEntryViewController: JournalBaseViewController {
     
     
     private func update() {
-        let entry = textField!.text
-        let docID = journalEntry?.docID
-        FirebaseUtilities.updateReflection(withDocID: docID!, byUserEmail: user.email, withEntry: entry!, withTitle: journalEntry!.prayerTitle)
-        RealmUtilities.updateJournalEntry(withID: docID!, withEntry: entry!) {
+        guard let entry = textField.text, let docID = journalEntry?.docID, let title = journalEntry?.prayerTitle else {
+            print("Error in update")
+            return
+        }
+        FirebaseUtilities.updateReflection(withDocID: docID, byUserEmail: user.email, withEntry: entry, withTitle: title)
+        RealmUtilities.updateJournalEntry(withID: docID, withEntry: entry) {
             self.navigationController?.popViewController(animated: true)
-            print("ENTRY after popping vc: \(entry!)")
+            print("ENTRY after popping vc: \(entry)")
         }
     }
     

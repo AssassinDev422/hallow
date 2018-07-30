@@ -50,13 +50,11 @@ class SettingsReminderViewController: UIViewController {
     }
     
     @IBAction func updateReminders(_ sender: Any) {
-        
         let defaults = UserDefaults.standard
         let reminderSet = defaults.bool(forKey: "reminderSet")
         let firstReminder = defaults.bool(forKey: "firstReminder")
-        
-        if reminderSet == true {
-            if firstReminder == false {
+        if reminderSet {
+            if !firstReminder {
                 let center = UNUserNotificationCenter.current()
                 center.removeAllDeliveredNotifications()
                 center.removeAllPendingNotificationRequests()
@@ -68,31 +66,23 @@ class SettingsReminderViewController: UIViewController {
             }
         } else {
             allowFirstReminder()
-            
             let defaults = UserDefaults.standard
             defaults.set(true, forKey: "reminderSet")
             defaults.set(true, forKey: "firstReminder")
             defaults.synchronize()
-                        
         }
     }
     
     // MARK: - Functions
     
-    
     private func loadDisplay() {
-        
         let defaults = UserDefaults.standard
         let reminderSet = defaults.bool(forKey: "reminderSet")
-        
-        if reminderSet == true {
-            
+        if reminderSet {
             updateButton.setTitle("UPDATE", for: .normal)
             reminderTimePicker.isHidden = false
             removeReminderButton.isHidden = false
-            
             self.setDisplay()
-            
         } else {
             updateButton.setTitle("ENABLE REMINDERS", for: .normal)
             reminderTimePicker.isHidden = true
@@ -102,20 +92,17 @@ class SettingsReminderViewController: UIViewController {
     }
 
     private func setDisplay() {
-            
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
-        
-        
         let defaults = UserDefaults.standard
-        let reminderTime = defaults.value(forKey: "reminderTime") as! Date
+        guard let reminderTime = defaults.value(forKey: "reminderTime") as? Date  else {
+            print("Error in setDisplay")
+            return
+        }
         defaults.synchronize()
-        
         let currentTime = formatter.string(from: reminderTime)
         currentReminderLabel.text = "Current reminder set to: \(currentTime)"
-    
         self.reminderTimePicker.date = reminderTime
-        
     }
 
 
@@ -141,9 +128,7 @@ class SettingsReminderViewController: UIViewController {
     
     private func setUpFirstReminder() {
         let center = UNUserNotificationCenter.current()
-        
         let identifier = "HallowLocalNotification"
-        
         let content = UNMutableNotificationContent()
         content.title = "Quick reminder to pray"
         content.sound = UNNotificationSound.default()
@@ -152,7 +137,6 @@ class SettingsReminderViewController: UIViewController {
         let triggerDaily = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
         print("triggerDaily value: \(triggerDaily)")
-        
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         center.add(request, withCompletionHandler: { (error) in
@@ -160,22 +144,14 @@ class SettingsReminderViewController: UIViewController {
                 print("Something went wrong on the last step!")
             }
         })
-        
-        
-        
         let defaults = UserDefaults.standard
         defaults.set(reminderTimePicker.date, forKey: "reminderTime")
         defaults.synchronize()
-        
-        print("Set constants value to: \(reminderTimePicker.date)")
-        
     }
     
     private func setUpReminder() {
         let center = UNUserNotificationCenter.current()
-        
         let identifier = "HallowLocalNotification"
-        
         let content = UNMutableNotificationContent()
         content.title = "Quick reminder to pray"
         content.sound = UNNotificationSound.default()
@@ -183,7 +159,6 @@ class SettingsReminderViewController: UIViewController {
         let time = reminderTimePicker.date
         let triggerDaily = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
-        
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         center.add(request, withCompletionHandler: { (error) in
@@ -191,11 +166,8 @@ class SettingsReminderViewController: UIViewController {
                 print("Something went wrong on the last step!")
             }
         })
-        
-        
         let defaults = UserDefaults.standard
         defaults.set(reminderTimePicker.date, forKey: "reminderTime")
         defaults.synchronize()
-        
     }
 }

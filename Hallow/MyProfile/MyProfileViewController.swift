@@ -23,14 +23,10 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
     @IBOutlet weak var streakNumber: UILabel!
     
     var user = User()
-    
     var storedUserID: String?
     var storedUserEmail: String?
-    
     var newFirebaseDocID: String?
-
     var numberLoading = 4
-    
     var imagePicker : UIImagePickerController = UIImagePickerController()
     var profilePicture : UIImage?
     
@@ -41,25 +37,24 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "fadedPink")
         imagePicker.delegate = self
-        
         profilePicture = loadImage()
-        
         profileImage.image = profilePicture
         formatProfilePicture()
         
     }
 
-    // Firebase listener
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let realm = try! Realm() //TODO: Change to do catch
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            guard let realmUser = realm.objects(User.self).first else {
+                print("REALM: Error in will appear of my profile")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of my profile")
         }
-        user = realmUser
         
         self.nameLabel.text = user.name
         self.completedNumber.text = String(user.completedPrayers.count - 1)
@@ -93,12 +88,10 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func uploadImage(_ sender: Any) {
-        
         let alertController : UIAlertController = UIAlertController(title: "Select source", message: "Select Camera or Photo Library", preferredStyle: .actionSheet)
         let cameraAction : UIAlertAction = UIAlertAction(title: "Camera", style: .default, handler: {(cameraAction) in
             print("camera Selected...")
-            
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) == true {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                 self.imagePicker.sourceType = .camera
                 self.present()
             } else {
@@ -108,7 +101,7 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         
         let libraryAction : UIAlertAction = UIAlertAction(title: "Photo Library", style: .default, handler: {(libraryAction) in
             print("Photo library selected....")
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) == true {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
                 self.imagePicker.sourceType = .photoLibrary
                 self.present()
             } else {
@@ -125,7 +118,6 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         alertController.addAction(cancelAction)
         alertController.popoverPresentationController?.sourceView = view
         alertController.popoverPresentationController?.sourceRect = view.frame
-        
         self.present(alertController, animated: true, completion: nil)
     }
     
@@ -138,16 +130,16 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
     func imagePickerController(_: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         print("info of the pic reached :\(info) ")
         self.profilePicture = info[UIImagePickerControllerOriginalImage] as? UIImage
-        
         profileImage.image = self.profilePicture
-        
         formatProfilePicture()
-        
-        FirebaseUtilities.uploadProfilePicture(withImage: self.profilePicture!, byUserEmail: user.email)
-        updateImage(image: self.profilePicture!)
+        guard let profilePicture = self.profilePicture else {
+            print("Error in imagePickerController")
+            return
+        }
+        FirebaseUtilities.uploadProfilePicture(withImage: profilePicture, byUserEmail: user.email)
+        updateImage(image: profilePicture)
         
         self.imagePicker.dismiss(animated: true, completion: nil)
-        
     }
     
     private func formatProfilePicture() {

@@ -20,10 +20,8 @@ class GuideSelectorViewController: AudioController {
     
     var firstPlay: Bool = true
     var isPlaying: Bool = false
-    
-    var guideSelected: String = "Francis"
-    var guidePlaying: Guide?
-    
+    var guideSelected: User.Guide = User.Guide.Francis
+    var guidePlaying: User.Guide?
     var francisSampleAudioURL = "audio/Samples - F.mp3"
     var abbySampleAudioURL = "audio/Samples - A.mp3"
     
@@ -61,45 +59,45 @@ class GuideSelectorViewController: AudioController {
     @IBAction func francisButton(_ sender: UIButton) {
         francisButton.isSelected = !francisButton.isSelected
         abbyButton.isSelected = !abbyButton.isSelected
-        guideSelected = "Francis"
+        guideSelected = User.Guide.Francis
     }
     
     @IBAction func abbyButton(_ sender: UIButton) {
         abbyButton.isSelected = !abbyButton.isSelected
         francisButton.isSelected = !francisButton.isSelected
-        guideSelected = "Abby"
+        guideSelected = User.Guide.Abby
     }
     
     @IBAction func francisPlaySample(_ sender: UIButton) {
-        if firstPlay == false {
+        if !firstPlay {
             audioPlayer?.stop()
         }
-        downloadAudio(guide: Guide.Francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
+        downloadAudio(guide: User.Guide.Francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
             self.set(isLoading: isLoading)
         }, completionBlock: { guide, audioURL in
-            self.setupAudioPlayer(guide: Guide.Francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
+            self.setupAudioPlayer(guide: User.Guide.Francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
             }, playPause: { guide in
-                self.playToggle(guide: Guide.Francis)
+                self.playToggle(guide: User.Guide.Francis)
             })
         })
         firstPlay = false
     }
     
     @IBAction func abbyPlaySample(_ sender: UIButton) {
-        if firstPlay == false {
+        if !firstPlay {
             audioPlayer?.stop()
         }
         
-        downloadAudio(guide: Guide.Abby, audioURL: abbySampleAudioURL, setLoading: { isLoading in
+        downloadAudio(guide: User.Guide.Abby, audioURL: abbySampleAudioURL, setLoading: { isLoading in
             self.set(isLoading: isLoading)
         }, completionBlock: { guide, audioURL in
-            self.setupAudioPlayer(guide: Guide.Abby, audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
+            self.setupAudioPlayer(guide: User.Guide.Abby, audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
             }, playPause: { guide in
-                self.playToggle(guide: Guide.Abby)
+                self.playToggle(guide: User.Guide.Abby)
             })
         })
         firstPlay = false
@@ -115,29 +113,29 @@ class GuideSelectorViewController: AudioController {
         }
     }
     
-    private func playToggle(guide: Guide) {
+    private func playToggle(guide: User.Guide) {
         switch guide {
         case .Francis:
-            if isPlaying == true, guidePlaying == Guide.Abby {
+            if isPlaying, guidePlaying == User.Guide.Abby {
                 abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
                 audioPlayer?.stop()
                 isPlaying = false
-                downloadAudio(guide: Guide.Francis, audioURL: francisSampleAudioURL, setLoading: { isLoading in
+                downloadAudio(guide: User.Guide.Francis, audioURL: francisSampleAudioURL, setLoading: { isLoading in
                     self.set(isLoading: isLoading)
                 }, completionBlock: { guide, audioURL in
-                    self.setupAudioPlayer(guide: Guide.Abby, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
+                    self.setupAudioPlayer(guide: User.Guide.Abby, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
                         self.set(isLoading: isLoading)
                     }, updateProgress: {
                     }, playPause: { guide in
-                        self.playToggle(guide: Guide.Francis)
+                        self.playToggle(guide: User.Guide.Francis)
                     })
                 })
             } else {
-                if isPlaying == false {
+                if !isPlaying {
                     francisPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
                     audioPlayer?.play()
                     isPlaying = true
-                    guidePlaying = Guide.Francis
+                    guidePlaying = User.Guide.Francis
                 } else {
                     francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
                     audioPlayer?.pause()
@@ -145,26 +143,26 @@ class GuideSelectorViewController: AudioController {
                 }
             }
         case .Abby:
-            if isPlaying == true, guidePlaying == Guide.Francis {
+            if isPlaying, guidePlaying == User.Guide.Francis {
                 francisPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
                 audioPlayer?.stop()
                 isPlaying = false
-                downloadAudio(guide: Guide.Abby, audioURL: abbySampleAudioURL, setLoading: { isLoading in
+                downloadAudio(guide: User.Guide.Abby, audioURL: abbySampleAudioURL, setLoading: { isLoading in
                     self.set(isLoading: isLoading)
                 }, completionBlock: { guide, audioURL in
-                    self.setupAudioPlayer(guide: Guide.Abby, audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
+                    self.setupAudioPlayer(guide: User.Guide.Abby, audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
                         self.set(isLoading: isLoading)
                     }, updateProgress: {
                     }, playPause: { guide in
-                        self.playToggle(guide: Guide.Abby)
+                        self.playToggle(guide: User.Guide.Abby)
                     })
                 })
             } else {
-                if isPlaying == false {
+                if !isPlaying {
                     abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "pauseButtonImage"), for: .normal)
                     audioPlayer?.play()
                     isPlaying = true
-                    guidePlaying = Guide.Abby
+                    guidePlaying = User.Guide.Abby
                 } else {
                     abbyPlaySampleButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
                     audioPlayer?.pause()

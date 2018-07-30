@@ -21,27 +21,25 @@ class FeedbackViewController: JournalBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setUpDoneButton(textView: feedbackField)
-        
         feedbackField.delegate = self
-                
-        feedbackField!.layer.borderWidth = 0
-        feedbackField!.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
-        
+        feedbackField?.layer.borderWidth = 0
+        feedbackField?.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
         navigationItem.title = "Send Feedback"
     }
     
-    // Firebase listener
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let realm = try! Realm() //TODO: Change to do catch
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            guard let realmUser = realm.objects(User.self).first else {
+                print("Error in feedback")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of feedback")
         }
-        user = realmUser
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -53,9 +51,11 @@ class FeedbackViewController: JournalBaseViewController {
     // MARK: - Actions
     
     @IBAction func sendButtonPressed(_ sender: Any) {
-        let entry = feedbackField!.text
-        FirebaseUtilities.sendFeedback(ofType: "feedback", byUserEmail: user.email, withEntry: entry!)
+        guard let entry = feedbackField.text else {
+            print("Error in sendButtonPressed")
+            return
+        }
+        FirebaseUtilities.sendFeedback(ofType: "feedback", byUserEmail: user.email, withEntry: entry)
         self.navigationController?.popViewController(animated: true)
     }
-
 }

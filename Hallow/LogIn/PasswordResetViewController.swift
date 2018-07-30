@@ -52,23 +52,21 @@ class PasswordResetViewController: LogInBaseViewController {
     
     private func sendReset() {
         showLightHud()
-        if let emailInit = self.emailField.text {
-            var email = emailInit
-            if email.last == " " {
-                email.removeLast()
-            }
-            Auth.auth().sendPasswordReset(withEmail: email) { (error) in
-                if let error = error {
-                    self.dismissHud()
-                    self.errorAlert(message: "\(error.localizedDescription)", viewController: self)
-                } else {
-                    self.dismissHud()
-                    
-                    self.alertWithDismiss(viewController: self, title: "Thanks!", message: "Check your email for next steps")
-                    
-                }
+        guard let originalEmail = emailField.text else {
+            self.dismissHud()
+            self.alertWithDismiss(viewController: self, title: "Error", message: "No email entered into email field")
+            return
+        }
+        let email = cleanText(text: originalEmail)
+        
+        Auth.auth().sendPasswordReset(withEmail: email) { (error) in
+            if let error = error {
+                self.dismissHud()
+                self.errorAlert(message: "\(error.localizedDescription)", viewController: self)
+            } else {
+                self.dismissHud()
+                self.alertWithDismiss(viewController: self, title: "Thanks!", message: "Check your email for next steps")
             }
         }
     }
-    
 }

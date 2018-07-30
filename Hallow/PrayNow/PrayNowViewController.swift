@@ -24,11 +24,10 @@ class PrayNowViewController: BaseViewController {
     
     var user = User()
     var prayer: PrayerItem?
-    var lengthWasChanged: Bool = false
-    
     var prayer10mins: PrayerItem?
     var prayer5mins: PrayerItem?
     var prayer15mins: PrayerItem?
+    var lengthWasChanged: Bool = false
     
     // MARK: - Life cycle
     
@@ -37,18 +36,18 @@ class PrayNowViewController: BaseViewController {
         setUpSelector()
     }
     
-    // Firebase listener
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            guard let realmUser = realm.objects(User.self).first else {
+                print("REALM: Error starting realm in praynow appear")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error starting realm in praynow appear")
         }
-        user = realmUser
-        
         if let prayer = self.prayer {
             self.setPrayerSession(withTitle: prayer.title)
             print("SETTING PRAYER SESSION WITH PRAYER: \(prayer.title)")
@@ -56,7 +55,6 @@ class PrayNowViewController: BaseViewController {
             self.setPrayerSession(withTitle: user.nextPrayerTitle)
             print("SETTING PRAYER SESSION WITHOUT PRAYER: \(user.nextPrayerTitle)")
         }
-
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -74,7 +72,10 @@ class PrayNowViewController: BaseViewController {
     
     @IBAction func lengthChanged(_ sender: Any) {
         RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
-        let length = self.lengthSelector.titleForSegment(at: self.lengthSelector.selectedSegmentIndex)!
+        guard let length = self.lengthSelector.titleForSegment(at: self.lengthSelector.selectedSegmentIndex) else {
+            print("Error in lengthChanged")
+            return
+        }
         if length == "5 mins" {
             self.prayer = self.prayer5mins
         } else if length == "15 mins" {
@@ -82,8 +83,6 @@ class PrayNowViewController: BaseViewController {
         } else {
             self.prayer = self.prayer10mins
         }
-        print("Prayer length changed: \(length)")
-
         UIView.animate(withDuration: 0.3) {
             self.setSelectorBarPosition()
         }
@@ -92,12 +91,15 @@ class PrayNowViewController: BaseViewController {
     // MARK: - Functions
     
     private func setPrayerSession(withTitle title: String) {
-        
-        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        let prayers = realm.objects(PrayerItem.self)
-        self.prayer5mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user.guide, "5 mins") [0]
-        self.prayer10mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user.guide, "10 mins") [0]
-        self.prayer15mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user.guide, "15 mins") [0]
+        do {
+            let realm = try Realm()
+            let prayers = realm.objects(PrayerItem.self)
+            self.prayer5mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "5 mins").first
+            self.prayer10mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "10 mins").first
+            self.prayer15mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "15 mins").first
+        } catch {
+            print("REALM: Error loading prayers in praynow")
+        }
 
         if let length = self.prayer?.length {
             if length == "5 mins" {
@@ -113,11 +115,15 @@ class PrayNowViewController: BaseViewController {
             self.prayer = self.prayer10mins
         }
         
-        self.prayerSessionTitle.text = self.prayer!.title
+        guard let prayer = self.prayer else {
+            print("Error in setPrayerSession")
+            return
+        }
+        self.prayerSessionTitle.text = prayer.title
         self.prayerSessionTitle.text?.append(" of 9")
-        self.prayerSessionDescription.text = self.prayer!.desc
+        self.prayerSessionDescription.text = prayer.desc
         
-        let description2 = NSMutableAttributedString(string: self.prayer!.desc2)
+        let description2 = NSMutableAttributedString(string: prayer.desc2)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
@@ -166,7 +172,6 @@ class PrayNowViewController: BaseViewController {
     // MARK: - Design
     
     private func setUpSelector() {
-        
         lengthSelector.setTitleTextAttributes([
             NSAttributedStringKey.font : UIFont(name: "Montserrat-Black", size: 18) as Any,
             NSAttributedStringKey.foregroundColor: UIColor(named: "darkIndigo") as Any
@@ -176,9 +181,5 @@ class PrayNowViewController: BaseViewController {
             NSAttributedStringKey.font : UIFont(name: "Montserrat-Black", size: 18) as Any,
             NSAttributedStringKey.foregroundColor: UIColor(named: "fadedPink") as Any
             ], for: .selected)
-        
     }
-    
-    
-    
 }

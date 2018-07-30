@@ -21,31 +21,31 @@ class RecommendViewController: LogInBaseViewController {
     
     var user = User()
     
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         nameField.delegate = self
         phoneNumberField.delegate = self
         emailField.delegate = self
-        
         setUpDoneButton(textField: nameField)
         setUpDoneButton(textField: phoneNumberField)
         setUpDoneButton(textField: emailField)
-        
         navigationItem.title = "Recommend a Friend"
-
     }
-    
-    // Firebase listener
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let realm = try! Realm() //TODO: Change to do catch
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            guard let realmUser = realm.objects(User.self).first else {
+                print("REALM: Error in will appear of recommend")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of recommend")
         }
-        user = realmUser
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -76,9 +76,10 @@ class RecommendViewController: LogInBaseViewController {
     // MARK: - Functions
     
     private func submit () {
-        let name = nameField!.text
-        let number = phoneNumberField!.text
-        let email = emailField!.text
+        guard let name = nameField.text, let number = phoneNumberField.text, let email = emailField.text else {
+            print("Error in submit")
+            return
+        }
         let submission = "\(String(describing: name)) - \(String(describing: number)) - \(String(describing: email))"
         FirebaseUtilities.sendFeedback(ofType: "recommendation", byUserEmail: user.email, withEntry: submission)
         self.navigationController?.popViewController(animated: true)
@@ -90,5 +91,4 @@ class RecommendViewController: LogInBaseViewController {
         super.textFieldDidBeginEditing(textField)
         textField.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
     }
-
 }

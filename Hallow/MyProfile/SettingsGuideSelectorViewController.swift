@@ -20,12 +20,16 @@ class SettingsGuideSelectorViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let realm = try! Realm() //TODO: Change to do catch
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            guard let realmUser = realm.objects(User.self).first else {
+                print("Error in settings guide selector")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of settings guide selector")
         }
-        user = realmUser
         setGuideButton()
     }
     
@@ -45,21 +49,21 @@ class SettingsGuideSelectorViewController: UIViewController {
     @IBAction func francisButton(_ sender: UIButton) {
         francisButton.isSelected = !francisButton.isSelected
         abbyButton.isSelected = !abbyButton.isSelected
-        RealmUtilities.updateGuide(withGuide: "Francis") { }
+        RealmUtilities.updateGuide(withGuide: User.Guide.Francis) { }
         RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
     }
     
     @IBAction func abbyButton(_ sender: UIButton) {
         abbyButton.isSelected = !abbyButton.isSelected
         francisButton.isSelected = !francisButton.isSelected
-        RealmUtilities.updateGuide(withGuide: "Abby") { }
+        RealmUtilities.updateGuide(withGuide: User.Guide.Abby) { }
         RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
     }
     
     // MARK: - Functions
     
     private func setGuideButton() {
-        if user.guide == "Francis" {
+        if user.guide == User.Guide.Francis {
             francisButton.isSelected = true
             abbyButton.isSelected = false
         } else {

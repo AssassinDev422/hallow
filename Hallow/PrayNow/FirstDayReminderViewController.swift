@@ -14,15 +14,11 @@ class FirstDayReminderViewController: UIViewController {
         
     // MARK: - Life cycle
     
-    // Firebase listener
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         let center = UNUserNotificationCenter.current()
         center.removeAllDeliveredNotifications()
         center.removeAllPendingNotificationRequests()
-        
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -34,11 +30,9 @@ class FirstDayReminderViewController: UIViewController {
     // MARK: - Actions
 
     @IBAction func yesButton(_ sender: Any) {
-        
         let defaults = UserDefaults.standard
         defaults.set(true, forKey: "reminderSet")
         defaults.synchronize()
-        
         let center = UNUserNotificationCenter.current()
         let options: UNAuthorizationOptions = [.alert, .sound]
         center.requestAuthorization(options: options) {
@@ -54,9 +48,6 @@ class FirstDayReminderViewController: UIViewController {
         }
     }
     
-    // MARK: - Functions
-    // TODO: - Can probably combine with functions from myProfile into Firebase Utilities file
-    
     // MARK: - NAVIGATION
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -66,5 +57,4 @@ class FirstDayReminderViewController: UIViewController {
             }
         }
     }
-    
 }

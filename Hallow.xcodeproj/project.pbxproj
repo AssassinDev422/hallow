@@ -26,7 +26,6 @@
 		B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057320D2EEA7000EB246 /* FeedbackViewController.swift */; };
 		B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057520D2EEB3000EB246 /* SupportViewController.swift */; };
 		B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */; };
-		B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */; };
 		B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */; };
 		B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */; };
 		B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */; };
@@ -94,7 +93,6 @@
 		B432057320D2EEA7000EB246 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		B432057520D2EEB3000EB246 /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideSelectorViewController.swift; sourceTree = "<group>"; };
-		B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderViewController.swift; sourceTree = "<group>"; };
 		B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderSettingViewController.swift; sourceTree = "<group>"; };
 		B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsReminderViewController.swift; sourceTree = "<group>"; };
@@ -228,7 +226,6 @@
 			isa = PBXGroup;
 			children = (
 				B42B0CE520A4D91A00FDAFB6 /* LaunchViewController.swift */,
-				B4445D4120D18ABF0047B9B8 /* TabBarViewController.swift */,
 				B42B0CE720A4DE3400FDAFB6 /* PrayNowViewController.swift */,
 				B42B0CEB20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift */,
 				B42B0CED20A542E600FDAFB6 /* ReflectViewController.swift */,
@@ -510,7 +507,6 @@
 				B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */,
 				B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */,
 				B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */,
-				B4445D4220D18ABF0047B9B8 /* TabBarViewController.swift in Sources */,
 				B4BB64882100D90F008FD331 /* BaseFunctions.swift in Sources */,
 				B42B0CEE20A542E600FDAFB6 /* ReflectViewController.swift in Sources */,
 			);

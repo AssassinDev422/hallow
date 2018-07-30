@@ -21,13 +21,10 @@ class SignInViewController: LogInBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         emailField.delegate = self
         passwordField.delegate = self
-        
         setUpDoneButton(textField: emailField)
         setUpDoneButton(textField: passwordField)
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,32 +57,33 @@ class SignInViewController: LogInBaseViewController {
     
     private func signIn() {
         showLightHud()
-        if let email = self.emailField.text, let password = self.passwordField.text {
-            var email = email
-            if email.last == " " {
-                email.removeLast()
+        guard let originalEmail = emailField.text, let password = self.passwordField.text else {
+            self.dismissHud()
+            self.alertWithDismiss(viewController: self, title: "Error", message: "Missing email or password")
+            return
+        }
+        let email = cleanText(text: originalEmail)
+        
+        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+            guard let _ = user?.uid, let userEmail = user?.email, error == nil else {
+                self.errorAlert(message: "\(error?.localizedDescription ?? "Error signing in")", viewController: self)
+                self.dismissHud()
+                return
             }
-            Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-                guard let _ = user?.uid, let userEmail = user?.email, error == nil else {
-                    self.errorAlert(message: "\(error?.localizedDescription ?? "Error signing in")", viewController: self)
-                    self.dismissHud()
+            FirebaseUtilities.loadUserData(byUserEmail: userEmail) { results in
+                guard let results = results.map(User.init).first else {
+                    print("FIREBASE: Error loading user data")
                     return
                 }
-                
-                FirebaseUtilities.loadUserData(byUserEmail: userEmail) { results in
-                    self.user = results.map(User.init)[0]
-                    
-                    RealmUtilities.signInUser(withUser: self.user) {
-                        self.dismissHud()
-                        self.performSegue(withIdentifier: "signInSegue", sender: self)
-                    }
+                self.user = results
+                RealmUtilities.signInUser(withUser: self.user) {
+                    self.dismissHud()
+                    self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
-                
-                FirebaseUtilities.loadProfilePicture(byUserEmail: self.user.email) { image in
-                    self.saveImage(image: image)
-                } // TODO: Check if loading error since running on different thread
             }
+            FirebaseUtilities.loadProfilePicture(byUserEmail: self.user.email) { image in
+                self.saveImage(image: image)
+            } // TODO: Check if loading error since running on different thread
         }
     }
-    
 }

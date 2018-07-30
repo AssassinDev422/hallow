@@ -44,31 +44,24 @@ class FirstDayReminderSettingViewController: UIViewController {
     
     private func setUpReminder() {
         let center = UNUserNotificationCenter.current()
-        
         let identifier = "HallowLocalNotification"
-        
         let content = UNMutableNotificationContent()
         content.title = "Quick reminder to pray"
         content.sound = UNNotificationSound.default()
-        
         let time = reminderTime.date
         let triggerDaily = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
-        
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        
         center.add(request, withCompletionHandler: { (error) in
             if error != nil {
                 print("Something went wrong on the last step!")
             }
         })
-        
         let defaults = UserDefaults.standard
         defaults.set(reminderTime.date, forKey: "reminderTime")
         defaults.synchronize()
         
         performSegue(withIdentifier: "finishFirstDaySegue", sender: self)
-
     }
     
     // MARK: - Navigation
@@ -80,5 +73,4 @@ class FirstDayReminderSettingViewController: UIViewController {
             }
         }
     }
-    
 }

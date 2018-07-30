@@ -26,11 +26,9 @@ class SignUpViewController: LogInBaseViewController {
         nameField.delegate = self
         emailField.delegate = self
         passwordField.delegate = self
-        
         setUpDoneButton(textField: nameField)
         setUpDoneButton(textField: emailField)
         setUpDoneButton(textField: passwordField)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,26 +59,27 @@ class SignUpViewController: LogInBaseViewController {
         signUp()
     }
     
+    // MARK: - Functions
+    
     private func signUp() {
         showLightHud()
-        if let name = nameField.text, let email = emailField.text, let password = passwordField.text {
-            var email = email
-            if email.last == " " {
-                email.removeLast()
+        guard let name = nameField.text, let originalEmail = emailField.text, let password = self.passwordField.text else {
+            self.dismissHud()
+            self.alertWithDismiss(viewController: self, title: "Error", message: "Missing name, email or password")
+            return
+        }
+        let email = cleanText(text: originalEmail)
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            guard let email = authResult?.email, error == nil else {
+                self.dismissHud()
+                self.errorAlert(message: "\(error?.localizedDescription ?? "Error signing up")", viewController: self)
+                return
             }
-            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-                guard let email = authResult?.email, error == nil else {
-                    self.dismissHud()
-                    self.errorAlert(message: "\(error?.localizedDescription ?? "Error signing up")", viewController: self)
-                    return
-                }
-                
-                FirebaseUtilities.createUserData(withEmail: email, withName: name) // TODO: Figure out if it runs on the background thread
-                
-                RealmUtilities.createUserData(withEmail: email, withName: name) {
-                    self.dismissHud()
-                    self.performSegue(withIdentifier: "signUpSegue", sender: self)
-                }
+            FirebaseUtilities.createUserData(withEmail: email, withName: name) // TODO: Figure out if it runs on the background thread
+            RealmUtilities.createUserData(withEmail: email, withName: name) {
+                self.dismissHud()
+                self.performSegue(withIdentifier: "signUpSegue", sender: self)
             }
         }
     }

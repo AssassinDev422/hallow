@@ -26,10 +26,9 @@ class PrayerItem: Object {
             let audioFilePath = data["audio"] as? String,
             let guide = data["guide"] as? String,
             let length = data["length"] as? String else {
-                fatalError("This prayer document could not be parsed. It's data was: \(document.data() ?? [:])")
+                fatalError("FIREBASE: This prayer document could not be parsed. It's data was: \(document.data() ?? [:])")
         }
         self.init()
-
         self.title = title
         self.desc = desc
         self.desc2 = desc2

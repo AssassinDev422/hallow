@@ -19,7 +19,6 @@ import RealmSwift
 // MARK: - Hud
 
 class BaseViewController: UIViewController {
-    
     var hud: JGProgressHUD?
     
     func showLightHud() {
@@ -54,7 +53,7 @@ class BaseViewController: UIViewController {
     }
     
     func urlInDocumentsDirectory(forPath path: String) -> URL {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) [0]
         return documentsDirectory.appendingPathComponent(path)
     }
     
@@ -73,7 +72,6 @@ class BaseViewController: UIViewController {
         catch let error as NSError {
             print("An error took place: \(error)")
         }
-        
     }
     
     func saveImage(image: UIImage) -> Void {
@@ -122,11 +120,9 @@ class BaseViewController: UIViewController {
         }))
         viewController.present(alert, animated: true)
     }
-    
 }
 
 class BaseTableViewController: UITableViewController {
-    
     var hud: JGProgressHUD?
     
     func showLightHud() {
@@ -149,7 +145,6 @@ class BaseTableViewController: UITableViewController {
     func dismissHud() {
         self.hud?.dismiss()
     }
-    
 }
 
 // MARK: - Text subview edits
@@ -182,10 +177,14 @@ class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+    
+    func cleanText(text: String) -> String { //TODO: Check if this works
+        let newText = text.trimmingCharacters(in: .whitespaces)
+        return newText
+    }
 }
 
 class JournalBaseViewController: BaseViewController, UITextViewDelegate {
-    
     var frame: CGRect?
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -220,35 +219,30 @@ class JournalBaseViewController: BaseViewController, UITextViewDelegate {
 }
 
 //MARK: - Audio functions
-
 //TODO: - need to set isLoading true before running
 
 class AudioController: BaseViewController, AVAudioPlayerDelegate {
-    
     var pathReference: StorageReference?
     var downloadTask: StorageDownloadTask?
     var audioPlayer: AVAudioPlayer?
-    
-    enum Guide {
-        case Francis
-        case Abby
-    }
-    
     var startTime = Date(timeIntervalSinceNow: 0)
 
-    func downloadAudio(guide: Guide, audioURL: String, setLoading: (Bool) -> Void, completionBlock: @escaping (Guide, String) -> Void) {
+    func downloadAudio(guide: User.Guide, audioURL: String, setLoading: (Bool) -> Void, completionBlock: @escaping (User.Guide, String) -> Void) {
         let destinationFileURL = urlInDocumentsDirectory(forPath: audioURL)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
             completionBlock(guide, audioURL)
             return
         }
-        
         print("attempting to download: \(audioURL)...")
         setLoading(true)
         pathReference = Storage.storage().reference(withPath: audioURL)
         
-        downloadTask = self.pathReference!.write(toFile: destinationFileURL) { (url, error) in
+        guard let pathReference = self.pathReference else {
+            print("BASE: Error in downloadAudio")
+            return
+        }
+        downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
             if let error = error {
                 print("error downloading file: \(error)")
             } else {
@@ -256,9 +250,16 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
                 completionBlock(guide, audioURL)
             }
         }
-        
-        downloadTask!.observe(.progress) { snapshot in
-            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+        guard let downloadTask = downloadTask else {
+            print("BASE: Error in downloadAudio - downloadTask")
+            return
+        }
+        downloadTask.observe(.progress) { snapshot in
+            guard let progress = snapshot.progress else {
+                print("BASE: Error in downloadAudio - snapShot")
+                return
+            }
+            let percentComplete = 100.0 * Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
             self.hud?.progress = Float(percentComplete)/100.0
             if percentComplete > 1.0 {
                 let percentCompleteRound = String(format: "%.0f", percentComplete)
@@ -267,37 +268,28 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         }
     }
     
-    func setupAudioPlayer(guide: Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: () -> Void, playPause: (Guide) -> Void) {
+    func setupAudioPlayer(guide: User.Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: () -> Void, playPause: (User.Guide) -> Void) {
         setLoading(false)
-        
-        let realm = try! Realm() //TODO: Change to do catch
-        guard let user = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
-        }
-        
-        let audioURL = urlInDocumentsDirectory(forPath: audioURL)
-        
         do {
+            let realm = try Realm()
+            guard let user = realm.objects(User.self).first else {
+                print("BASE: Error in setUpAudioPlayer")
+                return
+            }
+            let audioURL = urlInDocumentsDirectory(forPath: audioURL)
+        
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
-            
             audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
-            
             audioPlayer?.delegate = self
-            
             print("Audio player was set up")
-            
             playPause(guide)
-            
             updateProgress()
-            
             audioPlayer?.currentTime = user.pausedTime
-            
             startTime = Date(timeIntervalSinceNow: 0)
-            
         } catch let error {
             print(error.localizedDescription)
+            print("REALM: Error in base functions - setUpAudioPlayer")
         }
     }
 }

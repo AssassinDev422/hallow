@@ -15,11 +15,9 @@ class SupportViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Contact & Support"
-        
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"]  as? String, let bundle = Bundle.main.infoDictionary?["CFBundleVersion"] as? String  {
             versionBuildLabel.text = "Version \(version) (\(bundle))"
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,5 +29,4 @@ class SupportViewController: UIViewController {
         super.viewWillDisappear(animated)
         ReachabilityManager.shared.removeListener(listener: self)
     }
-
 }

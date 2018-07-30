@@ -18,7 +18,6 @@ class LaunchViewController: BaseViewController {
     @IBOutlet weak var prayerChallengeLabel: UILabel!
     
     var user = User()
-    
     var handle: AuthStateDidChangeListenerHandle?
     var userEmail: String?
         
@@ -27,7 +26,6 @@ class LaunchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideOutlets(shouldHide: true)
-        
         let defaults = UserDefaults.standard
         if defaults.string(forKey: "firstOpenOnDevice") != nil {
             print("Not first open on this device")
@@ -44,15 +42,18 @@ class LaunchViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        FirebaseUtilities.syncUserData() { }
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             if let _ = user?.uid, let userEmail = user?.email {
                 self.loadUser(fromUserEmail: userEmail)
+                FirebaseUtilities.syncUserData() { }
                 FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail) { image in
                     self.saveImage(image: image)
                 }
             } else {
-                self.load10minPrayers(skippingSignIn: false)
+                FirebaseUtilities.loadAllPrayers() { prayers in
+                    RealmUtilities.addPrayers(withPrayers: prayers)
+                    self.hideOutlets(shouldHide: false)
+                }
                 print("no one is logged in")
             }
         }
@@ -73,54 +74,15 @@ class LaunchViewController: BaseViewController {
     
     private func loadUser(fromUserEmail userEmail: String) {
         FirebaseUtilities.loadUserData(byUserEmail: userEmail) { results in
-            self.user = results.map(User.init)[0]
-            
+            guard let results = results.map(User.init).first else {
+                print("FIREBASE: Error loading user data")
+                return
+            }
+            self.user = results
             RealmUtilities.signInUser(withUser: self.user) {
-                self.load10minPrayers(skippingSignIn: true)
-            }
-        }
-    }
-    
-    
-    //TODO: Clean up these funcs
-    private func load10minPrayers(skippingSignIn: Bool) {
-        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "10 mins") { results in
-            let realm = try! Realm() //TODO: change to do, catch try
-            var prayers = results.map(PrayerItem.init)
-            prayers.sort{$0.title < $1.title}
-            let prayers10mins = prayers
-            try! realm.write { //TODO: change to do, catch try
-                realm.add(prayers)
-                realm.add(prayers10mins)
-            }
-            self.load15minPrayers(skippingSignIn: skippingSignIn)
-        }
-    }
-    
-    private func load15minPrayers(skippingSignIn: Bool) {
-        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "15 mins") { results in
-            let realm = try! Realm() //TODO: change to do, catch try
-            var prayers15mins = results.map(PrayerItem.init)
-            prayers15mins.sort{$0.title < $1.title}
-            try! realm.write { //TODO: change to do, catch try
-                realm.add(prayers15mins)
-            }
-            self.load5minPrayers(skippingSignIn: skippingSignIn)
-        }
-    }
-    
-    private func load5minPrayers(skippingSignIn: Bool) {
-        FirebaseUtilities.loadAllPrayersWithLength(ofType: "prayer", withLength: "5 mins") { results in
-            let realm = try! Realm() //TODO: change to do, catch try
-            var prayers5mins = results.map(PrayerItem.init)
-            prayers5mins.sort{$0.title < $1.title}
-            try! realm.write { //TODO: change to do, catch try
-                realm.add(prayers5mins)
-            }
-            
-            if skippingSignIn == false {
-                self.hideOutlets(shouldHide: false)
-            } else {
+                FirebaseUtilities.loadAllPrayers() { prayers in
+                    RealmUtilities.addPrayers(withPrayers: prayers)
+                }
                 self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
             }
         }

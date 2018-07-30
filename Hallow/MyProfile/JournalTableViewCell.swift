@@ -9,7 +9,6 @@
 import UIKit
 
 class JournalTableViewCell: UITableViewCell {
-    
     @IBOutlet weak var dateField: UILabel!
     @IBOutlet weak var entryField: UILabel!
     @IBOutlet weak var titleField: UILabel!

@@ -17,20 +17,21 @@ class FirebaseUtilities {
     
     // MARK: - Load prayers
 
-    static func loadAllPrayersWithLength(ofType type: String, withLength length: String,
-                                 _ callback: @escaping ([DocumentSnapshot]) -> ()) {
+    static func loadAllPrayers(completionBlock: @escaping ([PrayerItem]) -> Void) {
         let db = Firestore.firestore()
-        db.collection(type).whereField("length", isEqualTo: length).getDocuments { result, error in
+        db.collection("prayer").getDocuments { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
                     print("Got an error loading prayers from Firestore: \(error)")
                 } else {
                     print("While fetching prayers, the results were nil, but there was no error. That's weird.")
                 }
-                callback([])
                 return
             }
-            callback(result.documents)
+            let results = result.documents
+            var prayers = results.map(PrayerItem.init)
+            prayers.sort{$0.title < $1.title}
+            completionBlock(prayers)
         }
     }
     
@@ -59,7 +60,7 @@ class FirebaseUtilities {
             "Next Prayer Title": nextPrayerTitle,
             ]) { err in
                 if let err = err {
-                    print("Error adding document: \(err)")
+                    fatalError("Error adding document: \(err)")
                 } else {
                     print("Document added")
                 }
@@ -72,7 +73,7 @@ class FirebaseUtilities {
         db.collection("user_v2").document(email).getDocument { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
-                    print("Got an error loading files from Firestore: \(error)")
+                    fatalError("FIREBASE: Got an error loading files from Firestore: \(error)")
                 } else {
                     print("While fetching files, the results were nil, but there was no error. That's weird.")
                 }
@@ -84,32 +85,36 @@ class FirebaseUtilities {
     }
     
     static func syncUserData(completionBlock: @escaping () -> Void) {
-        let realm = try! Realm() //TODO: Change to do catch - not sure if I need this
-        guard let user = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
-        }
-        let db = Firestore.firestore()
-        let dateStored = Date(timeIntervalSinceNow: 0)
-        
-        db.collection("user_v2").document(user.email).updateData([
-            "Name": user.name,
-            "Email": user.email,
-            "Date Stored": dateStored,
-            "Guide": user.guide,
-            "First Day": user.isFirstDay,
-            "Time in Prayer": user.timeInPrayer,
-            "Streak": user.streak,
-            "Completed Prayers": user._completedPrayers,
-            "Most Recent Prayer Date": user.mostRecentPrayerDate,
-            "Next Prayer Title": user.nextPrayerTitle,
-            ]) { err in
-                if let err = err {
-                    print("Error adding document: \(err)") //TODO: Make useful error
-                } else {
-                    print("Document added")
-                    completionBlock()
-                }
+        do {
+            let realm = try Realm() 
+            guard let user = realm.objects(User.self).first else {
+                print("FIREBASE: Error in utilies - syncUserData")
+                return
+            }
+            let db = Firestore.firestore()
+            let dateStored = Date(timeIntervalSinceNow: 0)
+            
+            db.collection("user_v2").document(user.email).updateData([
+                "Name": user.name,
+                "Email": user.email,
+                "Date Stored": dateStored,
+                "Guide": user._guide,
+                "First Day": user.isFirstDay,
+                "Time in Prayer": user.timeInPrayer,
+                "Streak": user.streak,
+                "Completed Prayers": user._completedPrayers,
+                "Most Recent Prayer Date": user.mostRecentPrayerDate,
+                "Next Prayer Title": user.nextPrayerTitle,
+                ]) { err in
+                    if let err = err {
+                        print("Error adding document: \(err)") //TODO: Make useful error
+                    } else {
+                        print("Document added")
+                        completionBlock()
+                    }
+            }
+        } catch {
+            print("REALM: Error in Firebase Utilities - syncUserData")
         }
     }
     
@@ -119,8 +124,7 @@ class FirebaseUtilities {
             print("IN DO")
             completionBlock()
         } catch let error {
-            print(error.localizedDescription)
-            BaseViewController().errorAlert(message: "\(error.localizedDescription)", viewController: viewController) //TODO: Check if this works
+            fatalError("\(error.localizedDescription)")
         }
     }
         
@@ -162,16 +166,19 @@ class FirebaseUtilities {
                 print("Error adding document: \(err)")
         } else {
                 print("Document added with ID: \(email)")
+                guard let ref = ref else {
+                    print("FIREBASE: Error in save reflection")
+                    return
+                }
                 let journalEntry = JournalEntry()
                 journalEntry.date = date
                 journalEntry.dateStored = dateStored
-                journalEntry.docID = ref!.documentID
+                journalEntry.docID = ref.documentID
                 journalEntry.entry = entry
                 journalEntry.prayerTitle = title
                 RealmUtilities.saveJournalEntry(withEntry: journalEntry)
             }
         }
-        
     }
     
     static func updateReflection(withDocID docID: String, byUserEmail email: String, withEntry entry: String, withTitle title: String) {
@@ -193,8 +200,6 @@ class FirebaseUtilities {
                 print("Document added with ID: \(email)")
             }
         }
-        
-        // FIXME: Need some realm function here
     }
     
     static func sendFeedback(ofType type: String, byUserEmail email: String, withEntry entry: String) {
@@ -224,9 +229,13 @@ class FirebaseUtilities {
         let data = UIImageJPEGRepresentation(image, 0.5)
         
         imageRef.delete { error in
+            guard let data = data else {
+                print("FIREBASE: Error in uploadProfilePicture")
+                return
+            }
             if error != nil {
                 print("Error in deleting image")
-                imageRef.putData(data!, metadata: nil) { (metadata, error) in
+                imageRef.putData(data, metadata: nil) { (metadata, error) in
                     guard metadata != nil else {
                         print("Error occured in uploading the image")
                         return
@@ -235,7 +244,7 @@ class FirebaseUtilities {
                 }
             } else {
                 print("No error in deleting image")
-                imageRef.putData(data!, metadata: nil) { (metadata, error) in
+                imageRef.putData(data, metadata: nil) { (metadata, error) in
                     guard metadata != nil else {
                         print("Error occured in uploading the image")
                         return
@@ -248,11 +257,8 @@ class FirebaseUtilities {
     
     static func loadProfilePicture(byUserEmail userEmail: String, completionBlock: @escaping (UIImage) -> Void) {
         let path = "profilePictures/\(userEmail).png"
-        
         let destinationFileURL = BaseViewController().urlInDocumentsDirectory(forPath: path) //TODO: Check if this works
-        
         print("attempting to download: \(path)...")
-        
         let pathReference = Storage.storage().reference(withPath: path)
         
         pathReference.write(toFile: destinationFileURL) { (url, error) in
@@ -262,7 +268,11 @@ class FirebaseUtilities {
             } else {
                 print("Downloaded image: \(path)")
                 let fileURL = BaseViewController().urlInDocumentsDirectory(forPath: path) //TODO: Check if this works
-                completionBlock(UIImage(contentsOfFile: fileURL.path)!)
+                guard let image = UIImage(contentsOfFile: fileURL.path) else {
+                    print("FIREBASE: Error in loadProfilePicture")
+                    return
+                }
+                completionBlock(image)
             }
         }
     }
@@ -279,5 +289,4 @@ class FirebaseUtilities {
             }
         }
     }
-        
 }

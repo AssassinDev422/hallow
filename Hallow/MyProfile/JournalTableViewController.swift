@@ -27,16 +27,17 @@ class JournalTableViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let realm = try! Realm() //TODO: Change !
-        
-        journalEntries = Array(realm.objects(JournalEntry.self).sorted(byKeyPath: "dateStored", ascending: false))
-        
-        guard let realmUser = realm.objects(User.self).first else {
-            print("Error in realm prayer completed")
-            return
+        do {
+            let realm = try Realm()
+            journalEntries = Array(realm.objects(JournalEntry.self).sorted(byKeyPath: "dateStored", ascending: false))
+            guard let realmUser = realm.objects(User.self).first else {
+                print("REALM: Error in will appear of journal table view")
+                return
+            }
+            user = realmUser
+        } catch {
+            print("REALM: Error in will appear of journal table view")
         }
-        user = realmUser
-        
         self.tableView.reloadData()
         ReachabilityManager.shared.addListener(listener: self)
     }
@@ -71,11 +72,9 @@ class JournalTableViewController: BaseTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! JournalTableViewCell
         let journalEntry = journalEntries[indexPath.row]
-        
         cell.titleField.text = journalEntry.prayerTitle
         cell.dateField.text = journalEntry.date
         cell.entryField.text = journalEntry.entry
-        
         return cell
     }
     
@@ -87,15 +86,12 @@ class JournalTableViewController: BaseTableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
-            
             let entry = journalEntries[indexPath.row]
             let docID = entry.docID
-            
             RealmUtilities.deleteJournalEntry(withID: docID) {
                 self.journalEntries.remove(at: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: .left)
             }
-            
             FirebaseUtilities.deleteFile(ofType: "journal", byUserEmail: user.email, withID: docID)
         }
     }
@@ -112,5 +108,4 @@ class JournalTableViewController: BaseTableViewController {
                 vc.journalEntry = journalEntry
         }
     }
-
 }

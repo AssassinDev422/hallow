@@ -250,7 +250,6 @@
                                 </state>
                                 <connections>
                                     <action selector="sendResetEmail:" destination="Ubf-ho-mFU" eventType="touchUpInside" id="Pi5-45-87N"/>
-                                    <action selector="signInButton:" destination="Fbz-mJ-l80" eventType="touchUpInside" id="weT-Xa-qWG"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive an email to reset your password" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cV-tS-nCb">
@@ -676,7 +675,7 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TqJ-gV-Cj7"/>
+        <segue reference="gPK-rW-TWn"/>
         <segue reference="DX7-xq-VrB"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
