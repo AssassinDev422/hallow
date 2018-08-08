@@ -11,9 +11,6 @@ import Firebase
 import JGProgressHUD
 import RealmSwift
 
-//TODO: Add privacy, terms and conditions
-//FIXME: Error if I say no to camera allow
-
 class MyProfileViewController: BaseViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var profileImage: UIImageView!
@@ -77,9 +74,10 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
 
     @IBAction func logOut(_ sender: Any) {
         showLightHud()
-        FirebaseUtilities.syncUserData() { //TODO: Not sure if this can have an input as 2 functions
-            RealmUtilities.deleteUser()
+        FirebaseUtilities.syncUserData() {
             self.deleteImage()
+            FirebaseUtilities.setLoggedInFalse(user: self.user) { }
+            RealmUtilities.deleteUser()
             FirebaseUtilities.logOut(viewController: self) {
                 self.dismissHud()
                 self.performSegue(withIdentifier: "signOutSegue", sender: self)

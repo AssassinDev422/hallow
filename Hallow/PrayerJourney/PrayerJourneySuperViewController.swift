@@ -68,7 +68,7 @@ class PrayerJourneySuperViewController: UIViewController {
     
     private func pullUpPrayerData() {
         do {
-            let realm = try Realm() //TODO: Change to do catch - not sure if I need this
+            let realm = try Realm() 
             let prayers = realm.objects(PrayerItem.self)
             self.prayer = prayers.filter("title = %@ AND guide = %@ AND length = %@", user.nextPrayerTitle, user._guide, "10 mins").first
         } catch {

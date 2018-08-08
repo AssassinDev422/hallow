@@ -6,9 +6,6 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
-//FIXME - maybe: Day 1 - 5 mins after loading it went straight to journal
-//TODO: Need to update constants.guide.francis eventually
-
 import UIKit
 import AVFoundation
 import FirebaseStorage
@@ -50,15 +47,14 @@ class AudioPlayerViewController: AudioController {
                 return
             }
             user = realmUser
+            guide = user.guide
         } catch {
             print("REALM: Error in will appear of audioplayer")
         }
-        setGuide()
         if let prayer = prayer {
             downloadAudio(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                     self.set(isLoading: isLoading)
                 }, completionBlock: { guide, audioURL in
-                    self.setGuide()
                     self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                         self.set(isLoading: isLoading)
                     }, updateProgress: {
@@ -159,7 +155,6 @@ class AudioPlayerViewController: AudioController {
     }
     
     // MARK: - Functions - Progress Control
-    // FIXME: Doesn't update consistently at least on lock screen each second esp. when play / pausing
     
     private func updateProgressControl() {
         if audioPlayer != nil {
@@ -170,11 +165,10 @@ class AudioPlayerViewController: AudioController {
                 }
                 let percentComplete = audioPlayer.currentTime / audioPlayer.duration
                 self?.progressSlider.setValue(Float(percentComplete), animated: true)
-                let time = audioPlayer.currentTime
-                let minutes = Int(time) / 60 % 60
-                let seconds = Int(time) % 60
+                let timeLeft = audioPlayer.duration - audioPlayer.currentTime
+                let minutes = Int(timeLeft) / 60 % 60
+                let seconds = Int(timeLeft) % 60
                 self?.timeLabel.text = String(format:"%01i:%02i", minutes, seconds)
-                self?.timeLabel.frame.origin.x = 5 + CGFloat(percentComplete) * (self?.progressSlider.frame.width)!
                 self?.setUpLockScreenInfo()
             }
         } else {
@@ -228,14 +222,6 @@ class AudioPlayerViewController: AudioController {
             })
             print("Audio player is nil")
             return
-        }
-    }
-    
-    private func setGuide() { //TODO: Likely not needed
-        if user.guide == User.Guide.Francis {
-            guide = User.Guide.Francis
-        } else {
-            guide = User.Guide.Abby
         }
     }
     

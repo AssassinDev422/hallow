@@ -18,6 +18,7 @@ class RealmUtilities {
         user.dateStored = Date(timeIntervalSinceNow: 0)
         user.guide = User.Guide.Francis
         user.isFirstDay = true
+        user.isLoggedIn = true
         user.timeInPrayer = 0.00
         user.streak = 0
         user.completedPrayers = [""]
@@ -39,6 +40,7 @@ class RealmUtilities {
             let realm = try Realm()
             try realm.write {
                 realm.add(user)
+                user.isLoggedIn = true
                 print("IN USER SIGN IN - NEXT PRAYER: \(user.nextPrayerTitle)")
                 completionBlock()
             }
@@ -117,8 +119,8 @@ class RealmUtilities {
             }
             try realm.write {
                 user.completedPrayers.append(prayerTitle)
-                var completedPrayers = user.completedPrayers // TODO: Might have to do all the weird realm stuff
-                completedPrayers.sort() // TODO: Might have to change to realm sort
+                var completedPrayers = user.completedPrayers
+                completedPrayers.sort()
                 var nextPrayerTitle = completedPrayers[completedPrayers.count-1]
                 guard let last = nextPrayerTitle.last else {
                     print("REALM: Error in prayerCompleted")
@@ -181,7 +183,7 @@ class RealmUtilities {
                 return
             }
             try realm.write {
-                user.pausedTime = currentTime //TODO: Does it keep track of time when you exit out and go back in?
+                user.pausedTime = currentTime
             }
         } catch {
             print("REALM: Error in utilities - setCurrentAudioTime")
@@ -211,7 +213,7 @@ class RealmUtilities {
                 return
             }
             try realm.write {
-                user.guide = guide //TODO: Not sure whether this updates _guide or not
+                user.guide = guide
                 completionBlock()
             }
         } catch {

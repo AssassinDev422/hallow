@@ -76,14 +76,22 @@ class SignInViewController: LogInBaseViewController {
                     return
                 }
                 self.user = results
+                guard !self.user.isLoggedIn else {
+                    self.errorAlert(message: "User is already signed in on another device", viewController: self)
+                    FirebaseUtilities.logOut(viewController: self) {
+                        self.dismissHud()
+                    }
+                    return
+                }
                 RealmUtilities.signInUser(withUser: self.user) {
                     self.dismissHud()
+                    FirebaseUtilities.syncUserData { }
                     self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
             }
             FirebaseUtilities.loadProfilePicture(byUserEmail: self.user.email) { image in
                 self.saveImage(image: image)
-            } // TODO: Check if loading error since running on different thread
+            } 
         }
     }
 }

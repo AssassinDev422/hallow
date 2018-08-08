@@ -191,12 +191,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNL-zN-yBb">
-                                        <rect key="frame" x="20" y="50" width="10" height="20"/>
+                                        <rect key="frame" x="20" y="50" width="25" height="50"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="BYj-jF-2uU"/>
+                                            <constraint firstAttribute="height" constant="50" id="BYj-jF-2uU"/>
                                             <constraint firstAttribute="width" secondItem="MNL-zN-yBb" secondAttribute="height" multiplier="1:2" id="DZd-Kr-1CL"/>
                                         </constraints>
                                         <color key="tintColor" name="beige"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="20"/>
                                         <state key="normal" image="backIcon">
                                             <color key="titleColor" name="beige"/>
                                         </state>
@@ -661,6 +662,9 @@
         <image name="pinkButton" width="278" height="48"/>
         <image name="playButtonImage" width="147" height="147"/>
         <image name="userIcon" width="24" height="24"/>
+        <namedColor name="beige">
+            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

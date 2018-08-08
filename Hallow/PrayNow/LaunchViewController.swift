@@ -42,6 +42,7 @@ class LaunchViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        overrideLogOut()
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             if let _ = user?.uid, let userEmail = user?.email {
                 self.loadUser(fromUserEmail: userEmail)

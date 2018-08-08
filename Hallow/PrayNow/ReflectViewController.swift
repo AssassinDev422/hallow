@@ -6,7 +6,6 @@
 //  Copyright © 2018 Hallow. All rights reserved.
 //
 
-//FIXME: Almost impossible to click the back button
 
 import UIKit
 import FirebaseFirestore
@@ -43,6 +42,7 @@ class ReflectViewController: JournalBaseViewController {
             print("REALM: Error in will appear of reflect")
         }
         ReachabilityManager.shared.addListener(listener: self)
+        textField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

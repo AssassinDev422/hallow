@@ -72,7 +72,7 @@ class PrayerJourneyTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         do {
-            let realm = try Realm() //TODO: Change to do catch - not sure if I need this
+            let realm = try Realm() 
             return realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user._guide, "10 mins").count
         } catch {
             print("REALM: Error in prayer journey table view - tableview number of rows")
@@ -111,7 +111,6 @@ class PrayerJourneyTableViewController: UITableViewController {
             print("REALM: Error in prayer journey table view - tableview cell for row at")
         }
         
-        // TODO: - have to delete prayer 9+
         cell.layer.borderWidth = 0
         cell.playCellButton.tag = indexPath.row
         cell.playCellButton.addTarget(self, action: #selector(PrayerJourneyTableViewController.buttonTapped(_:)), for: UIControlEvents.touchUpInside)
@@ -157,7 +156,7 @@ class PrayerJourneyTableViewController: UITableViewController {
             parent.prayerTitleLabel.text = prayer.title
             parent.prayerTitleLabel.text?.append(" of 9")
             if prayer.title == "Day 9+" {
-                parent.playSelectedButton.isHidden = true //FIXME: When I scroll the other day play buttons disappear
+                parent.playSelectedButton.isHidden = true 
                 parent.prayerTitleLabel.text = prayer.title
             }
         } catch {

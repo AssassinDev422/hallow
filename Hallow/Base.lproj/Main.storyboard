@@ -242,7 +242,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lTy-rn-MhQ">
-                                        <rect key="frame" x="5" y="576.5" width="50" height="20.5"/>
+                                        <rect key="frame" x="162.5" y="461" width="50" height="20.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="dZd-fq-FMa"/>
                                         </constraints>
@@ -251,13 +251,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now Praying:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AeU-Uh-YXN">
-                                        <rect key="frame" x="20" y="38.5" width="97" height="18"/>
+                                        <rect key="frame" x="20" y="56" width="97" height="18"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <color key="textColor" name="beige"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kea-gJ-RfM">
-                                        <rect key="frame" x="20" y="66.5" width="50.5" height="21"/>
+                                        <rect key="frame" x="20" y="84" width="50.5" height="21"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="17"/>
                                         <color key="textColor" name="beige"/>
                                         <nil key="highlightedColor"/>
@@ -265,13 +265,11 @@
                                 </subviews>
                                 <color key="tintColor" name="fadedPink"/>
                                 <constraints>
+                                    <constraint firstItem="lTy-rn-MhQ" firstAttribute="centerX" secondItem="Mqd-a6-weK" secondAttribute="centerX" id="6vY-Aq-QWq"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kea-gJ-RfM" secondAttribute="trailing" constant="20" id="KDo-TU-nUK"/>
-                                    <constraint firstItem="lTy-rn-MhQ" firstAttribute="leading" secondItem="Mqd-a6-weK" secondAttribute="leading" priority="250" constant="5" id="ana-mP-uRH"/>
-                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lTy-rn-MhQ" secondAttribute="trailing" constant="5" id="cJU-zb-7rn"/>
                                     <constraint firstItem="AeU-Uh-YXN" firstAttribute="leading" secondItem="Mqd-a6-weK" secondAttribute="leading" constant="20" id="fTH-qJ-bWf"/>
                                     <constraint firstItem="kea-gJ-RfM" firstAttribute="leading" secondItem="AeU-Uh-YXN" secondAttribute="leading" id="ioW-oR-IUA"/>
                                     <constraint firstItem="kea-gJ-RfM" firstAttribute="top" secondItem="AeU-Uh-YXN" secondAttribute="bottom" constant="10" id="nCP-NE-KAC"/>
-                                    <constraint firstItem="lTy-rn-MhQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Mqd-a6-weK" secondAttribute="leading" constant="5" id="t0P-xZ-3aa"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="bottomColor">
@@ -301,9 +299,10 @@
                                 </connections>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZ6-6H-8vb">
-                                <rect key="frame" x="325" y="40" width="30" height="15"/>
+                                <rect key="frame" x="305" y="40" width="50" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="15" id="MhI-n0-ZJj"/>
+                                    <constraint firstAttribute="height" constant="50" id="MhI-n0-ZJj"/>
+                                    <constraint firstAttribute="width" constant="50" id="QkJ-ee-vA9"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                 <color key="tintColor" name="fadedPink"/>
@@ -327,8 +326,8 @@
                             <constraint firstItem="Xky-H4-Z68" firstAttribute="centerX" secondItem="cRJ-Nv-69b" secondAttribute="centerX" id="OB8-zO-DMr"/>
                             <constraint firstItem="avM-mx-sbt" firstAttribute="centerX" secondItem="cRJ-Nv-69b" secondAttribute="centerX" id="Ujn-QS-Xq4"/>
                             <constraint firstItem="Mqd-a6-weK" firstAttribute="top" secondItem="cRJ-Nv-69b" secondAttribute="top" id="WjJ-6M-AVj"/>
-                            <constraint firstItem="Xky-H4-Z68" firstAttribute="top" secondItem="lTy-rn-MhQ" secondAttribute="bottom" constant="10" id="YjC-CF-EZ5"/>
                             <constraint firstItem="EZ6-6H-8vb" firstAttribute="top" secondItem="H1J-07-UHj" secondAttribute="top" constant="20" id="afq-hb-rHB"/>
+                            <constraint firstItem="lTy-rn-MhQ" firstAttribute="top" secondItem="avM-mx-sbt" secondAttribute="bottom" constant="60" id="bFy-v9-DHI"/>
                             <constraint firstItem="Xky-H4-Z68" firstAttribute="width" secondItem="cRJ-Nv-69b" secondAttribute="width" constant="-60" id="dls-sI-mG0"/>
                             <constraint firstItem="EZ6-6H-8vb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AeU-Uh-YXN" secondAttribute="trailing" constant="50" id="fs8-Fz-oIL"/>
                             <constraint firstItem="Mqd-a6-weK" firstAttribute="bottom" secondItem="cRJ-Nv-69b" secondAttribute="bottom" id="gYu-lC-gve"/>
@@ -409,7 +408,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
-                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="25"/>
+                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What did you take away from today's session?" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-rK-bLG">
@@ -419,12 +418,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VcP-bT-vJi">
-                                <rect key="frame" x="325" y="40" width="30" height="15"/>
+                                <rect key="frame" x="305" y="40" width="50" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="15" id="Vwc-9a-cfS"/>
+                                    <constraint firstAttribute="width" constant="50" id="1gh-3g-Bmf"/>
+                                    <constraint firstAttribute="height" constant="50" id="Vwc-9a-cfS"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="tintColor" name="beige"/>
+                                <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="20"/>
                                 <state key="normal" title="✕">
                                     <color key="titleColor" name="beige"/>
                                 </state>
@@ -433,12 +434,13 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Br0-AR-h54">
-                                <rect key="frame" x="20" y="40" width="8" height="15"/>
+                                <rect key="frame" x="20" y="40" width="30" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="8" id="3G6-ip-xmd"/>
-                                    <constraint firstAttribute="height" constant="15" id="T5J-lJ-lW6"/>
+                                    <constraint firstAttribute="width" constant="30" id="3G6-ip-xmd"/>
+                                    <constraint firstAttribute="height" constant="50" id="T5J-lJ-lW6"/>
                                 </constraints>
                                 <color key="tintColor" name="beige"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="22" maxY="35"/>
                                 <state key="normal" image="backIcon"/>
                                 <connections>
                                     <action selector="backButtonPressed:" destination="CuC-2t-K28" eventType="touchUpInside" id="lQb-Io-L1K"/>
@@ -761,9 +763,6 @@
         <image name="playButtonImage" width="147" height="147"/>
         <image name="prayNowIcon" width="12" height="16"/>
         <image name="smallPinkButton" width="96" height="40"/>
-        <namedColor name="beige">
-            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

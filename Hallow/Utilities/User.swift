@@ -32,6 +32,7 @@ class User: Object {
         }
     }
     @objc dynamic var isFirstDay: Bool = false
+    @objc dynamic var isLoggedIn: Bool = false
     @objc dynamic var timeInPrayer = 0.00
     @objc dynamic var streak = 1
     @objc dynamic var _completedPrayers: String = ""
@@ -39,7 +40,7 @@ class User: Object {
         get {
             return _completedPrayers.components(separatedBy: ",")
         } set {
-            _completedPrayers = newValue.joined(separator: ",") //TODO: Not sure this counts right - might add duplicates
+            _completedPrayers = newValue.joined(separator: ",")
         }
     }
     @objc dynamic var mostRecentPrayerDate: Date = Date(timeIntervalSince1970: 0)
@@ -55,12 +56,13 @@ class User: Object {
             let dateStored = data["Date Stored"] as? Date,
             let _guide = data["Guide"] as? String,
             let isFirstDay = data["First Day"] as? Bool,
+            let isLoggedIn = data["Logged In"] as? Bool,
             let timeInPrayer = data["Time in Prayer"] as? Double,
             let streak = data["Streak"] as? Int,
             let _completedPrayers = data["Completed Prayers"] as? String,
             let mostRecentPrayerDate = data["Most Recent Prayer Date"] as? Date,
             let nextPrayerTitle = data["Next Prayer Title"] as? String else {
-                print("FIREBASE: This user file could not be parsed. It's data was: \(document.data() ?? [:])") // TODO: Not sure this has to be fatal error - should work without internet
+                print("FIREBASE: This user file could not be parsed. It's data was: \(document.data() ?? [:])") 
                 self.init()
                 return
         }
@@ -70,6 +72,7 @@ class User: Object {
         self.dateStored = dateStored
         self._guide = _guide
         self.isFirstDay = isFirstDay
+        self.isLoggedIn = isLoggedIn
         self.timeInPrayer = timeInPrayer
         self.streak = streak
         self._completedPrayers = _completedPrayers

@@ -11,13 +11,13 @@ import FirebaseFirestore
 import Firebase
 import RealmSwift
 
-// TODO - Done button bar on top and next
-
 class RecommendViewController: LogInBaseViewController {
     
+    @IBOutlet weak var titleField: UILabel!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var phoneNumberField: UITextField!
     @IBOutlet weak var emailField: UITextField!
+    @IBOutlet weak var submitButton: UIButton!
     
     var user = User()
     
@@ -36,6 +36,8 @@ class RecommendViewController: LogInBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        titleField.text = "Let us know their info and we'll reach out!"
+        hideToggle(isHidden: false)
         do {
             let realm = try Realm()
             guard let realmUser = realm.objects(User.self).first else {
@@ -75,14 +77,22 @@ class RecommendViewController: LogInBaseViewController {
     
     // MARK: - Functions
     
-    private func submit () {
+    private func submit() {
         guard let name = nameField.text, let number = phoneNumberField.text, let email = emailField.text else {
             print("Error in submit")
             return
         }
         let submission = "\(String(describing: name)) - \(String(describing: number)) - \(String(describing: email))"
         FirebaseUtilities.sendFeedback(ofType: "recommendation", byUserEmail: user.email, withEntry: submission)
-        self.navigationController?.popViewController(animated: true)
+        titleField.text = "Successfully submitted - thanks!"
+        hideToggle(isHidden: true)
+    }
+    
+    private func hideToggle(isHidden: Bool) {
+        nameField.isHidden = isHidden
+        emailField.isHidden = isHidden
+        phoneNumberField.isHidden = isHidden
+        submitButton.isHidden = isHidden
     }
     
     // MARK: - Design

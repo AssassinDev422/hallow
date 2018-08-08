@@ -120,7 +120,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="purplishBlue"/>
                                 <color key="textColor" name="darkIndigo"/>
-                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="25"/>
+                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PLACEHOLDER TITLE" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2mL-7O-zFS">
@@ -609,7 +609,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="purplishBlue"/>
                                 <color key="textColor" name="darkIndigo"/>
-                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="25"/>
+                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We appreciate the feedback!" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Gi-fr-sPS">
@@ -655,12 +655,14 @@
                     </view>
                     <connections>
                         <outlet property="feedbackField" destination="LJ1-l3-AvZ" id="2Fa-U5-jsA"/>
+                        <outlet property="sendButton" destination="Xgp-B4-iAz" id="Zcb-af-A5i"/>
+                        <outlet property="titleField" destination="1Gi-fr-sPS" id="huk-k4-p7S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5dj-4a-Dvh" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="wEE-dd-622"/>
             </objects>
-            <point key="canvasLocation" x="4294" y="831"/>
+            <point key="canvasLocation" x="4293.6000000000004" y="830.73463268365822"/>
         </scene>
         <!--Settings Reminder View Controller-->
         <scene sceneID="Noq-zp-ryr">
@@ -766,7 +768,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Call:" translatesAutoresizingMaskIntoConstraints="NO" id="NgC-hf-5VD">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Call Alex at:" translatesAutoresizingMaskIntoConstraints="NO" id="NgC-hf-5VD">
                                 <rect key="frame" x="20" y="3.5" width="335" height="43"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="fadedPink"/>
@@ -775,7 +777,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="support@hallow.com" translatesAutoresizingMaskIntoConstraints="NO" id="hf4-qe-bMo">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="support@hallow.app" translatesAutoresizingMaskIntoConstraints="NO" id="hf4-qe-bMo">
                                 <rect key="frame" x="19.5" y="196.5" width="335" height="90"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="fadedPink"/>
@@ -929,6 +931,8 @@
                         <outlet property="emailField" destination="8Nh-Cy-0Xm" id="aH7-cc-Z8l"/>
                         <outlet property="nameField" destination="abd-LY-g39" id="OuU-Jb-JV2"/>
                         <outlet property="phoneNumberField" destination="REE-c5-488" id="zE5-Nq-0En"/>
+                        <outlet property="submitButton" destination="X5B-mV-7WT" id="hVk-IX-VVx"/>
+                        <outlet property="titleField" destination="nMo-Bl-9Le" id="aP3-5E-5hS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wni-fL-5Ql" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -11,8 +11,6 @@ import JGProgressHUD
 import Firebase
 import RealmSwift
 
-// TODO: Remove multiple downloaded files after playing
-
 class PrayNowViewController: BaseViewController {
     
     @IBOutlet weak var prayNowLabel: UIButton!
@@ -140,23 +138,6 @@ class PrayNowViewController: BaseViewController {
             self.selectorBar.frame.origin.x = origin + width
         } else {
             self.selectorBar.frame.origin.x = origin + 2 * width
-        }
-    }
-    
-    // Sets up hud
-    // TODO: - do I need to ever hide anything or show a hud?
-    
-    private func set(isLoading: Bool) {
-        self.prayerSessionTitle.isHidden = isLoading
-        self.prayerSessionDescription.isHidden = isLoading
-        self.prayNowLabel.isHidden = isLoading
-        self.lengthSelector.isHidden = isLoading
-        self.selectorBar.isHidden = isLoading
-        self.prayerSessionDescription2.isHidden = isLoading
-        if isLoading {
-            self.showLightHud()
-        } else {
-            self.dismissHud()
         }
     }
     

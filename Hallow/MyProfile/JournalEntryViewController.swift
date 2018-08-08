@@ -10,8 +10,6 @@ import UIKit
 import Firebase
 import RealmSwift
 
-//TODO: Delay in updating the journal view after clicking update
-
 class JournalEntryViewController: JournalBaseViewController {
     
     @IBOutlet weak var titleField: UILabel!
@@ -50,6 +48,7 @@ class JournalEntryViewController: JournalBaseViewController {
             print("REALM: Error in will appear of journal entry")
         }
         ReachabilityManager.shared.addListener(listener: self)
+        textField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

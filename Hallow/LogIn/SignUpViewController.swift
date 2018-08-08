@@ -76,7 +76,7 @@ class SignUpViewController: LogInBaseViewController {
                 self.errorAlert(message: "\(error?.localizedDescription ?? "Error signing up")", viewController: self)
                 return
             }
-            FirebaseUtilities.createUserData(withEmail: email, withName: name) // TODO: Figure out if it runs on the background thread
+            FirebaseUtilities.createUserData(withEmail: email, withName: name)
             RealmUtilities.createUserData(withEmail: email, withName: name) {
                 self.dismissHud()
                 self.performSegue(withIdentifier: "signUpSegue", sender: self)

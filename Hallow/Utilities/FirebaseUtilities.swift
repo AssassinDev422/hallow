@@ -35,6 +35,10 @@ class FirebaseUtilities {
         }
     }
     
+    // get all docs inside a collection called prayer = challenges / dailies / praylists
+    // save each title of the doc under a variable
+    // get all docs within each of those (cycle through loop 
+    
     // MARK: - User data management
     
     static func createUserData(withEmail email: String, withName name: String) {
@@ -42,6 +46,7 @@ class FirebaseUtilities {
         let dateStored = Date(timeIntervalSinceNow: 0)
         let guide = ""
         let isFirstDay = true
+        let isLoggedIn = true
         let timeInPrayer = 0.00
         let streak: Int = 0
         let _completedPrayers = ""
@@ -53,6 +58,7 @@ class FirebaseUtilities {
             "Date Stored": dateStored,
             "Guide": guide,
             "First Day": isFirstDay,
+            "Logged In": isLoggedIn,
             "Time in Prayer": timeInPrayer,
             "Streak": streak,
             "Completed Prayers": _completedPrayers,
@@ -100,6 +106,7 @@ class FirebaseUtilities {
                 "Date Stored": dateStored,
                 "Guide": user._guide,
                 "First Day": user.isFirstDay,
+                "Logged In": user.isLoggedIn,
                 "Time in Prayer": user.timeInPrayer,
                 "Streak": user.streak,
                 "Completed Prayers": user._completedPrayers,
@@ -118,10 +125,23 @@ class FirebaseUtilities {
         }
     }
     
+    static func setLoggedInFalse(user: User, completionBlock: @escaping () -> Void) {
+        let db = Firestore.firestore()
+        db.collection("user_v2").document(user.email).updateData([
+            "Logged In": false,
+            ]) { err in
+                if let err = err {
+                    print("Error changing logged in status: \(err)") //TODO: Make useful error
+                } else {
+                    print("Logged In status changed")
+                    completionBlock()
+                }
+        }
+    }
+    
     static func logOut(viewController: BaseViewController, completionBlock: () -> Void) {
         do {
             try Auth.auth().signOut()
-            print("IN DO")
             completionBlock()
         } catch let error {
             fatalError("\(error.localizedDescription)")

@@ -13,7 +13,9 @@ import RealmSwift
 
 class FeedbackViewController: JournalBaseViewController {
     
+    @IBOutlet weak var titleField: UILabel! // We appreciate the feedback!
     @IBOutlet weak var feedbackField: UITextView!
+    @IBOutlet weak var sendButton: UIButton!
     
     var user = User()
         
@@ -30,6 +32,8 @@ class FeedbackViewController: JournalBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        titleField.text = "We appreciate the feedback!"
+        hideToggle(isHidden: false)
         do {
             let realm = try Realm()
             guard let realmUser = realm.objects(User.self).first else {
@@ -41,11 +45,19 @@ class FeedbackViewController: JournalBaseViewController {
             print("REALM: Error in will appear of feedback")
         }
         ReachabilityManager.shared.addListener(listener: self)
+        feedbackField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         ReachabilityManager.shared.removeListener(listener: self)
+    }
+    
+    // MARK: - Functions
+    
+    private func hideToggle(isHidden: Bool) {
+        feedbackField.isHidden = isHidden
+        sendButton.isHidden = isHidden
     }
     
     // MARK: - Actions
@@ -56,6 +68,7 @@ class FeedbackViewController: JournalBaseViewController {
             return
         }
         FirebaseUtilities.sendFeedback(ofType: "feedback", byUserEmail: user.email, withEntry: entry)
-        self.navigationController?.popViewController(animated: true)
+        titleField.text = "Successfully submitted - thanks!"
+        hideToggle(isHidden: true)
     }
 }

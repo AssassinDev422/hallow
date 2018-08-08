@@ -219,7 +219,6 @@ class JournalBaseViewController: BaseViewController, UITextViewDelegate {
 }
 
 //MARK: - Audio functions
-//TODO: - need to set isLoading true before running
 
 class AudioController: BaseViewController, AVAudioPlayerDelegate {
     var pathReference: StorageReference?
@@ -280,7 +279,7 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: only for iOS 11, for iOS 10 and below: player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
+            audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: May only work for iOS11 - tbd
             audioPlayer?.delegate = self
             print("Audio player was set up")
             playPause(guide)
