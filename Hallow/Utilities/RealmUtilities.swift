@@ -221,6 +221,22 @@ class RealmUtilities {
         }
     }
     
+    static func changeIsLoggedIn(isLoggedIn: Bool, completionBlock: () -> Void) {
+        do {
+            let realm = try Realm()
+            guard let user = realm.objects(User.self).first else {
+                print("Error in realm guide update")
+                return
+            }
+            try realm.write {
+                user.isLoggedIn = isLoggedIn
+                completionBlock()
+            }
+        } catch {
+            print("REALM: Error in utilities - isLoggedIn")
+        }
+    }
+    
     static func deleteUser() {
         do {
             let realm = try Realm() 

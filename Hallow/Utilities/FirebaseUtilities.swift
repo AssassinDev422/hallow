@@ -134,7 +134,9 @@ class FirebaseUtilities {
                     print("Error changing logged in status: \(err)") //TODO: Make useful error
                 } else {
                     print("Logged In status changed")
-                    completionBlock()
+                    RealmUtilities.changeIsLoggedIn(isLoggedIn: false) {
+                        completionBlock()
+                    }
                 }
         }
     }
