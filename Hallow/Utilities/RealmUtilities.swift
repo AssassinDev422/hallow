@@ -11,12 +11,14 @@ import RealmSwift
 
 class RealmUtilities {
     
+    // MARK: - User data
+    
     static func createUserData(withEmail email: String, withName name: String, completionBlock: () -> Void) {
         let user = User()
         user.email = email
         user.name = name
         user.dateStored = Date(timeIntervalSinceNow: 0)
-        user.guide = User.Guide.Francis
+        user.guide = User.Guide.francis
         user.isFirstDay = true
         user.isLoggedIn = true
         user.timeInPrayer = 0.00
@@ -47,8 +49,21 @@ class RealmUtilities {
         } catch {
             print("REALM: Error in utilities - signInUser")
         }
-        loadJournalEntries(withUser: user)
     }
+    
+    static func deleteUser() {
+        do {
+            let realm = try Realm()
+            let user = realm.objects(User.self)
+            try realm.write {
+                realm.delete(user)
+            }
+        } catch {
+            print("REALM: Error in utilities - deleteUser")
+        }
+    }
+    
+    // MARK: - Journal entries
     
     static func saveJournalEntry(withEntry entry: JournalEntry) {
         do {
@@ -61,32 +76,21 @@ class RealmUtilities {
         }
     }
     
-    static func loadJournalEntries(withUser user: User) {
-        var journalEntries: [JournalEntry] = []
-        FirebaseUtilities.loadJournalEntries(byUserEmail: user.email) { results in
-            journalEntries = results.map(JournalEntry.init)
-            journalEntries.sort{$0.dateStored > $1.dateStored}
-            do {
-                let realm = try Realm()
-                let oldJournal = realm.objects(JournalEntry.self)
-                try realm.write {
-                    realm.delete(oldJournal)
-                }
-                for journalEntry in journalEntries {
-                    try realm.write {
-                        realm.add(journalEntry)
-                    }
-                }
-            } catch {
-                print("REALM: Error in utilities - loadJournalEntries")
-            }
+    static func calcDocID(withUser user: User) -> Int {
+        do {
+            let realm = try Realm()
+            let journal = realm.objects(JournalEntry.self).filter("userEmail = %a", user.email)
+            return journal.count
+        } catch {
+            print("REALM: Error in utilities - loadJournalEntries")
+            return 0
         }
     }
     
-    static func deleteJournalEntry(withID docID: String, completionBlock: () -> Void) {
+    static func deleteJournalEntry(fromUser user: User, withID docID: Int, completionBlock: () -> Void) {
         do {
             let realm = try Realm()
-            let journalEntry = realm.objects(JournalEntry.self).filter("docID = %a", docID)
+            let journalEntry = realm.objects(JournalEntry.self).filter("userEmail = %a AND docID = %a", user.email, docID)
             try realm.write {
                 realm.delete(journalEntry)
                 completionBlock()
@@ -96,10 +100,10 @@ class RealmUtilities {
         }
     }
     
-    static func updateJournalEntry(withID docID: String, withEntry entry: String, completionBlock: () -> Void) {
+    static func updateJournalEntry(fromUser user: User, withID docID: Int, withEntry entry: String, completionBlock: () -> Void) {
         do {
             let realm = try Realm()
-            if let journalEntry = realm.objects(JournalEntry.self).filter("docID = %a", docID).first {
+            if let journalEntry = realm.objects(JournalEntry.self).filter("userEmail = %a AND docID = %a", user.email, docID).first {
                 try realm.write {
                     journalEntry.entry = entry
                     completionBlock()
@@ -107,6 +111,34 @@ class RealmUtilities {
             }
         } catch {
             print("REALM: Error in utilities - updateJournalEntry")
+        }
+    }
+    
+    // MARK: Prayer and audio
+    
+    static func addPrayers(withPrayers prayers: [Prayer]) {
+        do {
+            let realm = try Realm()
+            let oldPrayers = realm.objects(Prayer.self)
+            try realm.write {
+                realm.delete(oldPrayers)
+                realm.add(prayers)
+            }
+        } catch {
+            print("REALM: Error in utilities - addPrayers")
+        }
+    }
+    
+    static func addChapters(withChapters chapters: [Chapter]) {
+        do {
+            let realm = try Realm()
+            let oldChapters = realm.objects(Chapter.self)
+            try realm.write {
+                realm.delete(oldChapters)
+                realm.add(chapters)
+            }
+        } catch {
+            print("REALM: Error in utilities - addChapters")
         }
     }
     
@@ -175,20 +207,7 @@ class RealmUtilities {
         }
     }
     
-    static func setCurrentAudioTime(withCurrentTime currentTime: Double) {
-        do {
-            let realm = try Realm()
-            guard let user = realm.objects(User.self).first else {
-                print("Error in realm prayer exited")
-                return
-            }
-            try realm.write {
-                user.pausedTime = currentTime
-            }
-        } catch {
-            print("REALM: Error in utilities - setCurrentAudioTime")
-        }
-    }
+    // MARK: Constants
     
     static func updateIsFirstDay(withIsFirstDay isFirstDay: Bool) {
         do {
@@ -205,7 +224,7 @@ class RealmUtilities {
         }
     }
     
-    static func updateGuide(withGuide guide: User.Guide, completionBlock: () -> Void) {
+    static func updateGuide(withGuide guide: User.Guide, completionBlock: (() -> Void)? = nil) {
         do {
             let realm = try Realm()
             guard let user = realm.objects(User.self).first else {
@@ -214,7 +233,7 @@ class RealmUtilities {
             }
             try realm.write {
                 user.guide = guide
-                completionBlock()
+                completionBlock?()
             }
         } catch {
             print("REALM: Error in utilities - updateGuide")
@@ -234,33 +253,6 @@ class RealmUtilities {
             }
         } catch {
             print("REALM: Error in utilities - isLoggedIn")
-        }
-    }
-    
-    static func deleteUser() {
-        do {
-            let realm = try Realm() 
-            let user = realm.objects(User.self)
-            let journal = realm.objects(JournalEntry.self)
-            try realm.write {
-                realm.delete(user)
-                realm.delete(journal)
-            }
-        } catch {
-            print("REALM: Error in utilities - deleteUser")
-        }
-    }
-    
-    static func addPrayers(withPrayers prayers: [PrayerItem]) {
-        do {
-            let realm = try Realm()
-            let oldPrayers = realm.objects(PrayerItem.self)
-            try realm.write {
-                realm.delete(oldPrayers)
-                realm.add(prayers)
-            }
-        } catch {
-            print("REALM: Error in utilities - addPrayers")
         }
     }
 }

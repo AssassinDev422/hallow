@@ -49,18 +49,18 @@ class PrayerJourneyTableViewController: UITableViewController {
     // MARK: - Functions
     
     private func updateTableViewPosition() {
-        guard let parent = self.parent as? PrayerJourneySuperViewController else {
+        guard let parent = parent as? PrayerJourneySuperViewController else {
             print("Error in updateTableViewPosition")
             return
         }
         if parent.dayNumber == 10 {
             let indexPath = IndexPath(row: 8, section: 0)
-            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
             print("DAY NUMBER: \(parent.dayNumber)")
-            self.row = parent.dayNumber - 1
-            let indexPath = IndexPath(row: self.row, section: 0)
-            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            row = parent.dayNumber - 1
+            let indexPath = IndexPath(row: row, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
 
@@ -73,7 +73,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         do {
             let realm = try Realm() 
-            return realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user._guide, "10 mins").count
+            return realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins").count
         } catch {
             print("REALM: Error in prayer journey table view - tableview number of rows")
             return 0
@@ -85,7 +85,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PrayerJourneyTableViewCell
         do {
             let realm = try Realm()
-            let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath.row]
+            let prayer = realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath.row]
             cell.prayerTitleLabel.text = prayer.title
             cell.prayerDescriptionLabel.text = prayer.desc
             let completed = user.completedPrayers.contains {$0 == prayer.title}
@@ -119,7 +119,7 @@ class PrayerJourneyTableViewController: UITableViewController {
     }
     
     @objc private func buttonTapped(_ sender: UIButton!){
-        self.performSegue(withIdentifier: "tableReturnToPrayNowSegue", sender: sender)
+        performSegue(withIdentifier: "tableReturnToPrayNowSegue", sender: sender)
     }
     
     // MARK: - Table view delegate and appearance
@@ -140,8 +140,8 @@ class PrayerJourneyTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do {
             let realm = try Realm()
-            let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath.item]
-            guard let parent = self.parent as? PrayerJourneySuperViewController else {
+            let prayer = realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath.item]
+            guard let parent = parent as? PrayerJourneySuperViewController else {
                 print("Error in didSelectRowAt")
                 return
             }
@@ -162,7 +162,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         } catch {
             print("REALM: Error in prayer journey table view - did select row at")
         }
-        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -170,7 +170,7 @@ class PrayerJourneyTableViewController: UITableViewController {
             let indexPath = button.tag
             do {
                 let realm = try Realm()
-                let prayer = realm.objects(PrayerItem.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath]
+                let prayer = realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath]
                 prayNow.prayer = prayer
             } catch {
                 print("REALM: Error in prayer journey table view - prepare for segue")

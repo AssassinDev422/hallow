@@ -44,11 +44,11 @@ class SignUpViewController: LogInBaseViewController {
     // MARK: - Actions
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == nameField {
+        if textField === nameField {
             emailField.becomeFirstResponder()
-        } else if textField == emailField {
+        } else if textField === emailField {
             passwordField.becomeFirstResponder()
-        } else if textField == passwordField {
+        } else if textField === passwordField {
             signUp()
             passwordField.resignFirstResponder()
         }
@@ -64,8 +64,8 @@ class SignUpViewController: LogInBaseViewController {
     private func signUp() {
         showLightHud()
         guard let name = nameField.text, let originalEmail = emailField.text, let password = self.passwordField.text else {
-            self.dismissHud()
-            self.alertWithDismiss(viewController: self, title: "Error", message: "Missing name, email or password")
+            dismissHud()
+            alertWithDismiss(viewController: self, title: "Error", message: "Missing name, email or password")
             return
         }
         let email = cleanText(text: originalEmail)

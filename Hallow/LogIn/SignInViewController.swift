@@ -40,9 +40,9 @@ class SignInViewController: LogInBaseViewController {
     // MARK: - Actions
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == emailField {
+        if textField === emailField {
             passwordField.becomeFirstResponder()
-        } else if textField == passwordField {
+        } else if textField === passwordField {
             signIn()
             passwordField.resignFirstResponder()
         }
@@ -57,15 +57,15 @@ class SignInViewController: LogInBaseViewController {
     
     private func signIn() {
         showLightHud()
-        guard let originalEmail = emailField.text, let password = self.passwordField.text else {
-            self.dismissHud()
-            self.alertWithDismiss(viewController: self, title: "Error", message: "Missing email or password")
+        guard let originalEmail = emailField.text, let password = passwordField.text else {
+            dismissHud()
+            alertWithDismiss(viewController: self, title: "Error", message: "Missing email or password")
             return
         }
         let email = cleanText(text: originalEmail)
         
-        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-            guard let _ = user?.uid, let userEmail = user?.email, error == nil else {
+        Auth.auth().signIn(withEmail: email, password: password) { (_user, error) in
+            guard let _ = _user?.uid, let userEmail = _user?.email, error == nil else {
                 self.errorAlert(message: "\(error?.localizedDescription ?? "Error signing in")", viewController: self)
                 self.dismissHud()
                 return
@@ -85,7 +85,7 @@ class SignInViewController: LogInBaseViewController {
                 }
                 RealmUtilities.signInUser(withUser: self.user) {
                     self.dismissHud()
-                    FirebaseUtilities.syncUserData { }
+                    FirebaseUtilities.syncUserData()
                     self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
             }

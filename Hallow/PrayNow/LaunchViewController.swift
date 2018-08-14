@@ -42,18 +42,20 @@ class LaunchViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        overrideLogOut()
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             if let _ = user?.uid, let userEmail = user?.email {
                 self.loadUser(fromUserEmail: userEmail)
-                FirebaseUtilities.syncUserData() { }
+                FirebaseUtilities.syncUserData()
                 FirebaseUtilities.loadProfilePicture(byUserEmail: userEmail) { image in
                     self.saveImage(image: image)
                 }
             } else {
-                FirebaseUtilities.loadAllPrayers() { prayers in
-                    RealmUtilities.addPrayers(withPrayers: prayers)
-                    self.hideOutlets(shouldHide: false)
+                FirebaseUtilities.loadPrayers() { prayers in
+                    FirebaseUtilities.loadChapters() { chapters in
+                        RealmUtilities.addPrayers(withPrayers: prayers)
+                        RealmUtilities.addChapters(withChapters: chapters)
+                        self.hideOutlets(shouldHide: false)
+                    }
                 }
                 print("no one is logged in")
             }
@@ -81,8 +83,11 @@ class LaunchViewController: BaseViewController {
             }
             self.user = results
             RealmUtilities.signInUser(withUser: self.user) {
-                FirebaseUtilities.loadAllPrayers() { prayers in
-                    RealmUtilities.addPrayers(withPrayers: prayers)
+                FirebaseUtilities.loadPrayers() { prayers in
+                    FirebaseUtilities.loadChapters() { chapters in
+                        RealmUtilities.addPrayers(withPrayers: prayers)
+                        RealmUtilities.addChapters(withChapters: chapters)
+                    }
                 }
                 self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
             }
@@ -91,9 +96,9 @@ class LaunchViewController: BaseViewController {
     
     // Created so when the segue skips past this screen (when user is already logged in) it doesn't show the buttons
     private func hideOutlets(shouldHide: Bool) {
-        self.signInButton.isHidden = shouldHide
-        self.signUpButton.isHidden = shouldHide
-        self.prayerChallengeLabel.isHidden = shouldHide
+        signInButton.isHidden = shouldHide
+        signUpButton.isHidden = shouldHide
+        prayerChallengeLabel.isHidden = shouldHide
     }
     
     // For testing - if need to override log out - call function after log in in viewWillAppear and run twice

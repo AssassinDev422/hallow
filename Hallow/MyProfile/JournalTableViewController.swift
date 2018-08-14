@@ -29,16 +29,16 @@ class JournalTableViewController: BaseTableViewController {
         super.viewWillAppear(animated)
         do {
             let realm = try Realm()
-            journalEntries = Array(realm.objects(JournalEntry.self).sorted(byKeyPath: "dateStored", ascending: false))
             guard let realmUser = realm.objects(User.self).first else {
                 print("REALM: Error in will appear of journal table view")
                 return
             }
             user = realmUser
+            journalEntries = Array(realm.objects(JournalEntry.self).filter("userEmail = %a", user.email).sorted(byKeyPath: "dateStored", ascending: false))
         } catch {
             print("REALM: Error in will appear of journal table view")
         }
-        self.tableView.reloadData()
+        tableView.reloadData()
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -50,11 +50,11 @@ class JournalTableViewController: BaseTableViewController {
     // Sets up hud
     
     func set(isLoading: Bool) {
-        self.tableView.isHidden = isLoading
+        tableView.isHidden = isLoading
         if isLoading {
-            self.showLightHud()
+            showLightHud()
         } else {
-            self.dismissHud()
+            dismissHud()
         }
     }
     
@@ -65,7 +65,7 @@ class JournalTableViewController: BaseTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.journalEntries.count
+        return journalEntries.count
     }
 
     
@@ -88,11 +88,10 @@ class JournalTableViewController: BaseTableViewController {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
             let entry = journalEntries[indexPath.row]
             let docID = entry.docID
-            RealmUtilities.deleteJournalEntry(withID: docID) {
-                self.journalEntries.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath], with: .left)
+            RealmUtilities.deleteJournalEntry(fromUser: user, withID: docID) {
+                journalEntries.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .left)
             }
-            FirebaseUtilities.deleteFile(ofType: "journal", byUserEmail: user.email, withID: docID)
         }
     }
     

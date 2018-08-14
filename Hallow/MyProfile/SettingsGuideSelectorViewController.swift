@@ -49,21 +49,21 @@ class SettingsGuideSelectorViewController: UIViewController {
     @IBAction func francisButton(_ sender: UIButton) {
         francisButton.isSelected = !francisButton.isSelected
         abbyButton.isSelected = !abbyButton.isSelected
-        RealmUtilities.updateGuide(withGuide: User.Guide.Francis) { }
-        RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
+        RealmUtilities.updateGuide(withGuide: User.Guide.francis)
+        Utilities.pausedTime = 0.00
     }
     
     @IBAction func abbyButton(_ sender: UIButton) {
         abbyButton.isSelected = !abbyButton.isSelected
         francisButton.isSelected = !francisButton.isSelected
-        RealmUtilities.updateGuide(withGuide: User.Guide.Abby) { }
-        RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
+        RealmUtilities.updateGuide(withGuide: User.Guide.abby)
+        Utilities.pausedTime = 0.00
     }
     
     // MARK: - Functions
     
     private func setGuideButton() {
-        if user.guide == User.Guide.Francis {
+        if user.guide == User.Guide.francis {
             francisButton.isSelected = true
             abbyButton.isSelected = false
         } else {

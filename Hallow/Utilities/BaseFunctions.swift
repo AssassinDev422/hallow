@@ -49,12 +49,7 @@ class BaseViewController: UIViewController {
     }
     
     func dismissHud() {
-        self.hud?.dismiss()
-    }
-    
-    func urlInDocumentsDirectory(forPath path: String) -> URL {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) [0]
-        return documentsDirectory.appendingPathComponent(path)
+        hud?.dismiss()
     }
     
     func updateImage(image: UIImage) -> Void {
@@ -75,14 +70,14 @@ class BaseViewController: UIViewController {
     }
     
     func saveImage(image: UIImage) -> Void {
-        let imageURL = urlInDocumentsDirectory(forPath: "profilePicture.jpg")
+        let imageURL = Utilities.urlInDocumentsDirectory(forPath: "profilePicture.jpg")
         if let imageData = UIImageJPEGRepresentation(image, 1.0) {
             try? imageData.write(to: imageURL, options: .atomic) //TODO: Why atomic?
         }
     }
     
     func loadImage() -> UIImage? {
-        let imageURL = urlInDocumentsDirectory(forPath: "profilePicture.jpg")
+        let imageURL = Utilities.urlInDocumentsDirectory(forPath: "profilePicture.jpg")
         do {
             let imageData = try Data(contentsOf: imageURL)
             return UIImage(data: imageData)
@@ -143,7 +138,7 @@ class BaseTableViewController: UITableViewController {
     }
     
     func dismissHud() {
-        self.hud?.dismiss()
+        hud?.dismiss()
     }
 }
 
@@ -165,7 +160,7 @@ class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneClicked))
         toolBar.setItems([flexibleSpace, doneButton], animated: false)
         textField.inputAccessoryView = toolBar
     }
@@ -175,7 +170,7 @@ class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
     
     func cleanText(text: String) -> String { //TODO: Check if this works
@@ -189,21 +184,21 @@ class JournalBaseViewController: BaseViewController, UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         print("Did begin editing")
-        self.frame = textView.frame
-        var newFrame = self.frame!
-        newFrame.size.height = self.frame!.height / 2.5
+        frame = textView.frame
+        var newFrame = frame!
+        newFrame.size.height = frame!.height / 2.5
         textView.frame = newFrame
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        textView.frame = self.frame!
+        textView.frame = frame!
     }
     
     func setUpDoneButton(textView: UITextView) {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneClicked))
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneClicked))
         toolBar.setItems([flexibleSpace, doneButton], animated: false)
         textView.inputAccessoryView = toolBar
     }
@@ -213,7 +208,7 @@ class JournalBaseViewController: BaseViewController, UITextViewDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
     
 }
@@ -227,7 +222,7 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
     var startTime = Date(timeIntervalSinceNow: 0)
 
     func downloadAudio(guide: User.Guide, audioURL: String, setLoading: (Bool) -> Void, completionBlock: @escaping (User.Guide, String) -> Void) {
-        let destinationFileURL = urlInDocumentsDirectory(forPath: audioURL)
+        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
             completionBlock(guide, audioURL)
@@ -237,7 +232,7 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         setLoading(true)
         pathReference = Storage.storage().reference(withPath: audioURL)
         
-        guard let pathReference = self.pathReference else {
+        guard let pathReference = pathReference else {
             print("BASE: Error in downloadAudio")
             return
         }
@@ -267,24 +262,18 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         }
     }
     
-    func setupAudioPlayer(guide: User.Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: () -> Void, playPause: (User.Guide) -> Void) {
+    func setupAudioPlayer(guide: User.Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: (() -> Void)? = nil, playPause: (User.Guide) -> Void) {
         setLoading(false)
+            let audioURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
         do {
-            let realm = try Realm()
-            guard let user = realm.objects(User.self).first else {
-                print("BASE: Error in setUpAudioPlayer")
-                return
-            }
-            let audioURL = urlInDocumentsDirectory(forPath: audioURL)
-        
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
             audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: May only work for iOS11 - tbd
             audioPlayer?.delegate = self
             print("Audio player was set up")
             playPause(guide)
-            updateProgress()
-            audioPlayer?.currentTime = user.pausedTime
+            updateProgress?()
+            audioPlayer?.currentTime = Utilities.pausedTime
             startTime = Date(timeIntervalSinceNow: 0)
         } catch let error {
             print(error.localizedDescription)

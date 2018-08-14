@@ -60,11 +60,11 @@ class RecommendViewController: LogInBaseViewController {
     // MARK: - Actions
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == nameField {
+        if textField === nameField {
             phoneNumberField.becomeFirstResponder()
-        } else if textField == phoneNumberField {
+        } else if textField === phoneNumberField {
             emailField.becomeFirstResponder()
-        } else if textField == emailField {
+        } else if textField === emailField {
             submit()
             emailField.resignFirstResponder()
         }
@@ -83,7 +83,7 @@ class RecommendViewController: LogInBaseViewController {
             return
         }
         let submission = "\(String(describing: name)) - \(String(describing: number)) - \(String(describing: email))"
-        FirebaseUtilities.sendFeedback(ofType: "recommendation", byUserEmail: user.email, withEntry: submission)
+        FirebaseUtilities.saveOtherData(ofType: "Recommendation", byUserEmail: user.email, withEntry: submission)
         titleField.text = "Successfully submitted - thanks!"
         hideToggle(isHidden: true)
     }

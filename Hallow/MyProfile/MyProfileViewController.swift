@@ -53,11 +53,11 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
             print("REALM: Error in will appear of my profile")
         }
         
-        self.nameLabel.text = user.name
-        self.completedNumber.text = String(user.completedPrayers.count - 1)
+        nameLabel.text = user.name
+        completedNumber.text = String(user.completedPrayers.count - 1)
         let minutes = user.timeInPrayer / 60.0
-        self.minsNumber.text = String(format: "%.0f", minutes)
-        self.streakNumber.text = String(user.streak)
+        minsNumber.text = String(format: "%.0f", minutes)
+        streakNumber.text = String(user.streak)
         ReachabilityManager.shared.addListener(listener: self)
         
         profilePicture = loadImage()
@@ -76,7 +76,7 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         showLightHud()
         FirebaseUtilities.syncUserData() {
             self.deleteImage()
-            FirebaseUtilities.setLoggedInFalse(user: self.user) { }
+            FirebaseUtilities.setLoggedInFalse(user: self.user)
             RealmUtilities.deleteUser()
             FirebaseUtilities.logOut(viewController: self) {
                 self.dismissHud()
@@ -116,28 +116,28 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         alertController.addAction(cancelAction)
         alertController.popoverPresentationController?.sourceView = view
         alertController.popoverPresentationController?.sourceRect = view.frame
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Functions - Image picker
 
     private func present() {
-        self.present(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
 
     func imagePickerController(_: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         print("info of the pic reached :\(info) ")
-        self.profilePicture = info[UIImagePickerControllerOriginalImage] as? UIImage
-        profileImage.image = self.profilePicture
+        profilePicture = info[UIImagePickerControllerOriginalImage] as? UIImage
+        profileImage.image = profilePicture
         formatProfilePicture()
-        guard let profilePicture = self.profilePicture else {
+        guard let profilePicture = profilePicture else {
             print("Error in imagePickerController")
             return
         }
         FirebaseUtilities.uploadProfilePicture(withImage: profilePicture, byUserEmail: user.email)
         updateImage(image: profilePicture)
         
-        self.imagePicker.dismiss(animated: true, completion: nil)
+        imagePicker.dismiss(animated: true, completion: nil)
     }
     
     private func formatProfilePicture() {

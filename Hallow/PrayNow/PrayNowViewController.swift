@@ -21,10 +21,10 @@ class PrayNowViewController: BaseViewController {
     @IBOutlet weak var selectorBar: UIView!
     
     var user = User()
-    var prayer: PrayerItem?
-    var prayer10mins: PrayerItem?
-    var prayer5mins: PrayerItem?
-    var prayer15mins: PrayerItem?
+    var prayer: Prayer?
+    var prayer10mins: Prayer?
+    var prayer5mins: Prayer?
+    var prayer15mins: Prayer?
     var lengthWasChanged: Bool = false
     
     // MARK: - Life cycle
@@ -46,11 +46,11 @@ class PrayNowViewController: BaseViewController {
         } catch {
             print("REALM: Error starting realm in praynow appear")
         }
-        if let prayer = self.prayer {
-            self.setPrayerSession(withTitle: prayer.title)
+        if let prayer = prayer {
+            setPrayerSession(withTitle: prayer.title)
             print("SETTING PRAYER SESSION WITH PRAYER: \(prayer.title)")
         } else {
-            self.setPrayerSession(withTitle: user.nextPrayerTitle)
+            setPrayerSession(withTitle: user.nextPrayerTitle)
             print("SETTING PRAYER SESSION WITHOUT PRAYER: \(user.nextPrayerTitle)")
         }
         ReachabilityManager.shared.addListener(listener: self)
@@ -69,17 +69,17 @@ class PrayNowViewController: BaseViewController {
     // MARK: - Actions
     
     @IBAction func lengthChanged(_ sender: Any) {
-        RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
-        guard let length = self.lengthSelector.titleForSegment(at: self.lengthSelector.selectedSegmentIndex) else {
+        Utilities.pausedTime = 0.00
+        guard let length = lengthSelector.titleForSegment(at: lengthSelector.selectedSegmentIndex) else {
             print("Error in lengthChanged")
             return
         }
         if length == "5 mins" {
-            self.prayer = self.prayer5mins
+            prayer = prayer5mins
         } else if length == "15 mins" {
-            self.prayer = self.prayer15mins
+            prayer = prayer15mins
         } else {
-            self.prayer = self.prayer10mins
+            prayer = prayer10mins
         }
         UIView.animate(withDuration: 0.3) {
             self.setSelectorBarPosition()
@@ -91,61 +91,60 @@ class PrayNowViewController: BaseViewController {
     private func setPrayerSession(withTitle title: String) {
         do {
             let realm = try Realm()
-            let prayers = realm.objects(PrayerItem.self)
-            self.prayer5mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "5 mins").first
-            self.prayer10mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "10 mins").first
-            self.prayer15mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "15 mins").first
+            let prayers = realm.objects(Prayer.self)
+            prayer5mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "5 mins").first
+            prayer10mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "10 mins").first
+            prayer15mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "15 mins").first
         } catch {
             print("REALM: Error loading prayers in praynow")
         }
 
-        if let length = self.prayer?.length {
+        if let length = prayer?.length {
             if length == "5 mins" {
-                self.prayer = self.prayer5mins
-                self.lengthSelector.selectedSegmentIndex = 0
+                prayer = prayer5mins
+                lengthSelector.selectedSegmentIndex = 0
             } else if length == "15 mins" {
-                self.prayer = self.prayer15mins
-                self.lengthSelector.selectedSegmentIndex = 2
+                prayer = prayer15mins
+                lengthSelector.selectedSegmentIndex = 2
             } else {
-                self.prayer = self.prayer10mins
+                prayer = prayer10mins
             }
         } else {
-            self.prayer = self.prayer10mins
+            prayer = prayer10mins
         }
         
-        guard let prayer = self.prayer else {
+        guard let prayer = prayer else {
             print("Error in setPrayerSession")
             return
         }
-        self.prayerSessionTitle.text = prayer.title
-        self.prayerSessionTitle.text?.append(" of 9")
-        self.prayerSessionDescription.text = prayer.desc
+        prayerSessionTitle.text = prayer.title
+        prayerSessionTitle.text?.append(" of 9")
+        prayerSessionDescription.text = prayer.desc
         
         let description2 = NSMutableAttributedString(string: prayer.desc2)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
-        self.prayerSessionDescription2.attributedText = description2
+        prayerSessionDescription2.attributedText = description2
     }
     
     private func setSelectorBarPosition() {
-        let width = self.lengthSelector.frame.width / 3
-        let origin = self.lengthSelector.frame.origin.x
-        let index = self.lengthSelector.selectedSegmentIndex
+        let width = lengthSelector.frame.width / 3
+        let origin = lengthSelector.frame.origin.x
+        let index = lengthSelector.selectedSegmentIndex
         if index == 0 {
-            self.selectorBar.frame.origin.x = origin
+            selectorBar.frame.origin.x = origin
         } else if index == 1 {
-            self.selectorBar.frame.origin.x = origin + width
+            selectorBar.frame.origin.x = origin + width
         } else {
-            self.selectorBar.frame.origin.x = origin + 2 * width
+            selectorBar.frame.origin.x = origin + 2 * width
         }
     }
     
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? UINavigationController, let AudioPlayerViewController = destination.viewControllers.first as? AudioPlayerViewController {    
-                let prayer = self.prayer
+        if let destination = segue.destination as? UINavigationController, let AudioPlayerViewController = destination.viewControllers.first as? AudioPlayerViewController, let prayer = self.prayer {
                 AudioPlayerViewController.prayer = prayer
         }
     }

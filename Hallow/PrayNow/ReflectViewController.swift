@@ -69,7 +69,18 @@ class ReflectViewController: JournalBaseViewController {
             print("Error in save")
             return
         }
-        FirebaseUtilities.saveReflection(ofType: "journal", byUserEmail: user.email, withEntry: entry, withTitle: prayerTitle)
+        let journalEntry = JournalEntry()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d/yy"
+        let date = formatter.string(from: NSDate() as Date)
+        let dateStored = Date(timeIntervalSinceNow: 0.00)
+        journalEntry.date = date
+        journalEntry.dateStored = dateStored
+        journalEntry.docID = RealmUtilities.calcDocID(withUser: user) + 1
+        journalEntry.entry = entry
+        journalEntry.prayerTitle = prayerTitle
+        journalEntry.userEmail = user.email
+        RealmUtilities.saveJournalEntry(withEntry: journalEntry)
         reflectSegue()
     }
         

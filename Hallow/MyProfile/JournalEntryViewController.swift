@@ -64,13 +64,12 @@ class JournalEntryViewController: JournalBaseViewController {
     
     
     private func update() {
-        guard let entry = textField.text, let docID = journalEntry?.docID, let title = journalEntry?.prayerTitle else {
-            print("Error in update")
+        guard let entry = textField.text, let docID = journalEntry?.docID, let _ = journalEntry?.prayerTitle else {
+            print("Error in update") // TODO: When changing to add own journal probs need to update title too
             return
         }
-        FirebaseUtilities.updateReflection(withDocID: docID, byUserEmail: user.email, withEntry: entry, withTitle: title)
-        RealmUtilities.updateJournalEntry(withID: docID, withEntry: entry) {
-            self.navigationController?.popViewController(animated: true)
+        RealmUtilities.updateJournalEntry(fromUser: user, withID: docID, withEntry: entry) {
+            navigationController?.popViewController(animated: true)
             print("ENTRY after popping vc: \(entry)")
         }
     }

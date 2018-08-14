@@ -15,11 +15,15 @@ import RealmSwift
 
 class FirebaseUtilities {
     
+    static let userLocation = "User"
+    static let prayerLocation = "Prayers"
+    static let chapterLocation = "Chapters"
+    
     // MARK: - Load prayers
 
-    static func loadAllPrayers(completionBlock: @escaping ([PrayerItem]) -> Void) {
+    static func loadPrayers(completionBlock: @escaping ([Prayer]) -> Void) {
         let db = Firestore.firestore()
-        db.collection("prayer").getDocuments { result, error in
+        db.collection(prayerLocation).getDocuments { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
                     print("Got an error loading prayers from Firestore: \(error)")
@@ -29,22 +33,37 @@ class FirebaseUtilities {
                 return
             }
             let results = result.documents
-            var prayers = results.map(PrayerItem.init)
+            var prayers = results.map(Prayer.init)
             prayers.sort{$0.title < $1.title}
             completionBlock(prayers)
         }
     }
     
-    // get all docs inside a collection called prayer = challenges / dailies / praylists
-    // save each title of the doc under a variable
-    // get all docs within each of those (cycle through loop 
+    static func loadChapters(completionBlock: @escaping ([Chapter]) -> Void) {
+        let db = Firestore.firestore()
+        db.collection(chapterLocation).getDocuments { result, error in
+            guard let result = result, error == nil else {
+                if let error = error {
+                    print("Got an error loading prayers from Firestore: \(error)")
+                } else {
+                    print("While fetching prayers, the results were nil, but there was no error. That's weird.")
+                }
+                return
+            }
+            let results = result.documents
+            var chapters = results.map(Chapter.init)
+            chapters.sort{$0.index < $1.index}
+            chapters.sort{$0.categoryIndex < $1.categoryIndex}
+            completionBlock(chapters)
+        }
+    }
     
     // MARK: - User data management
     
     static func createUserData(withEmail email: String, withName name: String) {
         let db = Firestore.firestore()
         let dateStored = Date(timeIntervalSinceNow: 0)
-        let guide = ""
+        let guide = "Not yet set"
         let isFirstDay = true
         let isLoggedIn = true
         let timeInPrayer = 0.00
@@ -52,7 +71,7 @@ class FirebaseUtilities {
         let _completedPrayers = ""
         let mostRecentPrayerDate = Date(timeIntervalSince1970: 0)
         let nextPrayerTitle = "Day 1"
-        db.collection("user_v2").document(email).setData([
+        db.collection(userLocation).document(email).setData([
             "Name": name,
             "Email": email,
             "Date Stored": dateStored,
@@ -76,7 +95,7 @@ class FirebaseUtilities {
     static func loadUserData(byUserEmail email: String,
                              _ callback: @escaping ([DocumentSnapshot]) -> ()) {
         let db = Firestore.firestore()
-        db.collection("user_v2").document(email).getDocument { result, error in
+        db.collection(userLocation).document(email).getDocument { result, error in
             guard let result = result, error == nil else {
                 if let error = error {
                     fatalError("FIREBASE: Got an error loading files from Firestore: \(error)")
@@ -90,7 +109,7 @@ class FirebaseUtilities {
         }
     }
     
-    static func syncUserData(completionBlock: @escaping () -> Void) {
+    static func syncUserData(completionBlock: (() -> Void)? = nil) {
         do {
             let realm = try Realm() 
             guard let user = realm.objects(User.self).first else {
@@ -100,7 +119,7 @@ class FirebaseUtilities {
             let db = Firestore.firestore()
             let dateStored = Date(timeIntervalSinceNow: 0)
             
-            db.collection("user_v2").document(user.email).updateData([
+            db.collection(userLocation).document(user.email).updateData([
                 "Name": user.name,
                 "Email": user.email,
                 "Date Stored": dateStored,
@@ -117,7 +136,7 @@ class FirebaseUtilities {
                         print("Error adding document: \(err)") //TODO: Make useful error
                     } else {
                         print("Document added")
-                        completionBlock()
+                        completionBlock?()
                     }
             }
         } catch {
@@ -125,9 +144,9 @@ class FirebaseUtilities {
         }
     }
     
-    static func setLoggedInFalse(user: User, completionBlock: @escaping () -> Void) {
+    static func setLoggedInFalse(user: User, completionBlock: (() -> Void)? = nil) {
         let db = Firestore.firestore()
-        db.collection("user_v2").document(user.email).updateData([
+        db.collection(userLocation).document(user.email).updateData([
             "Logged In": false,
             ]) { err in
                 if let err = err {
@@ -135,7 +154,7 @@ class FirebaseUtilities {
                 } else {
                     print("Logged In status changed")
                     RealmUtilities.changeIsLoggedIn(isLoggedIn: false) {
-                        completionBlock()
+                        completionBlock?()
                     }
                 }
         }
@@ -149,88 +168,15 @@ class FirebaseUtilities {
             fatalError("\(error.localizedDescription)")
         }
     }
-        
-    // MARK: - Journal entries
     
-    static func loadJournalEntries(byUserEmail email: String,
-                                         _ callback: @escaping ([DocumentSnapshot]) -> ()) {
-        let db = Firestore.firestore()
-        
-        db.collection("user_v2").document(email).collection("journal").getDocuments { result, error in
-            guard let result = result, error == nil else {
-                if let error = error {
-                    print("Got an error loading files from Firestore: \(error)")
-                } else {
-                    print("While fetching files, the results were nil, but there was no error. That's weird.")
-                }
-                callback([])
-                return
-            }
-            callback(result.documents)
-        }
-    }
-    
-    static func saveReflection(ofType type: String, byUserEmail email: String, withEntry entry: String, withTitle title: String) {
-        let db = Firestore.firestore()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M/d/yy"
-        let date = formatter.string(from: NSDate() as Date)
-        let dateStored = Date(timeIntervalSinceNow: 0.00)
-        var ref: DocumentReference? = nil
-        
-        ref = db.collection("user_v2").document(email).collection(type).addDocument(data: [
-            "Date": date,
-            "Date Stored": dateStored,
-            "Entry": entry,
-            "Prayer Title": title
-        ]) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
-        } else {
-                print("Document added with ID: \(email)")
-                guard let ref = ref else {
-                    print("FIREBASE: Error in save reflection")
-                    return
-                }
-                let journalEntry = JournalEntry()
-                journalEntry.date = date
-                journalEntry.dateStored = dateStored
-                journalEntry.docID = ref.documentID
-                journalEntry.entry = entry
-                journalEntry.prayerTitle = title
-                RealmUtilities.saveJournalEntry(withEntry: journalEntry)
-            }
-        }
-    }
-    
-    static func updateReflection(withDocID docID: String, byUserEmail email: String, withEntry entry: String, withTitle title: String) {
-        let db = Firestore.firestore()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M/d/yy"
-        let date = formatter.string(from: NSDate() as Date)
-        let dateStored = Date(timeIntervalSinceNow: 0.00)
-
-        db.collection("user_v2").document(email).collection("journal").document(docID).updateData([
-            "Date": date,
-            "Date Stored": dateStored,
-            "Entry": entry,
-            "Prayer Title": title
-        ]) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
-            } else {
-                print("Document added with ID: \(email)")
-            }
-        }
-    }
-    
-    static func sendFeedback(ofType type: String, byUserEmail email: String, withEntry entry: String) {
+    static func saveOtherData(ofType type: String, byUserEmail email: String, withEntry entry: String) {
         let db = Firestore.firestore()
         let formatterStored = DateFormatter()
         formatterStored.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         let dateStored = formatterStored.string(from: NSDate() as Date)
         
-        db.collection("user_v2").document(email).collection(type).addDocument(data: [
+        db.collection(type).addDocument(data: [
+            "User": email,
             "Date Stored": dateStored,
             "Entry": entry
         ]) { err in
@@ -279,7 +225,7 @@ class FirebaseUtilities {
     
     static func loadProfilePicture(byUserEmail userEmail: String, completionBlock: @escaping (UIImage) -> Void) {
         let path = "profilePictures/\(userEmail).png"
-        let destinationFileURL = BaseViewController().urlInDocumentsDirectory(forPath: path) //TODO: Check if this works
+        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: path) //TODO: Check if this works
         print("attempting to download: \(path)...")
         let pathReference = Storage.storage().reference(withPath: path)
         
@@ -289,7 +235,7 @@ class FirebaseUtilities {
                 completionBlock(#imageLiteral(resourceName: "profileWithCircle"))
             } else {
                 print("Downloaded image: \(path)")
-                let fileURL = BaseViewController().urlInDocumentsDirectory(forPath: path) //TODO: Check if this works
+                let fileURL = Utilities.urlInDocumentsDirectory(forPath: path)
                 guard let image = UIImage(contentsOfFile: fileURL.path) else {
                     print("FIREBASE: Error in loadProfilePicture")
                     return
@@ -303,7 +249,7 @@ class FirebaseUtilities {
     
     static func deleteFile(ofType type: String, byUserEmail userEmail: String, withID document: String) {
         let db = Firestore.firestore()
-        db.collection("user_v2").document(userEmail).collection(type).document(document).delete() { error in
+        db.collection(userLocation).document(userEmail).collection(type).document(document).delete() { error in
             if let error = error {
                 print("Error removing document: \(error)")
             } else {

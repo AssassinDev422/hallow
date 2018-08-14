@@ -67,7 +67,7 @@ class FeedbackViewController: JournalBaseViewController {
             print("Error in sendButtonPressed")
             return
         }
-        FirebaseUtilities.sendFeedback(ofType: "feedback", byUserEmail: user.email, withEntry: entry)
+        FirebaseUtilities.saveOtherData(ofType: "Feedback", byUserEmail: user.email, withEntry: entry)
         titleField.text = "Successfully submitted - thanks!"
         hideToggle(isHidden: true)
     }

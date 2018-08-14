@@ -112,7 +112,7 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         UITabBarItem.appearance().titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -6)
-        self.tabBar.unselectedItemTintColor = UIColor(named: "darkIndigo")
+        tabBar.unselectedItemTintColor = UIColor(named: "darkIndigo")
         UITabBar.appearance().layer.borderWidth = 0.0
         UITabBar.appearance().clipsToBounds = true
         
@@ -148,8 +148,8 @@ class CustomTabBar: UITabBar {
         let borderHeight: CGFloat = 3
         topBorder.borderWidth = borderHeight
         topBorder.borderColor = UIColor(named: "darkIndigo")?.withAlphaComponent(0.1).cgColor
-        topBorder.frame = CGRect(x: 0, y: -1, width: self.frame.width, height: borderHeight)
-        self.layer.addSublayer(topBorder)
+        topBorder.frame = CGRect(x: 0, y: -1, width: frame.width, height: borderHeight)
+        layer.addSublayer(topBorder)
     }
 }
 

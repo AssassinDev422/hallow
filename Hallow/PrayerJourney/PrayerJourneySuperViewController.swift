@@ -18,7 +18,7 @@ class PrayerJourneySuperViewController: UIViewController {
     @IBOutlet weak var tableViewContainter: UIView!
     @IBOutlet weak var playSelectedButton: UIButton!
     
-    var prayer: PrayerItem?
+    var prayer: Prayer?
     var user = User()
     var everythingIsLoaded: Bool = false
     var dayNumber: Int = 1
@@ -44,7 +44,7 @@ class PrayerJourneySuperViewController: UIViewController {
         } catch {
             print("REALM: Error in will appear of prayer journey")
         }
-        self.pullUpPrayerData()
+        pullUpPrayerData()
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -69,31 +69,31 @@ class PrayerJourneySuperViewController: UIViewController {
     private func pullUpPrayerData() {
         do {
             let realm = try Realm() 
-            let prayers = realm.objects(PrayerItem.self)
-            self.prayer = prayers.filter("title = %@ AND guide = %@ AND length = %@", user.nextPrayerTitle, user._guide, "10 mins").first
+            let prayers = realm.objects(Prayer.self)
+            prayer = prayers.filter("title = %@ AND guide = %@ AND length = %@", user.nextPrayerTitle, user._guide, "10 mins").first
         } catch {
             print("REALM: Error in prayer journey - pullUpPrayerData")
         }
         
-        guard let prayer = self.prayer else {
+        guard let prayer = prayer else {
             print("Error in pullUpPrayerData")
             return
         }
-        self.prayerTitleLabel.text = prayer.title
-        self.prayerTitleLabel.text?.append(" of 9")
-        self.prayerDescriptionLabel.text = prayer.desc
+        prayerTitleLabel.text = prayer.title
+        prayerTitleLabel.text?.append(" of 9")
+        prayerDescriptionLabel.text = prayer.desc
 
         let description2 = NSMutableAttributedString(string: prayer.desc2)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
-        self.prayerDescription2Label.attributedText = description2
+        prayerDescription2Label.attributedText = description2
         
     }
     
     private func updateTableViewPosition() {
         let nextPrayerTitle = user.completedPrayers.sorted()[user.completedPrayers.count - 1]
-        let child = self.childViewControllers.first as! PrayerJourneyTableViewController
+        let child = childViewControllers.first as! PrayerJourneyTableViewController
         guard let last = nextPrayerTitle.last else {
             print("Error in updateTableViewPosition")
             return
@@ -107,8 +107,8 @@ class PrayerJourneySuperViewController: UIViewController {
             let indexPath = IndexPath(row: 8, section: 0)
             child.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
-            self.row = self.dayNumber - 1
-            let indexPath = IndexPath(row: self.row, section: 0)
+            row = self.dayNumber - 1
+            let indexPath = IndexPath(row: row, section: 0)
             child.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
             child.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
         }
@@ -117,7 +117,7 @@ class PrayerJourneySuperViewController: UIViewController {
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let prayer = sender as? PrayerItem {
+        if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let prayer = sender as? Prayer {
             prayNow.prayer = prayer
         }
     }

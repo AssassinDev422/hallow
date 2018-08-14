@@ -80,7 +80,7 @@ class SettingsReminderViewController: UIViewController {
             updateButton.setTitle("UPDATE", for: .normal)
             reminderTimePicker.isHidden = false
             removeReminderButton.isHidden = false
-            self.setDisplay()
+            setDisplay()
         } else {
             updateButton.setTitle("ENABLE REMINDERS", for: .normal)
             reminderTimePicker.isHidden = true
@@ -100,7 +100,7 @@ class SettingsReminderViewController: UIViewController {
         defaults.synchronize()
         let currentTime = formatter.string(from: reminderTime)
         currentReminderLabel.text = "Current reminder set to: \(currentTime)"
-        self.reminderTimePicker.date = reminderTime
+        reminderTimePicker.date = reminderTime
     }
 
 

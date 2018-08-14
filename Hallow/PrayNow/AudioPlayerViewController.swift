@@ -24,12 +24,12 @@ class AudioPlayerViewController: AudioController {
     @IBOutlet weak var nowPrayingTitleLabel: UILabel!
     @IBOutlet weak var exitButton: UIButton!
     
-    var prayer: PrayerItem?
+    var prayer: Prayer?
     var controlTimer: Timer?
     var addedTimeTracker = 0.00
     var nowPlayingInfo = [String : Any]()
     var user = User()
-    var guide: User.Guide = User.Guide.Francis
+    var guide: User.Guide = User.Guide.francis
     
     // MARK: - Life cycle
    
@@ -53,7 +53,7 @@ class AudioPlayerViewController: AudioController {
         }
         if let prayer = prayer {
             downloadAudio(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                    self.set(isLoading: isLoading)
+                    set(isLoading: isLoading)
                 }, completionBlock: { guide, audioURL in
                     self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
                         self.set(isLoading: isLoading)
@@ -98,21 +98,21 @@ class AudioPlayerViewController: AudioController {
     }
     
     @IBAction func exitButtonReleased(_ sender: Any) {
-        if self.downloadTask != nil {
-            self.downloadTask?.cancel()
+        if downloadTask != nil {
+            downloadTask?.cancel()
             print("Canceled download")
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
         exitButton.setTitleColor(UIColor(named: "beige"), for: .normal)
         if let audioPlayer = audioPlayer {
             let timeLeft = audioPlayer.duration - audioPlayer.currentTime
             if timeLeft < 10.0 {
                 audioCompleted()
-                self.performSegue(withIdentifier: "reflectSegue", sender: self)
+                performSegue(withIdentifier: "reflectSegue", sender: self)
             } else {
                 RealmUtilities.prayerExited(withStartTime: startTime)
-                RealmUtilities.setCurrentAudioTime(withCurrentTime: audioPlayer.currentTime)
-                self.dismiss(animated: true, completion: nil)
+                Utilities.pausedTime = audioPlayer.currentTime
+                dismiss(animated: true, completion: nil)
             }
         }
     }
@@ -125,8 +125,8 @@ class AudioPlayerViewController: AudioController {
     
     private func setUpLockScreenInfo() {
         nowPlayingInfo[MPMediaItemPropertyTitle] = "\(prayer?.title ?? "") - \(prayer?.desc ?? "")"
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.audioPlayer?.currentTime
-        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] =  self.audioPlayer?.duration
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioPlayer?.currentTime
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] =  audioPlayer?.duration
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
@@ -136,12 +136,12 @@ class AudioPlayerViewController: AudioController {
                 print("prayer not set")
                 return
             }
-            self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                self.set(isLoading: isLoading)
+            setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
             }, playPause: { guide in
-                self.playPause()
+                playPause()
             })
             return
         }
@@ -176,12 +176,12 @@ class AudioPlayerViewController: AudioController {
                 print("Prayer not set")
                 return
             }
-            self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                self.set(isLoading: isLoading)
+            setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
             }, playPause: { guide in
-                self.playPause()
+                playPause()
             })
             print("Audio player is nil")
             return
@@ -190,17 +190,17 @@ class AudioPlayerViewController: AudioController {
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         audioCompleted()
-        self.performSegue(withIdentifier: "reflectSegue", sender: self)
+        performSegue(withIdentifier: "reflectSegue", sender: self)
     }
     
     private func audioCompleted() {
-        self.controlTimer?.invalidate()
+        controlTimer?.invalidate()
         guard let audioPlayer = audioPlayer, let prayer = prayer else {
             print("Error in audioCompleted")
             return
         }
         audioPlayer.pause()
-        self.playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
+        playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
         RealmUtilities.prayerCompleted(completedPrayerTitle: prayer.title, withStartTime: startTime)
     }
     
@@ -213,12 +213,12 @@ class AudioPlayerViewController: AudioController {
                 print("Prayer not set")
                 return
             }
-            self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                self.set(isLoading: isLoading)
+            setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                set(isLoading: isLoading)
             }, updateProgress: {
                 self.updateProgressControl()
             }, playPause: { guide in
-                self.playPause()
+                playPause()
             })
             print("Audio player is nil")
             return
@@ -230,27 +230,27 @@ class AudioPlayerViewController: AudioController {
     private func set(isLoading: Bool) {
         hideOutlets(shouldHide: isLoading)
         if isLoading {
-            self.showDownloadingHud()
+            showDownloadingHud()
         } else {
-            self.dismissHud()
+            dismissHud()
         }
     }
     
     private func hideOutlets(shouldHide: Bool) {
-        self.playPauseButton.isHidden = shouldHide
-        self.progressSlider.isHidden = shouldHide
-        self.timeLabel.isHidden = shouldHide
-        self.nowPrayingLabel.isHidden = shouldHide
-        self.nowPrayingTitleLabel.isHidden = shouldHide
+        playPauseButton.isHidden = shouldHide
+        progressSlider.isHidden = shouldHide
+        timeLabel.isHidden = shouldHide
+        nowPrayingLabel.isHidden = shouldHide
+        nowPrayingTitleLabel.isHidden = shouldHide
     }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination
-        if let ReflectViewController = destinationViewController as? ReflectViewController, let prayer = self.prayer {
+        if let ReflectViewController = destinationViewController as? ReflectViewController, let prayer = prayer {
             let prayerTitle = "\(prayer.title) - \(prayer.desc)"
             ReflectViewController.prayerTitle = prayerTitle
-            RealmUtilities.setCurrentAudioTime(withCurrentTime: 0.00)
+            Utilities.pausedTime = 0.00
         }
     }
 }

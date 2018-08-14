@@ -53,8 +53,8 @@ class PasswordResetViewController: LogInBaseViewController {
     private func sendReset() {
         showLightHud()
         guard let originalEmail = emailField.text else {
-            self.dismissHud()
-            self.alertWithDismiss(viewController: self, title: "Error", message: "No email entered into email field")
+            dismissHud()
+            alertWithDismiss(viewController: self, title: "Error", message: "No email entered into email field")
             return
         }
         let email = cleanText(text: originalEmail)

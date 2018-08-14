@@ -26,13 +26,19 @@
 		B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057320D2EEA7000EB246 /* FeedbackViewController.swift */; };
 		B432057620D2EEB3000EB246 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B432057520D2EEB3000EB246 /* SupportViewController.swift */; };
 		B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */; };
+		B434F12C211D433C00C57415 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B434F12B211D433B00C57415 /* Utilities.swift */; };
+		B434F12E211D522000C57415 /* DataWritingScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B434F12D211D522000C57415 /* DataWritingScripts.swift */; };
 		B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */; };
 		B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */; };
 		B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */; };
-		B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68220AC8A1C00D57E78 /* PrayerItem.swift */; };
+		B473D68320AC8A1C00D57E78 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B473D68220AC8A1C00D57E78 /* Prayer.swift */; };
 		B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B479569120BDC7FD00745E92 /* UIViewExtension.swift */; };
 		B4837C9420E5B6F5003525FB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4837C9320E5B6F5003525FB /* StoreKit.framework */; };
 		B489E4D620E3167000AA3B18 /* RecommendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B489E4D520E3167000AA3B18 /* RecommendViewController.swift */; };
+		B492A66B2122452F00B991E8 /* FullJourneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B492A66A2122452F00B991E8 /* FullJourneyViewController.swift */; };
+		B492A66D2122460A00B991E8 /* FullJourneyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B492A66C2122460A00B991E8 /* FullJourneyTableViewCell.swift */; };
+		B492A66F2122782600B991E8 /* FullJourneyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B492A66E2122782600B991E8 /* FullJourneyCollectionViewCell.swift */; };
+		B492A6712122809000B991E8 /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B492A6702122809000B991E8 /* Chapter.swift */; };
 		B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */; };
 		B4AA151E20B3C2C500A228E7 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */; };
 		B4AD61AC20E455700038A3B7 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AD61AB20E455700038A3B7 /* ReachabilityManager.swift */; };
@@ -93,13 +99,19 @@
 		B432057320D2EEA7000EB246 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		B432057520D2EEB3000EB246 /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		B433F49F20B096C9008DFA0E /* GuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideSelectorViewController.swift; sourceTree = "<group>"; };
+		B434F12B211D433B00C57415 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		B434F12D211D522000C57415 /* DataWritingScripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataWritingScripts.swift; sourceTree = "<group>"; };
 		B45C11DE20BC858800CEEAA9 /* FirstDayReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderViewController.swift; sourceTree = "<group>"; };
 		B45C11E020BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayReminderSettingViewController.swift; sourceTree = "<group>"; };
 		B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsReminderViewController.swift; sourceTree = "<group>"; };
-		B473D68220AC8A1C00D57E78 /* PrayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerItem.swift; sourceTree = "<group>"; };
+		B473D68220AC8A1C00D57E78 /* Prayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer.swift; sourceTree = "<group>"; };
 		B479569120BDC7FD00745E92 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		B4837C9320E5B6F5003525FB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B489E4D520E3167000AA3B18 /* RecommendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendViewController.swift; sourceTree = "<group>"; };
+		B492A66A2122452F00B991E8 /* FullJourneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullJourneyViewController.swift; sourceTree = "<group>"; };
+		B492A66C2122460A00B991E8 /* FullJourneyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullJourneyTableViewCell.swift; sourceTree = "<group>"; };
+		B492A66E2122782600B991E8 /* FullJourneyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullJourneyCollectionViewCell.swift; sourceTree = "<group>"; };
+		B492A6702122809000B991E8 /* Chapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
 		B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGuideSelectorViewController.swift; sourceTree = "<group>"; };
 		B4AA151D20B3C2C500A228E7 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		B4AD61AB20E455700038A3B7 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
@@ -238,6 +250,9 @@
 		B41F4E0E20D0620000C0D118 /* PrayerJourney */ = {
 			isa = PBXGroup;
 			children = (
+				B492A66A2122452F00B991E8 /* FullJourneyViewController.swift */,
+				B492A66C2122460A00B991E8 /* FullJourneyTableViewCell.swift */,
+				B492A66E2122782600B991E8 /* FullJourneyCollectionViewCell.swift */,
 				B4FB771320D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift */,
 				B4FB770F20D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift */,
 				B4FB771120D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift */,
@@ -248,14 +263,17 @@
 		B41F4E0F20D0621F00C0D118 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				B473D68220AC8A1C00D57E78 /* PrayerItem.swift */,
+				B473D68220AC8A1C00D57E78 /* Prayer.swift */,
+				B492A6702122809000B991E8 /* Chapter.swift */,
 				B4EEEA7A20B4E90700B091F7 /* User.swift */,
 				B42215E12109F73F006E8E8D /* JournalEntry.swift */,
+				B434F12B211D433B00C57415 /* Utilities.swift */,
 				B4CC6ECE210929A200A16166 /* RealmUtilities.swift */,
 				033704F7209E980A0032703B /* FirebaseUtilities.swift */,
 				B479569120BDC7FD00745E92 /* UIViewExtension.swift */,
 				B4BB64872100D90F008FD331 /* BaseFunctions.swift */,
 				B4AD61AB20E455700038A3B7 /* ReachabilityManager.swift */,
+				B434F12D211D522000C57415 /* DataWritingScripts.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -484,6 +502,7 @@
 				B42B0CEC20A4F9EA00FDAFB6 /* AudioPlayerViewController.swift in Sources */,
 				B433F4A020B096C9008DFA0E /* GuideSelectorViewController.swift in Sources */,
 				B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */,
+				B434F12E211D522000C57415 /* DataWritingScripts.swift in Sources */,
 				B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */,
 				B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */,
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,
@@ -493,19 +512,24 @@
 				B4AD61AC20E455700038A3B7 /* ReachabilityManager.swift in Sources */,
 				B489E4D620E3167000AA3B18 /* RecommendViewController.swift in Sources */,
 				033704F8209E980A0032703B /* FirebaseUtilities.swift in Sources */,
+				B492A6712122809000B991E8 /* Chapter.swift in Sources */,
+				B492A66B2122452F00B991E8 /* FullJourneyViewController.swift in Sources */,
 				B432057420D2EEA7000EB246 /* FeedbackViewController.swift in Sources */,
 				B42B0CE620A4D91A00FDAFB6 /* LaunchViewController.swift in Sources */,
 				B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */,
 				B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */,
 				B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */,
+				B492A66F2122782600B991E8 /* FullJourneyCollectionViewCell.swift in Sources */,
 				B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */,
 				B4CC6ECF210929A200A16166 /* RealmUtilities.swift in Sources */,
 				030C40CF209E718B006D9690 /* AppDelegate.swift in Sources */,
+				B434F12C211D433C00C57415 /* Utilities.swift in Sources */,
+				B492A66D2122460A00B991E8 /* FullJourneyTableViewCell.swift in Sources */,
 				B4024AAC20AA3D5D00F0690A /* JournalEntryViewController.swift in Sources */,
 				B4EEEA7920B4AD3A00B091F7 /* JournalTableViewCell.swift in Sources */,
 				B4FB771220D1BADD00D2FEBA /* PrayerJourneyTableViewCell.swift in Sources */,
 				B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */,
-				B473D68320AC8A1C00D57E78 /* PrayerItem.swift in Sources */,
+				B473D68320AC8A1C00D57E78 /* Prayer.swift in Sources */,
 				B42B0CE820A4DE3400FDAFB6 /* PrayNowViewController.swift in Sources */,
 				B4BB64882100D90F008FD331 /* BaseFunctions.swift in Sources */,
 				B42B0CEE20A542E600FDAFB6 /* ReflectViewController.swift in Sources */,

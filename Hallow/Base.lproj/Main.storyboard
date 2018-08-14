@@ -382,9 +382,16 @@
                                             <action selector="skipButtonPressed:" destination="CuC-2t-K28" eventType="touchUpInside" id="ihY-ge-sND"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="These entries are private and only stored on this device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yHE-5H-M9K">
+                                        <rect key="frame" x="53.5" y="524" width="268" height="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                        <color key="textColor" name="beige"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="VEe-JX-bup" firstAttribute="centerX" secondItem="UGT-5u-g1O" secondAttribute="centerX" id="Qqv-QE-1Ft"/>
+                                    <constraint firstItem="yHE-5H-M9K" firstAttribute="centerX" secondItem="UGT-5u-g1O" secondAttribute="centerX" id="hjf-8h-2Ek"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="bottomColor">
@@ -463,6 +470,7 @@
                             <constraint firstItem="Br0-AR-h54" firstAttribute="top" secondItem="VcP-bT-vJi" secondAttribute="top" id="aKA-5H-kL0"/>
                             <constraint firstItem="VEe-JX-bup" firstAttribute="top" secondItem="BYi-u1-ipc" secondAttribute="bottom" constant="10" id="bFN-zN-TKg"/>
                             <constraint firstItem="UGT-5u-g1O" firstAttribute="bottom" secondItem="OLG-fj-M2p" secondAttribute="bottom" id="cDY-yf-8eg"/>
+                            <constraint firstItem="yHE-5H-M9K" firstAttribute="top" secondItem="B6A-57-Wcy" secondAttribute="bottom" constant="10" id="cZT-jf-iLp"/>
                             <constraint firstItem="UGT-5u-g1O" firstAttribute="top" secondItem="OLG-fj-M2p" secondAttribute="top" id="cdl-kD-qYC"/>
                             <constraint firstItem="BYi-u1-ipc" firstAttribute="centerX" secondItem="OLG-fj-M2p" secondAttribute="centerX" id="eDi-Xx-XXi"/>
                             <constraint firstItem="Br0-AR-h54" firstAttribute="leading" secondItem="ULa-xf-s1e" secondAttribute="leading" constant="20" id="eaG-x0-CTK"/>
