@@ -47,11 +47,11 @@ class PrayNowViewController: BaseViewController {
             print("REALM: Error starting realm in praynow appear")
         }
         if let prayer = prayer {
-            setPrayerSession(withTitle: prayer.title)
-            print("SETTING PRAYER SESSION WITH PRAYER: \(prayer.title)")
+            setPrayerSession(withIndex: prayer.prayerIndex)
+            print("SETTING PRAYER SESSION WITH PRAYER: \(prayer.prayerIndex)")
         } else {
-            setPrayerSession(withTitle: user.nextPrayerTitle)
-            print("SETTING PRAYER SESSION WITHOUT PRAYER: \(user.nextPrayerTitle)")
+            setPrayerSession(withIndex: user.nextPrayerIndex)
+            print("SETTING PRAYER SESSION WITHOUT PRAYER: \(user.nextPrayerIndex)")
         }
         ReachabilityManager.shared.addListener(listener: self)
     }
@@ -88,13 +88,13 @@ class PrayNowViewController: BaseViewController {
     
     // MARK: - Functions
     
-    private func setPrayerSession(withTitle title: String) {
+    private func setPrayerSession(withIndex prayerIndex: Int) {
         do {
             let realm = try Realm()
             let prayers = realm.objects(Prayer.self)
-            prayer5mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "5 mins").first
-            prayer10mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "10 mins").first
-            prayer15mins = prayers.filter("title = %@ AND guide = %@ AND length = %@", title, user._guide, "15 mins").first
+            prayer5mins = prayers.filter("prayerIndex = %@ AND guide = %@ AND length = %@", prayerIndex, user._guide, "5 mins").first
+            prayer10mins = prayers.filter("prayerIndex = %@ AND guide = %@ AND length = %@", prayerIndex, user._guide, "10 mins").first
+            prayer15mins = prayers.filter("prayerIndex = %@ AND guide = %@ AND length = %@", prayerIndex, user._guide, "15 mins").first
         } catch {
             print("REALM: Error loading prayers in praynow")
         }
@@ -118,7 +118,6 @@ class PrayNowViewController: BaseViewController {
             return
         }
         prayerSessionTitle.text = prayer.title
-        prayerSessionTitle.text?.append(" of 9")
         prayerSessionDescription.text = prayer.desc
         
         let description2 = NSMutableAttributedString(string: prayer.desc2)

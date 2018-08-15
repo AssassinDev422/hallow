@@ -257,7 +257,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kea-gJ-RfM">
-                                        <rect key="frame" x="20" y="84" width="50.5" height="21"/>
+                                        <rect key="frame" x="20" y="84" width="42" height="20"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="17"/>
                                         <color key="textColor" name="beige"/>
                                         <nil key="highlightedColor"/>
@@ -411,7 +411,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="B6A-57-Wcy">
-                                <rect key="frame" x="20" y="190" width="335" height="324"/>
+                                <rect key="frame" x="20" y="150" width="335" height="364"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
@@ -419,7 +419,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What did you take away from today's session?" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-rK-bLG">
-                                <rect key="frame" x="20" y="70" width="335" height="110"/>
+                                <rect key="frame" x="20" y="70" width="335" height="70"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -539,16 +539,16 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eAD-Np-fey">
-                                <rect key="frame" x="20" y="147" width="335" height="173"/>
+                                <rect key="frame" x="20" y="167" width="335" height="133"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to set up a reminder each day?" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w48-FA-BB1">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="110"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="70"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can update this at any point in your profile" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2UW-oI-lJH">
-                                        <rect key="frame" x="0.0" y="130" width="335" height="43"/>
+                                        <rect key="frame" x="0.0" y="90" width="335" height="43"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
@@ -556,7 +556,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="JgL-2j-yQO">
-                                <rect key="frame" x="37.5" y="420" width="300" height="48"/>
+                                <rect key="frame" x="37.5" y="400" width="300" height="48"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrn-fj-wuF">
                                         <rect key="frame" x="0.0" y="0.0" width="135" height="48"/>
@@ -639,7 +639,7 @@
                                 </date>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great!  Just pick a time" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6fi-W8-qQx">
-                                <rect key="frame" x="20" y="70" width="335" height="73.5"/>
+                                <rect key="frame" x="20" y="70" width="335" height="35"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -743,7 +743,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lfb-6d-Ply" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1234" y="-67"/>
+            <point key="canvasLocation" x="1282" y="-67"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ue4-9w-cPe">

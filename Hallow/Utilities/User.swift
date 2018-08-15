@@ -22,7 +22,7 @@ class User: Object {
     @objc dynamic var streak = 1
     @objc dynamic var _completedPrayers: String = ""
     @objc dynamic var mostRecentPrayerDate: Date = Date(timeIntervalSince1970: 0)
-    @objc dynamic var nextPrayerTitle: String = "Day 1"
+    @objc dynamic var nextPrayerIndex: Int = 1
     
     var completedPrayers: [String] {
         get {
@@ -58,9 +58,9 @@ class User: Object {
             let timeInPrayer = data["Time in Prayer"] as? Double,
             let streak = data["Streak"] as? Int,
             let mostRecentPrayerDate = data["Most Recent Prayer Date"] as? Date,
-            let nextPrayerTitle = data["Next Prayer Title"] as? String,
             let _completedPrayers = data["Completed Prayers"] as? String,
-            let _guide = data["Guide"] as? String else {
+            let _guide = data["Guide"] as? String,
+            let nextPrayerIndex = data["Next Prayer Index"] as? Int else {
                 print("FIREBASE: This user file could not be parsed. It's data was: \(document.data() ?? [:])") 
                 self.init()
                 return
@@ -74,8 +74,8 @@ class User: Object {
         self.timeInPrayer = timeInPrayer
         self.streak = streak
         self.mostRecentPrayerDate = mostRecentPrayerDate
-        self.nextPrayerTitle = nextPrayerTitle
         self._completedPrayers = _completedPrayers
         self._guide = _guide
+        self.nextPrayerIndex = nextPrayerIndex
     }
 }

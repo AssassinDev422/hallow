@@ -15,7 +15,8 @@ class PrayerJourneyTableViewController: UITableViewController {
     private let reuseIdentifier = "cell"
     var user = User()
     var tableViewLoaded: Bool = false
-    var row: Int = 0
+    var chapterIndex: Int = 0
+    var prayers: [Prayer] = []
     
     // MARK: - Life cycle
     
@@ -37,6 +38,7 @@ class PrayerJourneyTableViewController: UITableViewController {
         } catch {
             print("REALM: Error in will appear of prayer journey table view")
         }
+        tableView.reloadData()
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -53,13 +55,11 @@ class PrayerJourneyTableViewController: UITableViewController {
             print("Error in updateTableViewPosition")
             return
         }
-        if parent.dayNumber == 10 {
+        if parent.nextPrayerIndex == 10 {
             let indexPath = IndexPath(row: 8, section: 0)
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
-            print("DAY NUMBER: \(parent.dayNumber)")
-            row = parent.dayNumber - 1
-            let indexPath = IndexPath(row: row, section: 0)
+            let indexPath = IndexPath(row: (parent.nextPrayerIndex - 1), section: 0)
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
@@ -72,8 +72,9 @@ class PrayerJourneyTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         do {
-            let realm = try Realm() 
-            return realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins").count
+            let realm = try Realm()
+            prayers = Array(realm.objects(Prayer.self).filter("chapterIndex = %@ AND guide = %@ AND length = %@", chapterIndex, user._guide, "10 mins"))
+            return prayers.count
         } catch {
             print("REALM: Error in prayer journey table view - tableview number of rows")
             return 0
@@ -83,32 +84,27 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PrayerJourneyTableViewCell
-        do {
-            let realm = try Realm()
-            let prayer = realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath.row]
-            cell.prayerTitleLabel.text = prayer.title
-            cell.prayerDescriptionLabel.text = prayer.desc
-            let completed = user.completedPrayers.contains {$0 == prayer.title}
-            if completed {
-                cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
-                cell.statusImage.tintColor = UIColor(named: "fadedPink")
-                cell.statusImage.contentMode = .scaleToFill
-                cell.prayerTitleLabel.textColor = UIColor(named: "fadedPink")
-                cell.prayerDescriptionLabel.textColor = UIColor(named: "fadedPink")
-                cell.playCellButton.isHidden = false
-            } else {
-                guard let purplishBlue = UIColor(named: "purplishBlue") else {
-                    print("Error in cellForRowAt")
-                    return cell
-                }
-                cell.statusImage.image = UIImage.circle(diameter: 15, color: purplishBlue)
-                cell.statusImage.contentMode = .center
-                cell.prayerTitleLabel.textColor = UIColor(named: "darkIndigo")
-                cell.prayerDescriptionLabel.textColor = UIColor(named: "darkIndigo")
-                cell.playCellButton.isHidden = false
+        let prayer = prayers[indexPath.row]
+        cell.prayerTitleLabel.text = prayer.title
+        cell.prayerDescriptionLabel.text = prayer.desc
+        let completed = user.completedPrayers.contains {$0 == "\(prayer.prayerIndex)"}
+        if completed {
+            cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")
+            cell.statusImage.tintColor = UIColor(named: "fadedPink")
+            cell.statusImage.contentMode = .scaleToFill
+            cell.prayerTitleLabel.textColor = UIColor(named: "fadedPink")
+            cell.prayerDescriptionLabel.textColor = UIColor(named: "fadedPink")
+            cell.playCellButton.isHidden = false
+        } else {
+            guard let purplishBlue = UIColor(named: "purplishBlue") else {
+                print("Error in cellForRowAt")
+                return cell
             }
-        } catch {
-            print("REALM: Error in prayer journey table view - tableview cell for row at")
+            cell.statusImage.image = UIImage.circle(diameter: 15, color: purplishBlue)
+            cell.statusImage.contentMode = .center
+            cell.prayerTitleLabel.textColor = UIColor(named: "darkIndigo")
+            cell.prayerDescriptionLabel.textColor = UIColor(named: "darkIndigo")
+            cell.playCellButton.isHidden = false
         }
         
         cell.layer.borderWidth = 0
@@ -138,43 +134,28 @@ class PrayerJourneyTableViewController: UITableViewController {
     // MARK: - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        do {
-            let realm = try Realm()
-            let prayer = realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath.item]
-            guard let parent = parent as? PrayerJourneySuperViewController else {
-                print("Error in didSelectRowAt")
-                return
-            }
-            parent.prayer = prayer
-            parent.prayerDescriptionLabel.text = prayer.desc
-            let description2 = NSMutableAttributedString(string: prayer.desc2)
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 10
-            description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
-            parent.prayerDescription2Label.attributedText = description2
-            parent.playSelectedButton.isHidden = false
-            parent.prayerTitleLabel.text = prayer.title
-            parent.prayerTitleLabel.text?.append(" of 9")
-            if prayer.title == "Day 9+" {
-                parent.playSelectedButton.isHidden = true 
-                parent.prayerTitleLabel.text = prayer.title
-            }
-        } catch {
-            print("REALM: Error in prayer journey table view - did select row at")
+        guard let parent = parent as? PrayerJourneySuperViewController else {
+            print("Error in didSelectRowAt")
+            return
         }
+        let prayer = prayers[indexPath.item]
+        parent.prayer = prayer
+        parent.prayerDescriptionLabel.text = prayer.desc
+        let description2 = NSMutableAttributedString(string: prayer.desc2)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 10
+        description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
+        parent.prayerDescription2Label.attributedText = description2
+        parent.playSelectedButton.isHidden = false
+        parent.prayerTitleLabel.text = prayer.title
         tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let button:UIButton = sender as! UIButton? {
             let indexPath = button.tag
-            do {
-                let realm = try Realm()
-                let prayer = realm.objects(Prayer.self).filter("guide = %@ AND length = %@", user._guide, "10 mins") [indexPath]
-                prayNow.prayer = prayer
-            } catch {
-                print("REALM: Error in prayer journey table view - prepare for segue")
-            }
+            let prayer = prayers[indexPath]
+            prayNow.prayer = prayer
         }
     }
     

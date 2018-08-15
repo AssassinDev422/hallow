@@ -15,13 +15,15 @@ class Chapter: Object {
     @objc dynamic var index = 0
     @objc dynamic var categoryIndex = 0
     @objc dynamic var desc = "Sitting in silence"
+    @objc dynamic var avail = false
     
     convenience init(firestoreDocument document: DocumentSnapshot) {
         guard let data = document.data(),
             let name = data["Name"] as? String,
             let index = data["Index"] as? Int,
             let categoryIndex = data["Category Index"] as? Int,
-            let desc = data["Description"] as? String else {
+            let desc = data["Description"] as? String,
+            let avail = data["Available"] as? Bool else {
                 fatalError("FIREBASE: This prayer document could not be parsed. It's data was: \(document.data() ?? [:])")
         }
         self.init()
@@ -29,5 +31,6 @@ class Chapter: Object {
         self.index = index
         self.categoryIndex = categoryIndex
         self.desc = desc
+        self.avail = avail
     }
 }

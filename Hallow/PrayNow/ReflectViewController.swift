@@ -100,12 +100,13 @@ class ReflectViewController: JournalBaseViewController {
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "isNotFirstDaySegue" {
-            if let destination = segue.destination as? UITabBarController {
-                destination.selectedIndex = 1
+        if let destination = segue.destination as? UITabBarController {
+            destination.selectedIndex = 1
+            if let nav = destination.selectedViewController as? UINavigationController {
+                if let root = nav.topViewController as? FullJourneyViewController {
+                    root.completedSegue = true
+                }
             }
-        } else if let destination = segue.destination as? UITabBarController {
-                destination.selectedIndex = 1
         }
     }
 }

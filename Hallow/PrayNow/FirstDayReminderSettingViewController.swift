@@ -70,6 +70,11 @@ class FirstDayReminderSettingViewController: UIViewController {
         if segue.identifier == "finishFirstDaySegue" {
             if let destination = segue.destination as? UITabBarController {
                 destination.selectedIndex = 1
+                if let nav = destination.selectedViewController as? UINavigationController {
+                    if let root = nav.topViewController as? FullJourneyViewController {
+                        root.completedSegue = true
+                    }
+                }
             }
         }
     }

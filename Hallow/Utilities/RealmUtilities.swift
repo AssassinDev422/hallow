@@ -25,6 +25,7 @@ class RealmUtilities {
         user.streak = 0
         user.completedPrayers = [""]
         user.mostRecentPrayerDate = Date(timeIntervalSince1970: 0)
+        user.nextPrayerIndex = 1
         
         do {
             let realm = try Realm()
@@ -43,7 +44,7 @@ class RealmUtilities {
             try realm.write {
                 realm.add(user)
                 user.isLoggedIn = true
-                print("IN USER SIGN IN - NEXT PRAYER: \(user.nextPrayerTitle)")
+                print("IN USER SIGN IN - NEXT PRAYER: \(user.nextPrayerIndex)")
                 completionBlock()
             }
         } catch {
@@ -142,7 +143,7 @@ class RealmUtilities {
         }
     }
     
-    static func prayerCompleted(completedPrayerTitle prayerTitle: String, withStartTime startTime: Date) {
+    static func prayerCompleted(completedPrayerIndex prayerIndex: Int, withStartTime startTime: Date) {
         do {
             let realm = try Realm()
             guard let user = realm.objects(User.self).first else {
@@ -150,27 +151,14 @@ class RealmUtilities {
                 return
             }
             try realm.write {
-                user.completedPrayers.append(prayerTitle)
+                user.completedPrayers.append("\(prayerIndex)")
                 var completedPrayers = user.completedPrayers
                 completedPrayers.sort()
-                var nextPrayerTitle = completedPrayers[completedPrayers.count-1]
-                guard let last = nextPrayerTitle.last else {
-                    print("REALM: Error in prayerCompleted")
-                    return
-                }
-                guard let _dayNumber = Int(String(last)) else {
+                guard let _nextPrayerIndex = Int(String(completedPrayers[completedPrayers.count-1])) else {
                     print("REALM: Error in prayerCompleted Int()")
                     return
                 }
-                let dayNumber: Int = _dayNumber + 1
-                let newDayNumber: String = String(dayNumber)
-                nextPrayerTitle.removeLast()
-                nextPrayerTitle.append(newDayNumber)
-                if dayNumber == 10 {
-                    user.nextPrayerTitle = "Day 9"
-                } else {
-                    user.nextPrayerTitle = nextPrayerTitle
-                }
+                user.nextPrayerIndex = _nextPrayerIndex + 1
                 
                 let calendar = Calendar.current
                 let isNextDay = calendar.isDateInYesterday(user.mostRecentPrayerDate)

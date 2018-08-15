@@ -168,7 +168,7 @@ class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
     @objc func doneClicked() {
         view.endEditing(true)
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
@@ -189,11 +189,11 @@ class JournalBaseViewController: BaseViewController, UITextViewDelegate {
         newFrame.size.height = frame!.height / 2.5
         textView.frame = newFrame
     }
-    
+
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.frame = frame!
     }
-    
+
     func setUpDoneButton(textView: UITextView) {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()

@@ -70,7 +70,7 @@ class FirebaseUtilities {
         let streak: Int = 0
         let _completedPrayers = ""
         let mostRecentPrayerDate = Date(timeIntervalSince1970: 0)
-        let nextPrayerTitle = "Day 1"
+        let nextPrayerIndex = 1
         db.collection(userLocation).document(email).setData([
             "Name": name,
             "Email": email,
@@ -82,7 +82,7 @@ class FirebaseUtilities {
             "Streak": streak,
             "Completed Prayers": _completedPrayers,
             "Most Recent Prayer Date": mostRecentPrayerDate,
-            "Next Prayer Title": nextPrayerTitle,
+            "Next Prayer Index": nextPrayerIndex,
             ]) { err in
                 if let err = err {
                     fatalError("Error adding document: \(err)")
@@ -105,7 +105,7 @@ class FirebaseUtilities {
                 callback([])
                 return
             }
-            callback([result]) // ???
+            callback([result])
         }
     }
     
@@ -130,7 +130,7 @@ class FirebaseUtilities {
                 "Streak": user.streak,
                 "Completed Prayers": user._completedPrayers,
                 "Most Recent Prayer Date": user.mostRecentPrayerDate,
-                "Next Prayer Title": user.nextPrayerTitle,
+                "Next Prayer Index": user.nextPrayerIndex
                 ]) { err in
                     if let err = err {
                         print("Error adding document: \(err)") //TODO: Make useful error

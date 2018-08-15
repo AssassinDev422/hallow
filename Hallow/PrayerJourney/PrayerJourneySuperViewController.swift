@@ -21,8 +21,8 @@ class PrayerJourneySuperViewController: UIViewController {
     var prayer: Prayer?
     var user = User()
     var everythingIsLoaded: Bool = false
-    var dayNumber: Int = 1
-    var row: Int = 0
+    var nextPrayerIndex: Int = 1
+    var chapterIndex: Int = 0
     
     // MARK: - Life cycle
     
@@ -34,6 +34,7 @@ class PrayerJourneySuperViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isTranslucent = false
         do {
             let realm = try Realm()
             guard let realmUser = realm.objects(User.self).first else {
@@ -64,13 +65,17 @@ class PrayerJourneySuperViewController: UIViewController {
         performSegue(withIdentifier: "returnToPrayNow", sender: prayer)
     }
     
+    @IBAction func exitButtonPressed(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - Functions
     
     private func pullUpPrayerData() {
         do {
             let realm = try Realm() 
             let prayers = realm.objects(Prayer.self)
-            prayer = prayers.filter("title = %@ AND guide = %@ AND length = %@", user.nextPrayerTitle, user._guide, "10 mins").first
+            prayer = prayers.filter("chapterIndex = %@ AND prayerIndex = %@ AND guide = %@ AND length = %@", chapterIndex, user.nextPrayerIndex, user._guide, "10 mins").first
         } catch {
             print("REALM: Error in prayer journey - pullUpPrayerData")
         }
@@ -79,8 +84,10 @@ class PrayerJourneySuperViewController: UIViewController {
             print("Error in pullUpPrayerData")
             return
         }
+        let child = childViewControllers.first as! PrayerJourneyTableViewController
+        child.chapterIndex = chapterIndex
+        
         prayerTitleLabel.text = prayer.title
-        prayerTitleLabel.text?.append(" of 9")
         prayerDescriptionLabel.text = prayer.desc
 
         let description2 = NSMutableAttributedString(string: prayer.desc2)
@@ -88,27 +95,21 @@ class PrayerJourneySuperViewController: UIViewController {
         paragraphStyle.lineSpacing = 10
         description2.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, description2.length))
         prayerDescription2Label.attributedText = description2
-        
     }
     
     private func updateTableViewPosition() {
-        let nextPrayerTitle = user.completedPrayers.sorted()[user.completedPrayers.count - 1]
+        let lastCompleted = user.completedPrayers.sorted()[user.completedPrayers.count - 1]
         let child = childViewControllers.first as! PrayerJourneyTableViewController
-        guard let last = nextPrayerTitle.last else {
-            print("Error in updateTableViewPosition")
-            return
-        }
-        guard let dayNumber = Int(String(last)) else {
+        guard let _nextPrayerIndex = Int(String(lastCompleted)) else {
             print("Error in updateTableViewPosition Int()")
             return
         }
-        self.dayNumber = dayNumber + 1
-        if self.dayNumber == 10 {
+        self.nextPrayerIndex = _nextPrayerIndex + 1
+        if self.nextPrayerIndex == 10 {
             let indexPath = IndexPath(row: 8, section: 0)
             child.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
-            row = self.dayNumber - 1
-            let indexPath = IndexPath(row: row, section: 0)
+            let indexPath = IndexPath(row: (self.nextPrayerIndex - 1), section: 0)
             child.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
             child.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
         }

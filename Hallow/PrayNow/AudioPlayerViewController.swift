@@ -201,7 +201,7 @@ class AudioPlayerViewController: AudioController {
         }
         audioPlayer.pause()
         playPauseButton.setImage(#imageLiteral(resourceName: "playButtonImage"), for: .normal)
-        RealmUtilities.prayerCompleted(completedPrayerTitle: prayer.title, withStartTime: startTime)
+        RealmUtilities.prayerCompleted(completedPrayerIndex: prayer.prayerIndex, withStartTime: startTime)
     }
     
     private func sliderUpdatedTime() {
