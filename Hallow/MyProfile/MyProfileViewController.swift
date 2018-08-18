@@ -19,7 +19,6 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
     @IBOutlet weak var completedNumber: UILabel!
     @IBOutlet weak var streakNumber: UILabel!
     
-    var user = User()
     var storedUserID: String?
     var storedUserEmail: String?
     var newFirebaseDocID: String?
@@ -42,17 +41,10 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        do {
-            let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error in will appear of my profile")
-                return
-            }
-            user = realmUser
-        } catch {
-            print("REALM: Error in will appear of my profile")
+        guard let user = User.current else {
+            print("ERROR in pulling user data - it's nil")
+            return
         }
-        
         nameLabel.text = user.name
         completedNumber.text = String(user.completedPrayers.count - 1)
         let minutes = user.timeInPrayer / 60.0
@@ -73,10 +65,14 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
     // MARK: - Actions
 
     @IBAction func logOut(_ sender: Any) {
+        guard let user = User.current else {
+            print("ERROR in pulling user data - it's nil")
+            return
+        }
         showLightHud()
         FirebaseUtilities.syncUserData() {
             self.deleteImage()
-            FirebaseUtilities.setLoggedInFalse(user: self.user)
+            FirebaseUtilities.setLoggedInFalse(user: user)
             RealmUtilities.deleteUser()
             FirebaseUtilities.logOut(viewController: self) {
                 self.dismissHud()
@@ -130,7 +126,7 @@ class MyProfileViewController: BaseViewController, UIImagePickerControllerDelega
         profilePicture = info[UIImagePickerControllerOriginalImage] as? UIImage
         profileImage.image = profilePicture
         formatProfilePicture()
-        guard let profilePicture = profilePicture else {
+        guard let profilePicture = profilePicture, let user = User.current else {
             print("Error in imagePickerController")
             return
         }

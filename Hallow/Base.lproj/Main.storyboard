@@ -166,7 +166,7 @@
                                     <constraint firstAttribute="height" constant="5" id="Gng-jz-GC7"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleAspectFit" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nIG-NJ-1Xj" customClass="DesignableButton" customModule="Hallow" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleAspectFit" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nIG-NJ-1Xj">
                                 <rect key="frame" x="132.5" y="404" width="110" height="110"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -257,11 +257,24 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kea-gJ-RfM">
-                                        <rect key="frame" x="20" y="84" width="42" height="20"/>
+                                        <rect key="frame" x="20" y="84" width="50.5" height="21"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="17"/>
                                         <color key="textColor" name="beige"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MnV-XQ-sta">
+                                        <rect key="frame" x="245" y="40" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="A1d-ZC-lpH"/>
+                                            <constraint firstAttribute="width" constant="50" id="Gag-RO-qRS"/>
+                                        </constraints>
+                                        <color key="tintColor" name="beige"/>
+                                        <inset key="imageEdgeInsets" minX="18" minY="18" maxX="18" maxY="18"/>
+                                        <state key="normal" image="sound"/>
+                                        <connections>
+                                            <action selector="backgroundButtonPressed:" destination="6Sh-5U-3MK" eventType="touchUpInside" id="59M-iG-5RV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="tintColor" name="fadedPink"/>
                                 <constraints>
@@ -320,11 +333,13 @@
                             <constraint firstItem="AeU-Uh-YXN" firstAttribute="centerY" secondItem="EZ6-6H-8vb" secondAttribute="centerY" id="2UW-Xe-647"/>
                             <constraint firstItem="EZ6-6H-8vb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cRJ-Nv-69b" secondAttribute="leading" constant="100" id="Bci-yj-EqU"/>
                             <constraint firstItem="Mqd-a6-weK" firstAttribute="trailing" secondItem="cRJ-Nv-69b" secondAttribute="trailing" id="Cc9-Vd-Oi2"/>
+                            <constraint firstItem="EZ6-6H-8vb" firstAttribute="leading" secondItem="MnV-XQ-sta" secondAttribute="trailing" constant="10" id="Idi-Fx-F80"/>
                             <constraint firstItem="Mqd-a6-weK" firstAttribute="leading" secondItem="cRJ-Nv-69b" secondAttribute="leading" id="Ip1-AW-5M9"/>
                             <constraint firstAttribute="trailing" secondItem="EZ6-6H-8vb" secondAttribute="trailing" constant="20" id="IuW-uS-QSF"/>
                             <constraint firstItem="H1J-07-UHj" firstAttribute="bottom" secondItem="Xky-H4-Z68" secondAttribute="bottom" constant="30" id="L9S-SY-hgc"/>
                             <constraint firstItem="Xky-H4-Z68" firstAttribute="centerX" secondItem="cRJ-Nv-69b" secondAttribute="centerX" id="OB8-zO-DMr"/>
                             <constraint firstItem="avM-mx-sbt" firstAttribute="centerX" secondItem="cRJ-Nv-69b" secondAttribute="centerX" id="Ujn-QS-Xq4"/>
+                            <constraint firstItem="MnV-XQ-sta" firstAttribute="top" secondItem="EZ6-6H-8vb" secondAttribute="top" id="WKp-i8-9d6"/>
                             <constraint firstItem="Mqd-a6-weK" firstAttribute="top" secondItem="cRJ-Nv-69b" secondAttribute="top" id="WjJ-6M-AVj"/>
                             <constraint firstItem="EZ6-6H-8vb" firstAttribute="top" secondItem="H1J-07-UHj" secondAttribute="top" constant="20" id="afq-hb-rHB"/>
                             <constraint firstItem="lTy-rn-MhQ" firstAttribute="top" secondItem="avM-mx-sbt" secondAttribute="bottom" constant="60" id="bFy-v9-DHI"/>
@@ -337,6 +352,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="qge-kw-a2t"/>
                     <connections>
+                        <outlet property="backgroundButton" destination="MnV-XQ-sta" id="p4d-BR-GQv"/>
                         <outlet property="exitButton" destination="EZ6-6H-8vb" id="SJH-pn-Yk0"/>
                         <outlet property="nowPrayingLabel" destination="AeU-Uh-YXN" id="ZMs-9O-Svl"/>
                         <outlet property="nowPrayingTitleLabel" destination="kea-gJ-RfM" id="oD3-fX-VEa"/>
@@ -411,7 +427,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="B6A-57-Wcy">
-                                <rect key="frame" x="20" y="150" width="335" height="364"/>
+                                <rect key="frame" x="20" y="190" width="335" height="324"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
@@ -419,7 +435,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What did you take away from today's session?" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-rK-bLG">
-                                <rect key="frame" x="20" y="70" width="335" height="70"/>
+                                <rect key="frame" x="20" y="70" width="335" height="110"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -539,16 +555,16 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eAD-Np-fey">
-                                <rect key="frame" x="20" y="167" width="335" height="133"/>
+                                <rect key="frame" x="20" y="147" width="335" height="173"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to set up a reminder each day?" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w48-FA-BB1">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="70"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="110"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can update this at any point in your profile" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2UW-oI-lJH">
-                                        <rect key="frame" x="0.0" y="90" width="335" height="43"/>
+                                        <rect key="frame" x="0.0" y="130" width="335" height="43"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" name="realWhite"/>
                                         <nil key="highlightedColor"/>
@@ -556,7 +572,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="JgL-2j-yQO">
-                                <rect key="frame" x="37.5" y="400" width="300" height="48"/>
+                                <rect key="frame" x="37.5" y="420" width="300" height="48"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrn-fj-wuF">
                                         <rect key="frame" x="0.0" y="0.0" width="135" height="48"/>
@@ -639,7 +655,7 @@
                                 </date>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great!  Just pick a time" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6fi-W8-qQx">
-                                <rect key="frame" x="20" y="70" width="335" height="35"/>
+                                <rect key="frame" x="20" y="70" width="335" height="73.5"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Black" family="Montserrat" pointSize="30"/>
                                 <color key="textColor" name="realWhite"/>
                                 <nil key="highlightedColor"/>
@@ -771,6 +787,10 @@
         <image name="playButtonImage" width="147" height="147"/>
         <image name="prayNowIcon" width="12" height="16"/>
         <image name="smallPinkButton" width="96" height="40"/>
+        <image name="sound" width="24" height="28"/>
+        <namedColor name="beige">
+            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -797,6 +817,7 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="NSv-il-5pe"/>
         <segue reference="MfL-On-nYD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>

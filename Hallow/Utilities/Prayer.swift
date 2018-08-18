@@ -18,6 +18,7 @@ class Prayer: Object {
     @objc dynamic var chapterIndex = 0
     @objc dynamic var desc = "Sitting in silence"
     @objc dynamic var desc2 = "Placeholder"
+    @objc dynamic var desc3 = "Placeholder"
     @objc dynamic var audioURLPath = "audio/Meditation - 10 mins - F - 1.mp3"
     @objc dynamic var length = "10 mins"
     @objc dynamic var guide = "Francis"
@@ -31,6 +32,7 @@ class Prayer: Object {
             let chapterIndex = data["Chapter Index"] as? Int,
             let desc = data["Description"] as? String,
             let desc2 = data["Description 2"] as? String,
+            let desc3 = data["Description 3"] as? String,
             let guide = data["Guide"] as? String,
             let length = data["Length"] as? String,
             let audioFilePath = data["Audio"] as? String else {
@@ -44,8 +46,13 @@ class Prayer: Object {
         self.chapterIndex = chapterIndex
         self.desc = desc
         self.desc2 = desc2
+        self.desc3 = desc3
         self.guide = guide
         self.length = length
         self.audioURLPath = audioFilePath
+    }
+    
+    override static func primaryKey() -> String? {
+        return "index"
     }
 }

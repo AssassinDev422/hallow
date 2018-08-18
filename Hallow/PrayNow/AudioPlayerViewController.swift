@@ -23,13 +23,14 @@ class AudioPlayerViewController: AudioController {
     @IBOutlet weak var nowPrayingLabel: UILabel!
     @IBOutlet weak var nowPrayingTitleLabel: UILabel!
     @IBOutlet weak var exitButton: UIButton!
+    @IBOutlet weak var backgroundButton: UIButton!
     
     var prayer: Prayer?
     var controlTimer: Timer?
     var addedTimeTracker = 0.00
     var nowPlayingInfo = [String : Any]()
-    var user = User()
     var guide: User.Guide = User.Guide.francis
+    var isBackgroundPlaying = false
     
     // MARK: - Life cycle
    
@@ -40,25 +41,19 @@ class AudioPlayerViewController: AudioController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        do {
-            let realm = try Realm() 
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error in will appear of audioplayer")
-                return
-            }
-            user = realmUser
-            guide = user.guide
-        } catch {
-            print("REALM: Error in will appear of audioplayer")
+        guard let user = User.current else {
+            print("ERROR in pulling user data - it's nil")
+            return
         }
+        guide = user.guide
         if let prayer = prayer {
             downloadAudio(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                    set(isLoading: isLoading)
+                self.set(isLoading: isLoading)
                 }, completionBlock: { guide, audioURL in
-                    self.setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                    self.setupAudioPlayer(guide: guide, _audioURL: prayer.audioURLPath, setLoading: { isLoading in
                         self.set(isLoading: isLoading)
                     }, updateProgress: {
-                        self.updateProgressControl()
+                        self.startProgressControlTimer()
                     }, playPause: { guide in
                         self.playPause()
                     })
@@ -84,6 +79,7 @@ class AudioPlayerViewController: AudioController {
         controlTimer?.invalidate()
         audioPlayer?.currentTime = 0
         audioPlayer?.stop()
+        backgroundAudioPlayer?.stop()
         progressSlider.setValue(Float(0.0), animated: false)
     }
     
@@ -121,12 +117,41 @@ class AudioPlayerViewController: AudioController {
         exitButton.setTitleColor(UIColor(named: "fadedPink"), for: .normal)
     }
     
+    @IBAction func backgroundButtonPressed(_ sender: Any) {
+        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: Utilities.backgroundAudioURL)
+        guard FileManager.default.fileExists(atPath: destinationFileURL.path) else {
+            print("The background audio has not been downloaded")
+            downloadAudio(guide: User.Guide.francis, audioURL: Utilities.backgroundAudioURL, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
+            }, completionBlock: { guide, audioURL in
+                self.setupAudioPlayer(guide: User.Guide.francis, _audioURL: Utilities.backgroundAudioURL, setLoading: { isLoading in
+                    self.set(isLoading: isLoading)
+                }, updateProgress: nil, playPause: { guide in
+                    self.backgroundAudioPlayer?.play()
+                })
+            })
+            return
+        }
+        if isBackgroundPlaying {
+            backgroundAudioPlayer?.stop()
+            backgroundButton.setImage(#imageLiteral(resourceName: "sound"), for: .normal)
+            backgroundButton.tintColor = UIColor(named: "beige")
+            isBackgroundPlaying = false
+        } else {
+            setupAudioPlayer(guide: User.Guide.francis, _audioURL: Utilities.backgroundAudioURL)
+            backgroundButton.setImage(#imageLiteral(resourceName: "soundOff"), for: .normal)
+            backgroundButton.tintColor = UIColor(named: "fadedPink")
+            isBackgroundPlaying = true
+        }
+    }
+    
     // MARK: - Functions
     
     private func setUpLockScreenInfo() {
         nowPlayingInfo[MPMediaItemPropertyTitle] = "\(prayer?.title ?? "") - \(prayer?.desc ?? "")"
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioPlayer?.currentTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] =  audioPlayer?.duration
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] =  audioPlayer?.rate
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
@@ -136,12 +161,12 @@ class AudioPlayerViewController: AudioController {
                 print("prayer not set")
                 return
             }
-            setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                set(isLoading: isLoading)
+            setupAudioPlayer(guide: guide, _audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
             }, updateProgress: {
-                self.updateProgressControl()
+                self.startProgressControlTimer()
             }, playPause: { guide in
-                playPause()
+                self.playPause()
             })
             return
         }
@@ -156,41 +181,47 @@ class AudioPlayerViewController: AudioController {
     
     // MARK: - Functions - Progress Control
     
-    private func updateProgressControl() {
-        if audioPlayer != nil {
-            controlTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
-                guard let audioPlayer = self?.audioPlayer else {
-                    print("Error in updateProgressControl")
-                    return
-                }
-                let percentComplete = audioPlayer.currentTime / audioPlayer.duration
-                self?.progressSlider.setValue(Float(percentComplete), animated: true)
-                let timeLeft = audioPlayer.duration - audioPlayer.currentTime
-                let minutes = Int(timeLeft) / 60 % 60
-                let seconds = Int(timeLeft) % 60
-                self?.timeLabel.text = String(format:"%01i:%02i", minutes, seconds)
-                self?.setUpLockScreenInfo()
+    private func startProgressControlTimer() {
+        if let audioPlayer = audioPlayer {
+            updateProgressControl(audioPlayer: audioPlayer)
+            setUpLockScreenInfo()
+            controlTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+                self?.updateProgressControl(audioPlayer: audioPlayer)
             }
         } else {
             guard let prayer = prayer else {
                 print("Prayer not set")
                 return
             }
-            setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                set(isLoading: isLoading)
+            setupAudioPlayer(guide: guide, _audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
             }, updateProgress: {
-                self.updateProgressControl()
+                self.startProgressControlTimer()
             }, playPause: { guide in
-                playPause()
+                self.playPause()
             })
             print("Audio player is nil")
             return
         }
     }
     
+    private func updateProgressControl(audioPlayer: AVAudioPlayer) {
+        let percentComplete = audioPlayer.currentTime / audioPlayer.duration
+        progressSlider.setValue(Float(percentComplete), animated: true)
+        let timeDisplay = audioPlayer.currentTime
+        let minutes = Int(timeDisplay) / 60 % 60
+        let seconds = Int(timeDisplay) % 60
+        timeLabel.text = String(format:"%01i:%02i", minutes, seconds)
+    }
+    
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        audioCompleted()
-        performSegue(withIdentifier: "reflectSegue", sender: self)
+        if player === audioPlayer {
+            audioCompleted()
+            performSegue(withIdentifier: "reflectSegue", sender: self)
+        } else {
+            backgroundAudioPlayer?.currentTime = 0
+            backgroundAudioPlayer?.play()
+        }
     }
     
     private func audioCompleted() {
@@ -213,12 +244,12 @@ class AudioPlayerViewController: AudioController {
                 print("Prayer not set")
                 return
             }
-            setupAudioPlayer(guide: guide, audioURL: prayer.audioURLPath, setLoading: { isLoading in
-                set(isLoading: isLoading)
+            setupAudioPlayer(guide: guide, _audioURL: prayer.audioURLPath, setLoading: { isLoading in
+                self.set(isLoading: isLoading)
             }, updateProgress: {
-                self.updateProgressControl()
+                self.startProgressControlTimer()
             }, playPause: { guide in
-                playPause()
+                self.playPause()
             })
             print("Audio player is nil")
             return
@@ -248,8 +279,7 @@ class AudioPlayerViewController: AudioController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination
         if let ReflectViewController = destinationViewController as? ReflectViewController, let prayer = prayer {
-            let prayerTitle = "\(prayer.title) - \(prayer.desc)"
-            ReflectViewController.prayerTitle = prayerTitle
+            ReflectViewController.prayer = prayer
             Utilities.pausedTime = 0.00
         }
     }

@@ -49,10 +49,10 @@ class SettingsReminderViewController: UIViewController {
     
     @IBAction func updateReminders(_ sender: Any) {
         let defaults = UserDefaults.standard
-        let reminderSet = defaults.bool(forKey: "reminderSet")
-        let firstReminder = defaults.bool(forKey: "firstReminder")
-        if reminderSet {
-            if !firstReminder {
+        let isReminderSet = defaults.bool(forKey: "isReminderSet")
+        let isFirstReminder = defaults.bool(forKey: "isFirstReminder")
+        if isReminderSet {
+            if !isFirstReminder {
                 let center = UNUserNotificationCenter.current()
                 center.removeAllDeliveredNotifications()
                 center.removeAllPendingNotificationRequests()
@@ -65,8 +65,8 @@ class SettingsReminderViewController: UIViewController {
         } else {
             allowFirstReminder()
             let defaults = UserDefaults.standard
-            defaults.set(true, forKey: "reminderSet")
-            defaults.set(true, forKey: "firstReminder")
+            defaults.set(true, forKey: "isReminderSet")
+            defaults.set(true, forKey: "isFirstReminder")
             defaults.synchronize()
         }
     }
@@ -75,16 +75,14 @@ class SettingsReminderViewController: UIViewController {
     
     private func loadDisplay() {
         let defaults = UserDefaults.standard
-        let reminderSet = defaults.bool(forKey: "reminderSet")
-        if reminderSet {
-            updateButton.setTitle("UPDATE", for: .normal)
-            reminderTimePicker.isHidden = false
-            removeReminderButton.isHidden = false
+        let isReminderSet = defaults.bool(forKey: "isReminderSet")
+        let updateText = isReminderSet ? "UPDATE" : "ENABLE REMINDERS"
+        updateButton.setTitle(updateText, for: .normal)
+        reminderTimePicker.isHidden = !isReminderSet
+        removeReminderButton.isHidden = !isReminderSet
+        if isReminderSet {
             setDisplay()
         } else {
-            updateButton.setTitle("ENABLE REMINDERS", for: .normal)
-            reminderTimePicker.isHidden = true
-            removeReminderButton.isHidden = true
             currentReminderLabel.text = "No reminder currently set"
         }
     }

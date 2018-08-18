@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-class PasswordResetViewController: LogInBaseViewController {
+class PasswordResetViewController: TextBaseViewController {
     
     @IBOutlet weak var emailField: UITextField!
         
@@ -19,7 +19,7 @@ class PasswordResetViewController: LogInBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         emailField.delegate = self
-        setUpDoneButton(textField: emailField)
+        setUpTextFieldDoneButton(textField: emailField)
     }
     
     override func viewWillAppear(_ animated: Bool) {

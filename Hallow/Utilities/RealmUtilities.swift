@@ -42,7 +42,7 @@ class RealmUtilities {
         do {
             let realm = try Realm()
             try realm.write {
-                realm.add(user)
+                realm.add(user, update: true)
                 user.isLoggedIn = true
                 print("IN USER SIGN IN - NEXT PRAYER: \(user.nextPrayerIndex)")
                 completionBlock()
@@ -66,21 +66,37 @@ class RealmUtilities {
     
     // MARK: - Journal entries
     
-    static func saveJournalEntry(withEntry entry: JournalEntry) {
+    static func saveJournalEntry(entryText: String, prayerTitle: String, completionBlock: (() -> Void)? = nil) {
+        guard let user = User.current else {
+            print("Error in save journal entry")
+            return
+        }
+        let journalEntry = JournalEntry()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d/yy"
+        let date = formatter.string(from: NSDate() as Date)
+        let dateStored = Date(timeIntervalSinceNow: 0.00)
+        journalEntry.date = date
+        journalEntry.dateStored = dateStored
+        journalEntry.docID = RealmUtilities.calcDocID() + 1
+        journalEntry.entry = entryText
+        journalEntry.prayerTitle = prayerTitle
+        journalEntry.userEmail = user.email
         do {
             let realm = try Realm()
             try realm.write {
-                realm.add(entry)
+                realm.add(journalEntry)
+                completionBlock?()
             }
         } catch {
             print("REALM: Error in utilities - saveJournalEntry")
         }
     }
     
-    static func calcDocID(withUser user: User) -> Int {
+    static func calcDocID() -> Int {
         do {
             let realm = try Realm()
-            let journal = realm.objects(JournalEntry.self).filter("userEmail = %a", user.email)
+            let journal = realm.objects(JournalEntry.self)
             return journal.count
         } catch {
             print("REALM: Error in utilities - loadJournalEntries")
@@ -120,10 +136,8 @@ class RealmUtilities {
     static func addPrayers(withPrayers prayers: [Prayer]) {
         do {
             let realm = try Realm()
-            let oldPrayers = realm.objects(Prayer.self)
             try realm.write {
-                realm.delete(oldPrayers)
-                realm.add(prayers)
+                realm.add(prayers, update: true)
             }
         } catch {
             print("REALM: Error in utilities - addPrayers")
@@ -133,10 +147,8 @@ class RealmUtilities {
     static func addChapters(withChapters chapters: [Chapter]) {
         do {
             let realm = try Realm()
-            let oldChapters = realm.objects(Chapter.self)
             try realm.write {
-                realm.delete(oldChapters)
-                realm.add(chapters)
+                realm.add(chapters, update: true)
             }
         } catch {
             print("REALM: Error in utilities - addChapters")

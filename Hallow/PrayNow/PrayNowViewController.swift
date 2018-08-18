@@ -20,7 +20,6 @@ class PrayNowViewController: BaseViewController {
     @IBOutlet weak var lengthSelector: UISegmentedControl!
     @IBOutlet weak var selectorBar: UIView!
     
-    var user = User()
     var prayer: Prayer?
     var prayer10mins: Prayer?
     var prayer5mins: Prayer?
@@ -36,22 +35,14 @@ class PrayNowViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        do {
-            let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error starting realm in praynow appear")
-                return
-            }
-            user = realmUser
-        } catch {
-            print("REALM: Error starting realm in praynow appear")
+        guard let user = User.current else {
+            print("ERROR in pulling user data - it's nil")
+            return
         }
         if let prayer = prayer {
             setPrayerSession(withIndex: prayer.prayerIndex)
-            print("SETTING PRAYER SESSION WITH PRAYER: \(prayer.prayerIndex)")
         } else {
             setPrayerSession(withIndex: user.nextPrayerIndex)
-            print("SETTING PRAYER SESSION WITHOUT PRAYER: \(user.nextPrayerIndex)")
         }
         ReachabilityManager.shared.addListener(listener: self)
     }
@@ -90,6 +81,10 @@ class PrayNowViewController: BaseViewController {
     
     private func setPrayerSession(withIndex prayerIndex: Int) {
         do {
+            guard let user = User.current else {
+                print("ERROR in pulling user data - it's nil")
+                return
+            }
             let realm = try Realm()
             let prayers = realm.objects(Prayer.self)
             prayer5mins = prayers.filter("prayerIndex = %@ AND guide = %@ AND length = %@", prayerIndex, user._guide, "5 mins").first

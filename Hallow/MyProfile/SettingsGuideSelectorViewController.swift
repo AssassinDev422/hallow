@@ -14,22 +14,10 @@ class SettingsGuideSelectorViewController: UIViewController {
     @IBOutlet weak var abbyButton: UIButton!
     @IBOutlet weak var francisButton: UIButton!
     
-    var user = User()
-    
     // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        do {
-            let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("Error in settings guide selector")
-                return
-            }
-            user = realmUser
-        } catch {
-            print("REALM: Error in will appear of settings guide selector")
-        }
         setGuideButton()
     }
     
@@ -63,6 +51,10 @@ class SettingsGuideSelectorViewController: UIViewController {
     // MARK: - Functions
     
     private func setGuideButton() {
+        guard let user = User.current else {
+            print("ERROR in pulling user data - it's nil")
+            return
+        }
         if user.guide == User.Guide.francis {
             francisButton.isSelected = true
             abbyButton.isSelected = false

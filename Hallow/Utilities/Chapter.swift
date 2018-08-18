@@ -33,4 +33,8 @@ class Chapter: Object {
         self.desc = desc
         self.avail = avail
     }
+    
+    override static func primaryKey() -> String? {
+        return "index"
+    }
 }

@@ -31,7 +31,7 @@ class FirstDayReminderViewController: UIViewController {
 
     @IBAction func yesButton(_ sender: Any) {
         let defaults = UserDefaults.standard
-        defaults.set(true, forKey: "reminderSet")
+        defaults.set(true, forKey: "isReminderSet")
         defaults.synchronize()
         let center = UNUserNotificationCenter.current()
         let options: UNAuthorizationOptions = [.alert, .sound]

@@ -15,7 +15,6 @@ import RealmSwift
 class JournalTableViewController: BaseTableViewController {
 
     var journalEntries: [JournalEntry] = []
-    var user = User()
     
     // MARK: - Life cycle
     
@@ -29,11 +28,10 @@ class JournalTableViewController: BaseTableViewController {
         super.viewWillAppear(animated)
         do {
             let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error in will appear of journal table view")
+            guard let user = User.current else {
+                print("ERROR in pulling user data - it's nil")
                 return
             }
-            user = realmUser
             journalEntries = Array(realm.objects(JournalEntry.self).filter("userEmail = %a", user.email).sorted(byKeyPath: "dateStored", ascending: false))
         } catch {
             print("REALM: Error in will appear of journal table view")
@@ -85,7 +83,7 @@ class JournalTableViewController: BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
+        if (editingStyle == UITableViewCellEditingStyle.delete), let user = User.current {
             let entry = journalEntries[indexPath.row]
             let docID = entry.docID
             RealmUtilities.deleteJournalEntry(fromUser: user, withID: docID) {
@@ -103,8 +101,12 @@ class JournalTableViewController: BaseTableViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? JournalEntryViewController, let journalEntry = sender as? JournalEntry {
+        if let vc = segue.destination as? JournalEntryViewController, let journalEntry = sender as? JournalEntry,  segue.identifier == "journalEntrySegue" {
                 vc.journalEntry = journalEntry
+                vc.isNewEntry = false
+        } else if let vc = segue.destination as? JournalEntryViewController, segue.identifier == "newEntrySegue" {
+            vc.isNewEntry = true
+            print("In new entry segue")
         }
     }
 }

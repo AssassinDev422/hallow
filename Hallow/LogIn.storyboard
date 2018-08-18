@@ -38,6 +38,7 @@
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H0Q-fC-67u" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
                                 <rect key="frame" x="50" y="311" width="275" height="45.5"/>
                                 <color key="backgroundColor" red="0.71372549019999998" green="0.63921568630000003" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES" textContentType="email"/>
@@ -67,6 +68,7 @@
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eHj-C9-bg1" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
                                 <rect key="frame" x="50" y="246" width="275" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019999998" green="0.63921568630000003" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" name="white"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="275" id="DlO-8o-LhN"/>
                                     <constraint firstAttribute="height" constant="45" id="a8j-kf-3ww"/>
@@ -223,6 +225,7 @@
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B4y-8n-xOX" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
                                 <rect key="frame" x="52" y="286" width="271" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019999998" green="0.63921568630000003" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" name="realWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="271" id="FZB-IQ-d6A"/>
                                     <constraint firstAttribute="height" constant="45" id="ceT-RY-QhQ"/>
@@ -449,6 +452,7 @@
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZZF-c4-nQP" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
                                 <rect key="frame" x="37.5" y="331" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019999998" green="0.63921568630000003" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="join" secureTextEntry="YES"/>
@@ -468,6 +472,7 @@
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fLi-0X-ete" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
                                 <rect key="frame" x="37.5" y="266" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019999998" green="0.63921568630000003" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" name="realWhite"/>
                                 <color key="textColor" name="realWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
@@ -496,7 +501,7 @@
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Phe-Ha-Jfb" customClass="DesignableUITextField" customModule="Hallow" customModuleProvider="target">
                                 <rect key="frame" x="37.5" y="201" width="300" height="45"/>
                                 <color key="backgroundColor" red="0.71372549019607845" green="0.63921568627450975" blue="0.81176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" name="realWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="2iD-5g-k2P"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="GVu-r7-h36"/>
@@ -665,12 +670,6 @@
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="beige">
-            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="beige">
-            <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="deepLilac">
             <color red="0.58399999140000003" green="0.48199999329999998" blue="0.72500002379999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -679,6 +678,12 @@
         </namedColor>
         <namedColor name="realWhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="realWhite">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="white">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>

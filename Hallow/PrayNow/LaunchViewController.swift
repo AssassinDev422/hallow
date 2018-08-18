@@ -11,13 +11,12 @@ import Firebase
 import Reachability
 import RealmSwift
 
-class LaunchViewController: BaseViewController {
+class LaunchViewController: AudioController {
     
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var prayerChallengeLabel: UILabel!
     
-    var user = User()
     var handle: AuthStateDidChangeListenerHandle?
     var userEmail: String?
         
@@ -25,19 +24,20 @@ class LaunchViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         hideOutlets(shouldHide: true)
         let defaults = UserDefaults.standard
-        if defaults.string(forKey: "firstOpenOnDevice") != nil {
+        if defaults.string(forKey: "isFirstOpenOnDevice") != nil {
             print("Not first open on this device")
         } else {
             print("First open on this device")
             defaults.set(Date(timeIntervalSince1970: 0),    forKey: "reminderTime")
-            defaults.set(false,                             forKey: "reminderSet")
-            defaults.set(false,                             forKey: "firstReminder")
-            defaults.set(false,                             forKey: "iPhoneX")
-            defaults.set("false",                           forKey: "firstOpenOnDevice")
+            defaults.set(false,                             forKey: "isReminderSet")
+            defaults.set(false,                             forKey: "isFirstReminder")
+            defaults.set("false",                           forKey: "isFirstOpenOnDevice")
             defaults.synchronize()
         }
+        downloadAudio(guide: User.Guide.francis, audioURL: Utilities.backgroundAudioURL)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,12 +50,8 @@ class LaunchViewController: BaseViewController {
                     self.saveImage(image: image)
                 }
             } else {
-                FirebaseUtilities.loadPrayers() { prayers in
-                    FirebaseUtilities.loadChapters() { chapters in
-                        RealmUtilities.addPrayers(withPrayers: prayers)
-                        RealmUtilities.addChapters(withChapters: chapters)
-                        self.hideOutlets(shouldHide: false)
-                    }
+                self.loadContent() {
+                    self.hideOutlets(shouldHide: false)
                 }
                 print("no one is logged in")
             }
@@ -77,19 +73,23 @@ class LaunchViewController: BaseViewController {
     
     private func loadUser(fromUserEmail userEmail: String) {
         FirebaseUtilities.loadUserData(byUserEmail: userEmail) { results in
-            guard let results = results.map(User.init).first else {
+            guard let user = results.map(User.init).first else {
                 print("FIREBASE: Error loading user data")
                 return
             }
-            self.user = results
-            RealmUtilities.signInUser(withUser: self.user) {
-                FirebaseUtilities.loadPrayers() { prayers in
-                    FirebaseUtilities.loadChapters() { chapters in
-                        RealmUtilities.addPrayers(withPrayers: prayers)
-                        RealmUtilities.addChapters(withChapters: chapters)
-                    }
-                }
+            RealmUtilities.signInUser(withUser: user) {
+                self.loadContent()
                 self.performSegue(withIdentifier: "alreadySignedInSegue", sender: self)
+            }
+        }
+    }
+    
+    private func loadContent(completionBlock: (() -> Void)? = nil) {
+        FirebaseUtilities.loadPrayers() { prayers in
+            FirebaseUtilities.loadChapters() { chapters in
+                RealmUtilities.addPrayers(withPrayers: prayers)
+                RealmUtilities.addChapters(withChapters: chapters)
+                completionBlock?()
             }
         }
     }

@@ -17,4 +17,8 @@ class JournalEntry: Object {
     @objc dynamic var dateStored: Date = Date(timeIntervalSince1970: 0)
     @objc dynamic var entry: String = ""
     @objc dynamic var prayerTitle: String = "Day 1"
+    
+    override static func primaryKey() -> String? {
+        return "docID"
+    }
 }

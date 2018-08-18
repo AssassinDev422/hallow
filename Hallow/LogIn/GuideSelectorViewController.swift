@@ -52,7 +52,6 @@ class GuideSelectorViewController: AudioController {
     @IBAction func nextButton(_ sender: Any) {
         RealmUtilities.updateGuide(withGuide: guideSelected) {
             self.performSegue(withIdentifier: "guideSelectedSegue", sender: self)
-            FirebaseUtilities.syncUserData()
         }
     }
     
@@ -73,9 +72,9 @@ class GuideSelectorViewController: AudioController {
             audioPlayer?.stop()
         }
         downloadAudio(guide: User.Guide.francis, audioURL: francisSampleAudioURL, setLoading: { isLoading in
-            set(isLoading: isLoading)
+            self.set(isLoading: isLoading)
         }, completionBlock: { guide, audioURL in
-            self.setupAudioPlayer(guide: User.Guide.francis, audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
+            self.setupAudioPlayer(guide: User.Guide.francis, _audioURL: self.francisSampleAudioURL, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: nil, playPause: { guide in
                 self.playToggle(guideSelected: User.Guide.francis)
@@ -90,9 +89,9 @@ class GuideSelectorViewController: AudioController {
         }
         
         downloadAudio(guide: User.Guide.abby, audioURL: abbySampleAudioURL, setLoading: { isLoading in
-            set(isLoading: isLoading)
+            self.set(isLoading: isLoading)
         }, completionBlock: { guide, audioURL in
-            self.setupAudioPlayer(guide: User.Guide.abby, audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
+            self.setupAudioPlayer(guide: User.Guide.abby, _audioURL: self.abbySampleAudioURL, setLoading: { isLoading in
                 self.set(isLoading: isLoading)
             }, updateProgress: {
             }, playPause: { guide in
@@ -135,9 +134,9 @@ class GuideSelectorViewController: AudioController {
             audioPlayer?.stop()
             isPlaying = false
             downloadAudio(guide: guideSelected, audioURL: url, setLoading: { isLoading in
-                set(isLoading: isLoading)
+                self.set(isLoading: isLoading)
             }, completionBlock: { guide, audioURL in
-                self.setupAudioPlayer(guide: guideSelected, audioURL: url, setLoading: { isLoading in
+                self.setupAudioPlayer(guide: guideSelected, _audioURL: url, setLoading: { isLoading in
                     self.set(isLoading: isLoading)
                 }, updateProgress: {
                 }, playPause: { guide in

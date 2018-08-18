@@ -12,8 +12,8 @@ import UIKit
 import RealmSwift
 
 class User: Object {
-    @objc dynamic var name: String = ""
     @objc dynamic var email: String = ""
+    @objc dynamic var name: String = ""
     @objc dynamic var dateStored: Date = Date(timeIntervalSince1970: 0)
     @objc dynamic var _guide: String = "Francis"
     @objc dynamic var isFirstDay: Bool = false
@@ -77,5 +77,23 @@ class User: Object {
         self._completedPrayers = _completedPrayers
         self._guide = _guide
         self.nextPrayerIndex = nextPrayerIndex
+    }
+    
+    static var current: User? {
+        do {
+            let realm = try Realm()
+            guard let user = realm.objects(User.self).first else {
+                print("REALM: Error pulling realm stuff")
+                return nil
+            }
+            return user
+        } catch {
+            print("REALM: Error accessing realm for user")
+            return nil
+        }
+    }
+    
+    override static func primaryKey() -> String? {
+        return "email"
     }
 }

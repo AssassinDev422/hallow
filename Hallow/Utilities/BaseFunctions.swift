@@ -144,7 +144,10 @@ class BaseTableViewController: UITableViewController {
 
 // MARK: - Text subview edits
 
-class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
+class TextBaseViewController: BaseViewController, UITextFieldDelegate, UITextViewDelegate {
+   
+    // Text field
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.layer.borderWidth = 1.0
         textField.layer.borderColor = UIColor.white.cgColor
@@ -156,7 +159,7 @@ class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
         textField.layer.borderColor = UIColor.clear.cgColor
     }
     
-    func setUpDoneButton(textField: UITextField) {
+    func setUpTextFieldDoneButton(textField: UITextField) {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
@@ -177,9 +180,9 @@ class LogInBaseViewController: BaseViewController, UITextFieldDelegate {
         let newText = text.trimmingCharacters(in: .whitespaces)
         return newText
     }
-}
-
-class JournalBaseViewController: BaseViewController, UITextViewDelegate {
+    
+    // Text View
+    
     var frame: CGRect?
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -189,12 +192,12 @@ class JournalBaseViewController: BaseViewController, UITextViewDelegate {
         newFrame.size.height = frame!.height / 2.5
         textView.frame = newFrame
     }
-
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.frame = frame!
     }
-
-    func setUpDoneButton(textView: UITextView) {
+    
+    func setUpTextViewDoneButton(textView: UITextView) {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
@@ -202,15 +205,6 @@ class JournalBaseViewController: BaseViewController, UITextViewDelegate {
         toolBar.setItems([flexibleSpace, doneButton], animated: false)
         textView.inputAccessoryView = toolBar
     }
-    
-    @objc func doneClicked() {
-        view.endEditing(true)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
 }
 
 //MARK: - Audio functions
@@ -219,17 +213,18 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
     var pathReference: StorageReference?
     var downloadTask: StorageDownloadTask?
     var audioPlayer: AVAudioPlayer?
+    var backgroundAudioPlayer: AVAudioPlayer?
     var startTime = Date(timeIntervalSinceNow: 0)
 
-    func downloadAudio(guide: User.Guide, audioURL: String, setLoading: (Bool) -> Void, completionBlock: @escaping (User.Guide, String) -> Void) {
+    func downloadAudio(guide: User.Guide, audioURL: String, setLoading: ((Bool) -> Void)? = nil, completionBlock: ((User.Guide, String) -> Void)? = nil) {
         let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
         guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
             print("That file's audio has already been downloaded")
-            completionBlock(guide, audioURL)
+            completionBlock?(guide, audioURL)
             return
         }
         print("attempting to download: \(audioURL)...")
-        setLoading(true)
+        setLoading?(true)
         pathReference = Storage.storage().reference(withPath: audioURL)
         
         guard let pathReference = pathReference else {
@@ -241,7 +236,7 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
                 print("error downloading file: \(error)")
             } else {
                 print("downloaded \(audioURL)")
-                completionBlock(guide, audioURL)
+                completionBlock?(guide, audioURL)
             }
         }
         guard let downloadTask = downloadTask else {
@@ -262,19 +257,25 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         }
     }
     
-    func setupAudioPlayer(guide: User.Guide, audioURL: String, setLoading: (Bool) -> Void, updateProgress: (() -> Void)? = nil, playPause: (User.Guide) -> Void) {
-        setLoading(false)
-            let audioURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
+    func setupAudioPlayer(guide: User.Guide, _audioURL: String, setLoading: ((Bool) -> Void)? = nil, updateProgress: (() -> Void)? = nil, playPause: ((User.Guide) -> Void)? = nil) {
+        setLoading?(false)
+            let audioURL = Utilities.urlInDocumentsDirectory(forPath: _audioURL)
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: May only work for iOS11 - tbd
-            audioPlayer?.delegate = self
+            if _audioURL == Utilities.backgroundAudioURL {
+                backgroundAudioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: May only work for iOS11 - tbd
+                backgroundAudioPlayer?.delegate = self
+                backgroundAudioPlayer?.play()
+            } else {
+                audioPlayer = try AVAudioPlayer(contentsOf: audioURL, fileTypeHint: AVFileType.mp3.rawValue) // TODO: May only work for iOS11 - tbd
+                audioPlayer?.delegate = self
+                playPause?(guide)
+                updateProgress?()
+                audioPlayer?.currentTime = Utilities.pausedTime
+                startTime = Date(timeIntervalSinceNow: 0)
+            }
             print("Audio player was set up")
-            playPause(guide)
-            updateProgress?()
-            audioPlayer?.currentTime = Utilities.pausedTime
-            startTime = Date(timeIntervalSinceNow: 0)
         } catch let error {
             print(error.localizedDescription)
             print("REALM: Error in base functions - setUpAudioPlayer")

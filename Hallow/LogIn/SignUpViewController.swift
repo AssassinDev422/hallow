@@ -11,14 +11,12 @@ import Firebase
 import FirebaseFirestore
 import JGProgressHUD
 
-class SignUpViewController: LogInBaseViewController {
+class SignUpViewController: TextBaseViewController {
 
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    
-    var user = User()
-    
+        
     // MARK: - Life cycle
     
     override func viewDidLoad() {
@@ -26,9 +24,9 @@ class SignUpViewController: LogInBaseViewController {
         nameField.delegate = self
         emailField.delegate = self
         passwordField.delegate = self
-        setUpDoneButton(textField: nameField)
-        setUpDoneButton(textField: emailField)
-        setUpDoneButton(textField: passwordField)
+        setUpTextFieldDoneButton(textField: nameField)
+        setUpTextFieldDoneButton(textField: emailField)
+        setUpTextFieldDoneButton(textField: passwordField)
     }
     
     override func viewWillAppear(_ animated: Bool) {

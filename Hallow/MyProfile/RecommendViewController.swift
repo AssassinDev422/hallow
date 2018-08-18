@@ -11,15 +11,13 @@ import FirebaseFirestore
 import Firebase
 import RealmSwift
 
-class RecommendViewController: LogInBaseViewController {
+class RecommendViewController: TextBaseViewController {
     
     @IBOutlet weak var titleField: UILabel!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var phoneNumberField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var submitButton: UIButton!
-    
-    var user = User()
     
     // MARK: - Life cycle
     
@@ -28,9 +26,9 @@ class RecommendViewController: LogInBaseViewController {
         nameField.delegate = self
         phoneNumberField.delegate = self
         emailField.delegate = self
-        setUpDoneButton(textField: nameField)
-        setUpDoneButton(textField: phoneNumberField)
-        setUpDoneButton(textField: emailField)
+        setUpTextFieldDoneButton(textField: nameField)
+        setUpTextFieldDoneButton(textField: phoneNumberField)
+        setUpTextFieldDoneButton(textField: emailField)
         navigationItem.title = "Recommend a Friend"
     }
     
@@ -38,16 +36,6 @@ class RecommendViewController: LogInBaseViewController {
         super.viewWillAppear(animated)
         titleField.text = "Let us know their info and we'll reach out!"
         hideToggle(isHidden: false)
-        do {
-            let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error in will appear of recommend")
-                return
-            }
-            user = realmUser
-        } catch {
-            print("REALM: Error in will appear of recommend")
-        }
         ReachabilityManager.shared.addListener(listener: self)
     }
     
@@ -78,7 +66,7 @@ class RecommendViewController: LogInBaseViewController {
     // MARK: - Functions
     
     private func submit() {
-        guard let name = nameField.text, let number = phoneNumberField.text, let email = emailField.text else {
+        guard let user = User.current, let name = nameField.text, let number = phoneNumberField.text, let email = emailField.text else {
             print("Error in submit")
             return
         }

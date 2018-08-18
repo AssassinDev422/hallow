@@ -29,15 +29,16 @@ import UIKit
 @IBDesignable
 class DesignableUITextField: UITextField {
     
-    @IBInspectable var leftPadding: CGFloat = 10
-    @IBInspectable var bottomPadding: CGFloat = 2
+    @IBInspectable var leftPadding: CGFloat = 10 {
+        didSet {
+            updateView()
+        }
+    }
     
-    // Provides left padding for images
-    override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-        var textRect = super.leftViewRect(forBounds: bounds)
-        textRect.origin.x += leftPadding
-        textRect.origin.y += bottomPadding
-        return textRect
+    @IBInspectable var bottomPadding: CGFloat = 2 {
+        didSet {
+            updateView()
+        }
     }
     
     @IBInspectable var leftImage: UIImage? {
@@ -50,6 +51,14 @@ class DesignableUITextField: UITextField {
         didSet {
             updateView()
         }
+    }
+    
+    // Provides left padding for images
+    override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+        var textRect = super.leftViewRect(forBounds: bounds)
+        textRect.origin.x += leftPadding
+        textRect.origin.y += bottomPadding
+        return textRect
     }
     
     func updateView() {
@@ -115,16 +124,6 @@ class TabBarViewController: UITabBarController {
         tabBar.unselectedItemTintColor = UIColor(named: "darkIndigo")
         UITabBar.appearance().layer.borderWidth = 0.0
         UITabBar.appearance().clipsToBounds = true
-        
-        let defaults = UserDefaults.standard
-        if UIDevice().userInterfaceIdiom == .phone {
-            switch UIScreen.main.nativeBounds.height {
-            case 2436:
-                defaults.set(true, forKey: "iPhoneX")
-            default:
-                defaults.set(false, forKey: "iPhoneX")
-            }
-        }
     }
     
 }
@@ -132,9 +131,7 @@ class TabBarViewController: UITabBarController {
 class CustomTabBar: UITabBar {
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         var sizeThatFits = super.sizeThatFits(size)
-        let defaults = UserDefaults.standard
-        let iPhoneX = defaults.bool(forKey: "iPhoneX")
-        if iPhoneX {
+        if Utilities.isX {
             sizeThatFits.height = 100
         } else {
             sizeThatFits.height = 65

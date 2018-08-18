@@ -13,7 +13,6 @@ import RealmSwift
 class PrayerJourneyTableViewController: UITableViewController {
     
     private let reuseIdentifier = "cell"
-    var user = User()
     var tableViewLoaded: Bool = false
     var chapterIndex: Int = 0
     var prayers: [Prayer] = []
@@ -28,16 +27,6 @@ class PrayerJourneyTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        do {
-            let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error in will appear of prayer journey table view")
-                return
-            }
-            user = realmUser
-        } catch {
-            print("REALM: Error in will appear of prayer journey table view")
-        }
         tableView.reloadData()
         ReachabilityManager.shared.addListener(listener: self)
     }
@@ -73,6 +62,10 @@ class PrayerJourneyTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         do {
             let realm = try Realm()
+            guard let user = User.current else {
+                print("ERROR in pulling user data - it's nil")
+                return 0
+            }
             prayers = Array(realm.objects(Prayer.self).filter("chapterIndex = %@ AND guide = %@ AND length = %@", chapterIndex, user._guide, "10 mins"))
             return prayers.count
         } catch {
@@ -83,10 +76,15 @@ class PrayerJourneyTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PrayerJourneyTableViewCell
         let prayer = prayers[indexPath.row]
         cell.prayerTitleLabel.text = prayer.title
-        cell.prayerDescriptionLabel.text = prayer.desc
+        cell.prayerDescriptionLabel.text = prayer.desc3
+        guard let user = User.current else {
+            print("ERROR in pulling user data - it's nil")
+            return cell
+        }
         let completed = user.completedPrayers.contains {$0 == "\(prayer.prayerIndex)"}
         if completed {
             cell.statusImage.image = #imageLiteral(resourceName: "checkmarkIcon")

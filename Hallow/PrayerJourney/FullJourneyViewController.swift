@@ -15,7 +15,6 @@ class FullJourneyViewController: UIViewController, UITableViewDataSource, UITabl
     
     var chapters: [Chapter] = []
     var categories = ["Dailies", "Praylists", "Challenges"]
-    var user = User()
     var _nextPrayer: Prayer?
     var _nextChapter: Chapter?
     var completedSegue: Bool = false
@@ -27,11 +26,10 @@ class FullJourneyViewController: UIViewController, UITableViewDataSource, UITabl
         super.viewWillAppear(animated)
         do {
             let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error starting realm in full journey will appear")
+            guard let user = User.current else {
+                print("ERROR in pulling user data - it's nil")
                 return
             }
-            user = realmUser
             _nextPrayer = realm.objects(Prayer.self).filter("prayerIndex = %a", user.nextPrayerIndex).first
             guard let nextPrayer = _nextPrayer else {
                 print("Error in full journey will appear")
@@ -46,6 +44,7 @@ class FullJourneyViewController: UIViewController, UITableViewDataSource, UITabl
             
             if completedSegue {
                 showDetail(chapterIndex: nextChapter.index)
+                completedSegue = false
             }
         } catch {
             print("REALM: Error in full journey will appear")

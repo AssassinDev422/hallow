@@ -19,7 +19,6 @@ class PrayerJourneySuperViewController: UIViewController {
     @IBOutlet weak var playSelectedButton: UIButton!
     
     var prayer: Prayer?
-    var user = User()
     var everythingIsLoaded: Bool = false
     var nextPrayerIndex: Int = 1
     var chapterIndex: Int = 0
@@ -35,16 +34,6 @@ class PrayerJourneySuperViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isTranslucent = false
-        do {
-            let realm = try Realm()
-            guard let realmUser = realm.objects(User.self).first else {
-                print("REALM: Error in will appear of prayer journey")
-                return
-            }
-            user = realmUser
-        } catch {
-            print("REALM: Error in will appear of prayer journey")
-        }
         pullUpPrayerData()
         ReachabilityManager.shared.addListener(listener: self)
     }
@@ -73,7 +62,11 @@ class PrayerJourneySuperViewController: UIViewController {
     
     private func pullUpPrayerData() {
         do {
-            let realm = try Realm() 
+            let realm = try Realm()
+            guard let user = User.current else {
+                print("ERROR in pulling user data - it's nil")
+                return
+            }
             let prayers = realm.objects(Prayer.self)
             prayer = prayers.filter("chapterIndex = %@ AND prayerIndex = %@ AND guide = %@ AND length = %@", chapterIndex, user.nextPrayerIndex, user._guide, "10 mins").first
         } catch {
@@ -98,6 +91,10 @@ class PrayerJourneySuperViewController: UIViewController {
     }
     
     private func updateTableViewPosition() {
+        guard let user = User.current else {
+            print("ERROR in pulling user data - it's nil")
+            return
+        }
         let lastCompleted = user.completedPrayers.sorted()[user.completedPrayers.count - 1]
         let child = childViewControllers.first as! PrayerJourneyTableViewController
         guard let _nextPrayerIndex = Int(String(lastCompleted)) else {

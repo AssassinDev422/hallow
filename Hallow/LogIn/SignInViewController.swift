@@ -10,12 +10,10 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-class SignInViewController: LogInBaseViewController {
+class SignInViewController: TextBaseViewController {
     
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    
-    var user = User()
     
     // MARK: - Life cycle
     
@@ -23,8 +21,8 @@ class SignInViewController: LogInBaseViewController {
         super.viewDidLoad()
         emailField.delegate = self
         passwordField.delegate = self
-        setUpDoneButton(textField: emailField)
-        setUpDoneButton(textField: passwordField)
+        setUpTextFieldDoneButton(textField: emailField)
+        setUpTextFieldDoneButton(textField: passwordField)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,27 +69,26 @@ class SignInViewController: LogInBaseViewController {
                 return
             }
             FirebaseUtilities.loadUserData(byUserEmail: userEmail) { results in
-                guard let results = results.map(User.init).first else {
+                guard let user = results.map(User.init).first else {
                     print("FIREBASE: Error loading user data")
                     return
                 }
-                self.user = results
-                guard !self.user.isLoggedIn else {
+                guard !user.isLoggedIn else {
                     self.errorAlert(message: "User is already signed in on another device", viewController: self)
                     FirebaseUtilities.logOut(viewController: self) {
                         self.dismissHud()
                     }
                     return
                 }
-                RealmUtilities.signInUser(withUser: self.user) {
+                RealmUtilities.signInUser(withUser: user) {
                     self.dismissHud()
                     FirebaseUtilities.syncUserData()
                     self.performSegue(withIdentifier: "signInSegue", sender: self)
                 }
+                FirebaseUtilities.loadProfilePicture(byUserEmail: user.email) { image in
+                    self.saveImage(image: image)
+                }
             }
-            FirebaseUtilities.loadProfilePicture(byUserEmail: self.user.email) { image in
-                self.saveImage(image: image)
-            } 
         }
     }
 }
