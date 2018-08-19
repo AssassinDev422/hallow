@@ -15,9 +15,8 @@ import RealmSwift
 class JournalEntryViewController: TextBaseViewController {
     
     @IBOutlet weak var titleField: UILabel!
-    @IBOutlet weak var textField: UITextView!
     @IBOutlet weak var dateField: UILabel!
-    @IBOutlet weak var newTitle: UITextField!
+    @IBOutlet weak var textField: UITextView!
     
     var journalEntry: JournalEntry?
     var isNewEntry: Bool = false
@@ -27,7 +26,6 @@ class JournalEntryViewController: TextBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         textField.delegate = self
-        newTitle.delegate = self
         titleField.text = journalEntry?.prayerTitle
         textField.text = journalEntry?.entry
         dateField.text = journalEntry?.date
@@ -46,11 +44,9 @@ class JournalEntryViewController: TextBaseViewController {
         if isNewEntry {
             titleField.isHidden = true
             dateField.isHidden = true
-            newTitle.isHidden = false
         } else {
             titleField.isHidden = false
             dateField.isHidden = false
-            newTitle.isHidden = true
             titleField.text = journalEntry?.prayerTitle
             textField.text = journalEntry?.entry
             dateField.text = journalEntry?.date
@@ -75,16 +71,13 @@ class JournalEntryViewController: TextBaseViewController {
                 print("Error in update is newEntry")
                 return
             }
-            var prayerTitle = ""
-            if let _prayerTitle = newTitle.text {
-                prayerTitle = _prayerTitle
-            }
+            let prayerTitle = "Ad hoc entry"
             RealmUtilities.saveJournalEntry(entryText: entryText, prayerTitle: prayerTitle) {
                 self.navigationController?.popViewController(animated: true)
             }
         } else {
             guard let user = User.current, let entryText = textField.text, let docID = journalEntry?.docID, let _ = journalEntry?.prayerTitle else {
-                print("Error in update") // TODO: When changing to add own journal probs need to update title too
+                print("Error in update")
                 return
             }
             RealmUtilities.updateJournalEntry(fromUser: user, withID: docID, withEntry: entryText) {
@@ -93,12 +86,5 @@ class JournalEntryViewController: TextBaseViewController {
             }
         }
     }
-    
-    // MARK: - Design
-    
-    override func textFieldDidBeginEditing(_ textField: UITextField) {
-        super.textFieldDidBeginEditing(textField)
-        textField.layer.borderColor = UIColor(named: "fadedPink")?.cgColor
-    }
-    
+        
 }

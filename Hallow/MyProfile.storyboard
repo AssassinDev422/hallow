@@ -6,7 +6,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -122,14 +121,6 @@
                                     <action selector="updateButtonPressed:" destination="FeD-UK-9vt" eventType="touchUpInside" id="R5B-Bv-xJs"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="w42-uc-kNW">
-                                <rect key="frame" x="16" y="156" width="343" height="39"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" name="purplishBlue"/>
-                                <color key="textColor" name="darkIndigo"/>
-                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PLACEHOLDER TITLE" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2mL-7O-zFS">
                                 <rect key="frame" x="20" y="20" width="335" height="54"/>
                                 <constraints>
@@ -154,36 +145,34 @@
                                 <color key="textColor" name="fadedPink"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iUb-3G-E4f">
-                                <rect key="frame" x="20" y="20" width="335" height="54"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="zoS-dp-Lnv">
+                                <rect key="frame" x="20" y="166" width="335" height="59"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="purplishBlue"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
+                                <color key="textColor" name="darkIndigo"/>
+                                <fontDescription key="fontDescription" name="Montserrat-ExtraLight" family="Montserrat" pointSize="20"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" name="greyWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="zoS-dp-Lnv" firstAttribute="top" secondItem="afx-N5-yQz" secondAttribute="bottom" constant="20" id="2lV-0M-iVf"/>
                             <constraint firstItem="2ml-yd-1eo" firstAttribute="trailing" secondItem="2mL-7O-zFS" secondAttribute="trailing" constant="20" id="5EM-Ec-I1j"/>
                             <constraint firstItem="2ml-yd-1eo" firstAttribute="bottom" secondItem="5JW-GT-dy7" secondAttribute="bottom" constant="20" id="9gD-Cf-y6c"/>
                             <constraint firstItem="vib-eA-nC8" firstAttribute="trailing" secondItem="2mL-7O-zFS" secondAttribute="trailing" id="9uj-Vc-nDI"/>
                             <constraint firstItem="vib-eA-nC8" firstAttribute="top" secondItem="2mL-7O-zFS" secondAttribute="bottom" constant="5" id="Ioq-lK-TS4"/>
                             <constraint firstItem="2mL-7O-zFS" firstAttribute="top" secondItem="2ml-yd-1eo" secondAttribute="top" constant="20" id="Khf-4H-ulp"/>
-                            <constraint firstItem="iUb-3G-E4f" firstAttribute="height" secondItem="2mL-7O-zFS" secondAttribute="height" id="Tgl-0O-5TF"/>
-                            <constraint firstItem="iUb-3G-E4f" firstAttribute="leading" secondItem="vib-eA-nC8" secondAttribute="leading" id="VNm-UW-W0t"/>
-                            <constraint firstItem="w42-uc-kNW" firstAttribute="leading" secondItem="F3U-hU-lN5" secondAttribute="leadingMargin" id="ZgS-Z9-2nn"/>
-                            <constraint firstItem="iUb-3G-E4f" firstAttribute="top" secondItem="2mL-7O-zFS" secondAttribute="top" id="cg9-c9-Dug"/>
+                            <constraint firstItem="zoS-dp-Lnv" firstAttribute="centerX" secondItem="2ml-yd-1eo" secondAttribute="centerX" id="Qpo-tU-VM9"/>
+                            <constraint firstItem="zoS-dp-Lnv" firstAttribute="leading" secondItem="afx-N5-yQz" secondAttribute="leading" id="V6I-wN-p6j"/>
                             <constraint firstItem="afx-N5-yQz" firstAttribute="leading" secondItem="2ml-yd-1eo" secondAttribute="leading" constant="20" id="ekA-MS-AaJ"/>
+                            <constraint firstItem="5JW-GT-dy7" firstAttribute="top" secondItem="zoS-dp-Lnv" secondAttribute="bottom" constant="20" id="hhg-mq-3FD"/>
                             <constraint firstItem="vib-eA-nC8" firstAttribute="leading" secondItem="2mL-7O-zFS" secondAttribute="leading" id="iDF-aQ-uk2"/>
-                            <constraint firstItem="iUb-3G-E4f" firstAttribute="width" secondItem="2mL-7O-zFS" secondAttribute="width" id="nVB-yO-xHe"/>
-                            <constraint firstItem="w42-uc-kNW" firstAttribute="centerX" secondItem="5JW-GT-dy7" secondAttribute="centerX" id="nax-gw-xVq"/>
+                            <constraint firstItem="zoS-dp-Lnv" firstAttribute="trailing" secondItem="afx-N5-yQz" secondAttribute="trailing" id="iDq-3i-Q7R"/>
                             <constraint firstItem="2mL-7O-zFS" firstAttribute="leading" secondItem="2ml-yd-1eo" secondAttribute="leading" constant="20" id="neT-Ec-0Cc"/>
-                            <constraint firstItem="5JW-GT-dy7" firstAttribute="top" secondItem="w42-uc-kNW" secondAttribute="bottom" constant="50" id="plM-NT-5oE"/>
+                            <constraint firstItem="5JW-GT-dy7" firstAttribute="centerX" secondItem="zoS-dp-Lnv" secondAttribute="centerX" id="pH1-Oo-S4o"/>
                             <constraint firstItem="afx-N5-yQz" firstAttribute="top" secondItem="vib-eA-nC8" secondAttribute="bottom" constant="10" id="r01-xa-gmA"/>
                             <constraint firstItem="afx-N5-yQz" firstAttribute="trailing" secondItem="2ml-yd-1eo" secondAttribute="trailing" constant="-20" id="tj1-82-0jW"/>
-                            <constraint firstItem="w42-uc-kNW" firstAttribute="trailing" secondItem="F3U-hU-lN5" secondAttribute="trailingMargin" id="xmy-by-Zz0"/>
-                            <constraint firstItem="w42-uc-kNW" firstAttribute="top" secondItem="afx-N5-yQz" secondAttribute="bottom" constant="10" id="ykh-ih-GRd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2ml-yd-1eo"/>
                         <connections>
@@ -192,8 +181,7 @@
                     </view>
                     <connections>
                         <outlet property="dateField" destination="vib-eA-nC8" id="W1L-nE-YUi"/>
-                        <outlet property="newTitle" destination="iUb-3G-E4f" id="bs4-un-dti"/>
-                        <outlet property="textField" destination="w42-uc-kNW" id="QOf-J7-Xej"/>
+                        <outlet property="textField" destination="zoS-dp-Lnv" id="KSS-Re-XFW"/>
                         <outlet property="titleField" destination="2mL-7O-zFS" id="xau-VM-VBf"/>
                     </connections>
                 </viewController>
@@ -974,9 +962,6 @@
         <namedColor name="fadedPink">
             <color red="0.83499997849999996" green="0.59600001570000005" blue="0.67100000380000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="fadedPink">
-            <color red="0.83499997849999996" green="0.59600001570000005" blue="0.67100000380000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="greyWhite">
             <color red="0.976000011" green="0.976000011" blue="0.97299999000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -991,7 +976,7 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Gu8-Kk-avh"/>
+        <segue reference="dGE-mI-Wti"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

@@ -191,10 +191,13 @@ class TextBaseViewController: BaseViewController, UITextFieldDelegate, UITextVie
         var newFrame = frame!
         newFrame.size.height = frame!.height / 2.5
         textView.frame = newFrame
+        print("Did begin editing - newFrame size: \(newFrame)")
+        print("Did begin editing - frame size: \(frame)")
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.frame = frame!
+        print("Did end editing - frame size: \(frame)")
     }
     
     func setUpTextViewDoneButton(textView: UITextView) {
