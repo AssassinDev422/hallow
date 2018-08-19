@@ -277,7 +277,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCs-dt-WAP">
-                                            <rect key="frame" x="64" y="15" width="240" height="21"/>
+                                            <rect key="frame" x="64" y="15" width="231" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="Jn2-Z0-fAj"/>
                                             </constraints>
@@ -286,19 +286,11 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1B-YC-4BF">
-                                            <rect key="frame" x="64" y="43.5" width="240" height="12"/>
+                                            <rect key="frame" x="64" y="43.5" width="231" height="12"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                             <color key="textColor" name="darkIndigo"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DkJ-30-NEj">
-                                            <rect key="frame" x="314" y="17" width="41" height="41"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="41" id="W72-27-Lh5"/>
-                                                <constraint firstAttribute="width" constant="41" id="tpF-5f-j1I"/>
-                                            </constraints>
-                                            <state key="normal" image="emptyPlayButton"/>
-                                        </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmarkIcon" translatesAutoresizingMaskIntoConstraints="NO" id="aQ3-Xy-v9n">
                                             <rect key="frame" x="20" y="25" width="24" height="25"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -308,23 +300,35 @@
                                                 <constraint firstAttribute="width" constant="24" id="rWO-rJ-yJi"/>
                                             </constraints>
                                         </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HcR-lY-riU">
+                                            <rect key="frame" x="315" y="17" width="40" height="40"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="40" id="59x-eX-Vdd"/>
+                                                <constraint firstAttribute="width" constant="40" id="bOf-x9-DBV"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                            <color key="tintColor" name="fadedPink"/>
+                                            <state key="normal" image="download">
+                                                <color key="titleColor" name="fadedPink"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="HcR-lY-riU" firstAttribute="leading" secondItem="SCs-dt-WAP" secondAttribute="trailing" constant="20" id="421-vs-yIa"/>
+                                        <constraint firstAttribute="trailing" secondItem="HcR-lY-riU" secondAttribute="trailing" constant="20" id="C1T-zm-SbH"/>
                                         <constraint firstItem="SCs-dt-WAP" firstAttribute="top" secondItem="RhU-FI-Uov" secondAttribute="top" constant="15" id="EcI-y8-a15"/>
                                         <constraint firstItem="SCs-dt-WAP" firstAttribute="leading" secondItem="aQ3-Xy-v9n" secondAttribute="trailing" constant="20" id="Fs6-Fu-2Pu"/>
-                                        <constraint firstItem="DkJ-30-NEj" firstAttribute="leading" secondItem="SCs-dt-WAP" secondAttribute="trailing" constant="10" id="M1L-7V-Txc"/>
                                         <constraint firstItem="m1B-YC-4BF" firstAttribute="trailing" secondItem="SCs-dt-WAP" secondAttribute="trailing" id="VTH-Lw-N5K"/>
-                                        <constraint firstItem="DkJ-30-NEj" firstAttribute="centerY" secondItem="RhU-FI-Uov" secondAttribute="centerY" id="Y2S-Xz-xOw"/>
                                         <constraint firstAttribute="leading" secondItem="aQ3-Xy-v9n" secondAttribute="leading" constant="-20" id="cMw-zX-SiL"/>
+                                        <constraint firstItem="aQ3-Xy-v9n" firstAttribute="centerY" secondItem="HcR-lY-riU" secondAttribute="centerY" id="dXV-dX-7rh"/>
                                         <constraint firstItem="m1B-YC-4BF" firstAttribute="leading" secondItem="SCs-dt-WAP" secondAttribute="leading" id="gPW-yB-nme"/>
-                                        <constraint firstAttribute="trailing" secondItem="DkJ-30-NEj" secondAttribute="trailing" constant="20" id="gV6-6S-DIg"/>
-                                        <constraint firstItem="aQ3-Xy-v9n" firstAttribute="centerY" secondItem="DkJ-30-NEj" secondAttribute="centerY" id="hHw-YS-h9T"/>
+                                        <constraint firstItem="HcR-lY-riU" firstAttribute="centerY" secondItem="RhU-FI-Uov" secondAttribute="centerY" id="m8k-oN-yNp"/>
                                         <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="m1B-YC-4BF" secondAttribute="bottom" constant="10" id="s8w-Ml-BYt"/>
                                         <constraint firstItem="m1B-YC-4BF" firstAttribute="top" secondItem="SCs-dt-WAP" secondAttribute="bottom" constant="7.5" id="zNA-bm-8Nl"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="playCellButton" destination="DkJ-30-NEj" id="S67-9f-j5O"/>
+                                    <outlet property="downloadButton" destination="HcR-lY-riU" id="b5c-no-kkj"/>
                                     <outlet property="prayerDescriptionLabel" destination="m1B-YC-4BF" id="GXn-67-Z2Z"/>
                                     <outlet property="prayerTitleLabel" destination="SCs-dt-WAP" id="ZpS-vm-BcP"/>
                                     <outlet property="statusImage" destination="aQ3-Xy-v9n" id="hEf-RG-NrK"/>
@@ -375,7 +379,7 @@
         <image name="backIcon" width="14" height="28"/>
         <image name="checkmarkIcon" width="28" height="26"/>
         <image name="compassIcon" width="18" height="18"/>
-        <image name="emptyPlayButton" width="42" height="42"/>
+        <image name="download" width="22" height="22"/>
         <image name="playButtonImage" width="147" height="147"/>
         <namedColor name="beige">
             <color red="0.95300000905990601" green="0.92500001192092896" blue="0.83499997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -385,6 +389,9 @@
         </namedColor>
         <namedColor name="deepLilac">
             <color red="0.58399999141693115" green="0.48199999332427979" blue="0.72500002384185791" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="fadedPink">
+            <color red="0.83499997854232788" green="0.59600001573562622" blue="0.67100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="fadedPink">
             <color red="0.83499997854232788" green="0.59600001573562622" blue="0.67100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -400,7 +407,7 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="z8B-f0-vag"/>
+        <segue reference="0Oe-eg-EVy"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="white"/>
 </document>

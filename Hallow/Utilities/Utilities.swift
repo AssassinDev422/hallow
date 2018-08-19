@@ -32,4 +32,39 @@ class Utilities {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) [0]
         return documentsDirectory.appendingPathComponent(path)
     }
+    
+    static func pullUpDownloads() -> [String] {
+        let path = "audio/"
+        var fileNames: [String] = []
+        let fileManager = FileManager.default
+        let _documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) [0]
+        let documentsDirectory = _documentsDirectory.appendingPathComponent(path)
+        
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            print("fileURLS: \(fileURLs)")
+            for fileURL in fileURLs {
+                fileNames.append(fileURL.lastPathComponent)
+                print("\(fileURL.lastPathComponent)")
+            }
+            return fileNames
+        } catch {
+            print("Error while enumerating files \(documentsDirectory.path): \(error.localizedDescription)")
+            return []
+        }
+    }
+    
+    static func deleteFile(path: String) -> () {
+        let fileManager = FileManager.default
+        let _documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) [0]
+        let documentsDirectory = _documentsDirectory.appendingPathComponent(path)
+        do {
+            try fileManager.removeItem(at: documentsDirectory)
+            print("File deleted: \(path)") //FIXME: Error
+        } catch {
+            print("Error while enumerating files \(documentsDirectory.path): \(error.localizedDescription)")
+        }
+    }
+    
+    
 }

@@ -35,6 +35,8 @@
 		B479569220BDC7FD00745E92 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B479569120BDC7FD00745E92 /* UIViewExtension.swift */; };
 		B4837C9420E5B6F5003525FB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4837C9320E5B6F5003525FB /* StoreKit.framework */; };
 		B489E4D620E3167000AA3B18 /* RecommendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B489E4D520E3167000AA3B18 /* RecommendViewController.swift */; };
+		B48A25A3212926EC0074FF6C /* DownloadsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48A25A2212926EC0074FF6C /* DownloadsTableViewController.swift */; };
+		B48A25A521292A5A0074FF6C /* DownloadsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48A25A421292A5A0074FF6C /* DownloadsTableViewCell.swift */; };
 		B492A66B2122452F00B991E8 /* FullJourneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B492A66A2122452F00B991E8 /* FullJourneyViewController.swift */; };
 		B492A66D2122460A00B991E8 /* FullJourneyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B492A66C2122460A00B991E8 /* FullJourneyTableViewCell.swift */; };
 		B492A66F2122782600B991E8 /* FullJourneyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B492A66E2122782600B991E8 /* FullJourneyCollectionViewCell.swift */; };
@@ -108,6 +110,8 @@
 		B479569120BDC7FD00745E92 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		B4837C9320E5B6F5003525FB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B489E4D520E3167000AA3B18 /* RecommendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendViewController.swift; sourceTree = "<group>"; };
+		B48A25A2212926EC0074FF6C /* DownloadsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsTableViewController.swift; sourceTree = "<group>"; };
+		B48A25A421292A5A0074FF6C /* DownloadsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsTableViewCell.swift; sourceTree = "<group>"; };
 		B492A66A2122452F00B991E8 /* FullJourneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullJourneyViewController.swift; sourceTree = "<group>"; };
 		B492A66C2122460A00B991E8 /* FullJourneyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullJourneyTableViewCell.swift; sourceTree = "<group>"; };
 		B492A66E2122782600B991E8 /* FullJourneyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullJourneyCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -228,6 +232,8 @@
 				B489E4D520E3167000AA3B18 /* RecommendViewController.swift */,
 				B4AA151B20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift */,
 				B45C11E220BC85A300CEEAA9 /* SettingsReminderViewController.swift */,
+				B48A25A2212926EC0074FF6C /* DownloadsTableViewController.swift */,
+				B48A25A421292A5A0074FF6C /* DownloadsTableViewCell.swift */,
 				B432057320D2EEA7000EB246 /* FeedbackViewController.swift */,
 				B432057520D2EEB3000EB246 /* SupportViewController.swift */,
 			);
@@ -436,7 +442,6 @@
 				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
@@ -454,7 +459,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
@@ -506,6 +510,7 @@
 				B45C11E320BC85A300CEEAA9 /* SettingsReminderViewController.swift in Sources */,
 				B434F12E211D522000C57415 /* DataWritingScripts.swift in Sources */,
 				B4AA151C20B3B18400A228E7 /* SettingsGuideSelectorViewController.swift in Sources */,
+				B48A25A3212926EC0074FF6C /* DownloadsTableViewController.swift in Sources */,
 				B4FB771420D1BE3C00D2FEBA /* PrayerJourneySuperViewController.swift in Sources */,
 				B4EB8E9420B38174000330EB /* MyProfileViewController.swift in Sources */,
 				B4FB771020D1BABF00D2FEBA /* PrayerJourneyTableViewController.swift in Sources */,
@@ -521,6 +526,7 @@
 				B4EEEA7720B4AC0900B091F7 /* JournalTableViewController.swift in Sources */,
 				B4D3A0F920A5F188009D69A5 /* SignUpViewController.swift in Sources */,
 				B45C11DF20BC858800CEEAA9 /* FirstDayReminderViewController.swift in Sources */,
+				B48A25A521292A5A0074FF6C /* DownloadsTableViewCell.swift in Sources */,
 				B492A66F2122782600B991E8 /* FullJourneyCollectionViewCell.swift in Sources */,
 				B45C11E120BC859700CEEAA9 /* FirstDayReminderSettingViewController.swift in Sources */,
 				B4CC6ECF210929A200A16166 /* RealmUtilities.swift in Sources */,

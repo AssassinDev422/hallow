@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import RealmSwift
 
-class PrayerJourneyTableViewController: UITableViewController {
+class PrayerJourneyTableViewController: AudioTableViewController {
     
     private let reuseIdentifier = "cell"
     var tableViewLoaded: Bool = false
@@ -92,7 +92,6 @@ class PrayerJourneyTableViewController: UITableViewController {
             cell.statusImage.contentMode = .scaleToFill
             cell.prayerTitleLabel.textColor = UIColor(named: "fadedPink")
             cell.prayerDescriptionLabel.textColor = UIColor(named: "fadedPink")
-            cell.playCellButton.isHidden = false
         } else {
             guard let purplishBlue = UIColor(named: "purplishBlue") else {
                 print("Error in cellForRowAt")
@@ -102,18 +101,36 @@ class PrayerJourneyTableViewController: UITableViewController {
             cell.statusImage.contentMode = .center
             cell.prayerTitleLabel.textColor = UIColor(named: "darkIndigo")
             cell.prayerDescriptionLabel.textColor = UIColor(named: "darkIndigo")
-            cell.playCellButton.isHidden = false
+        }
+        
+        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: prayer.audioURLPath)
+        if FileManager.default.fileExists(atPath: destinationFileURL.path) {
+            cell.downloadButton.isHidden = false
+            cell.downloadButton.setTitle("Remove download", for: .normal)
+        } else {
+            cell.downloadButton.isHidden = false
         }
         
         cell.layer.borderWidth = 0
-        cell.playCellButton.tag = indexPath.row
-        cell.playCellButton.addTarget(self, action: #selector(PrayerJourneyTableViewController.buttonTapped(_:)), for: UIControlEvents.touchUpInside)
-        
+        cell.downloadButton.tag = indexPath.row
+        cell.downloadButton.addTarget(self, action: #selector(PrayerJourneyTableViewController.downloadButtonTapped(_:)), for: UIControlEvents.touchUpInside)
         return cell
     }
     
-    @objc private func buttonTapped(_ sender: UIButton!){
-        performSegue(withIdentifier: "tableReturnToPrayNowSegue", sender: sender)
+    @objc private func downloadButtonTapped(_ sender: UIButton!){
+        print("Download button tapped")
+        let indexPath = sender.tag
+        let prayer = prayers[indexPath]
+        sender.setImage(nil, for: .normal)
+        downloadAudio(audioURL: prayer.audioURLPath, loadingButton: sender)
+    }
+    
+    private func set(isLoading: Bool) {
+        if isLoading {
+            showDownloadingHud()
+        } else {
+            dismissHud()
+        }
     }
     
     // MARK: - Table view delegate and appearance
@@ -147,14 +164,6 @@ class PrayerJourneyTableViewController: UITableViewController {
         parent.playSelectedButton.isHidden = false
         parent.prayerTitleLabel.text = prayer.title
         tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? UITabBarController, let prayNow = destination.viewControllers?.first as? PrayNowViewController, let button:UIButton = sender as! UIButton? {
-            let indexPath = button.tag
-            let prayer = prayers[indexPath]
-            prayNow.prayer = prayer
-        }
     }
     
 }

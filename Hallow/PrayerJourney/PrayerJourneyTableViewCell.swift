@@ -12,5 +12,5 @@ class PrayerJourneyTableViewCell: UITableViewCell {
     @IBOutlet weak var prayerTitleLabel: UILabel!
     @IBOutlet weak var prayerDescriptionLabel: UILabel!
     @IBOutlet weak var statusImage: UIImageView!
-    @IBOutlet weak var playCellButton: UIButton!
+    @IBOutlet weak var downloadButton: UIButton!
 }

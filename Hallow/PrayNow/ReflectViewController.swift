@@ -32,7 +32,12 @@ class ReflectViewController: TextBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         ReachabilityManager.shared.addListener(listener: self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         textField.becomeFirstResponder()
+        setTextViewHalfSize(textField)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

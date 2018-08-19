@@ -187,17 +187,18 @@ class TextBaseViewController: BaseViewController, UITextFieldDelegate, UITextVie
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         print("Did begin editing")
+        setTextViewHalfSize(textView)
+    }
+    
+    func setTextViewHalfSize(_ textView: UITextView) {
         frame = textView.frame
         var newFrame = frame!
         newFrame.size.height = frame!.height / 2.5
         textView.frame = newFrame
-        print("Did begin editing - newFrame size: \(newFrame)")
-        print("Did begin editing - frame size: \(frame)")
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.frame = frame!
-        print("Did end editing - frame size: \(frame)")
     }
     
     func setUpTextViewDoneButton(textView: UITextView) {
@@ -282,6 +283,47 @@ class AudioController: BaseViewController, AVAudioPlayerDelegate {
         } catch let error {
             print(error.localizedDescription)
             print("REALM: Error in base functions - setUpAudioPlayer")
+        }
+    }
+}
+
+class AudioTableViewController: BaseTableViewController, AVAudioPlayerDelegate {
+    var pathReference: StorageReference?
+    var downloadTask: StorageDownloadTask?
+    
+    func downloadAudio(audioURL: String, loadingButton: UIButton) {
+        let destinationFileURL = Utilities.urlInDocumentsDirectory(forPath: audioURL)
+        guard !FileManager.default.fileExists(atPath: destinationFileURL.path) else {
+            print("That file's audio has already been downloaded")
+            return
+        }
+        print("attempting to download: \(audioURL)...")
+        pathReference = Storage.storage().reference(withPath: audioURL)
+        
+        guard let pathReference = pathReference else {
+            print("BASE: Error in downloadAudio")
+            return
+        }
+        downloadTask = pathReference.write(toFile: destinationFileURL) { (url, error) in
+            if let error = error {
+                print("error downloading file: \(error)")
+            } else {
+                print("downloaded \(audioURL)")
+                loadingButton.setTitle("Remove Download", for: .normal)
+            }
+        }
+        guard let downloadTask = downloadTask else {
+            print("BASE: Error in downloadAudio - downloadTask")
+            return
+        }
+        downloadTask.observe(.progress) { snapshot in
+            guard let progress = snapshot.progress else {
+                print("BASE: Error in downloadAudio - snapShot")
+                return
+            }
+            let percentComplete = 100.0 * Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
+            let percentCompleteRound = "\(String(format: "%.0f", percentComplete))%"
+            loadingButton.setTitle(percentCompleteRound, for: .normal)
         }
     }
 }

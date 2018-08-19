@@ -70,7 +70,6 @@ PODS:
     - gRPC-Core (= 1.10.0)
     - gRPC-RxLibrary (= 1.10.0)
   - GTMSessionFetcher/Core (1.1.14)
-  - IQKeyboardManagerSwift (6.1.1)
   - JGProgressHUD (2.0.3)
   - leveldb-library (1.20)
   - nanopb (0.3.8):
@@ -91,7 +90,6 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Firestore
   - Firebase/Storage
-  - IQKeyboardManagerSwift
   - JGProgressHUD
   - ReachabilitySwift
   - RealmSwift
@@ -112,7 +110,6 @@ SPEC REPOS:
     - gRPC-ProtoRPC
     - gRPC-RxLibrary
     - GTMSessionFetcher
-    - IQKeyboardManagerSwift
     - JGProgressHUD
     - leveldb-library
     - nanopb
@@ -136,7 +133,6 @@ SPEC CHECKSUMS:
   gRPC-ProtoRPC: 22712b23eb1bda656a59715fa5c1da0ea1493ea4
   gRPC-RxLibrary: a41a4652d220f230ba1c0491a94ce2ee04c6180a
   GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
-  IQKeyboardManagerSwift: 977affaeb4d6e971975c7790a6850f31d38f1207
   JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
@@ -145,6 +141,6 @@ SPEC CHECKSUMS:
   Realm: c286caf4dbf346ce24aad49ca76c7ce622d4a082
   RealmSwift: 2a9281e37d6de55f66f76254d49d28aeb1b729e4
 
-PODFILE CHECKSUM: d2586d02a0c51b803cc17a87664c766f804ea719
+PODFILE CHECKSUM: 9e858fb53dc9dd6f1175b8007d3180438f2914e2
 
 COCOAPODS: 1.5.2

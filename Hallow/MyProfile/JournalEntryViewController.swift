@@ -40,7 +40,6 @@ class JournalEntryViewController: TextBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         ReachabilityManager.shared.addListener(listener: self)
-        textField.becomeFirstResponder()
         if isNewEntry {
             titleField.isHidden = true
             dateField.isHidden = true
@@ -51,6 +50,12 @@ class JournalEntryViewController: TextBaseViewController {
             textField.text = journalEntry?.entry
             dateField.text = journalEntry?.date
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        textField.becomeFirstResponder()
+        setTextViewHalfSize(textField)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -71,7 +76,7 @@ class JournalEntryViewController: TextBaseViewController {
                 print("Error in update is newEntry")
                 return
             }
-            let prayerTitle = "Ad hoc entry"
+            let prayerTitle = "Ad hoc"
             RealmUtilities.saveJournalEntry(entryText: entryText, prayerTitle: prayerTitle) {
                 self.navigationController?.popViewController(animated: true)
             }
